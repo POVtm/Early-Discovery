@@ -1,0 +1,3095 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POV Reflection Cards - Interactive Deck</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8f9fa;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* INTRO SCREEN */
+    .intro-screen {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4%;
+      background: linear-gradient(135deg, #f5f1e8 0%, #ede5d8 50%, #e8dcc8 100%);
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Large Decorative Delta Symbols */
+    .delta-pattern {
+      position: absolute;
+      font-size: 120px;
+      font-weight: 100;
+      color: #D4A030;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .delta-pattern-1 {
+      top: 5%;
+      left: 3%;
+      transform: rotate(-15deg);
+    }
+
+    .delta-pattern-2 {
+      top: 30%;
+      right: 2%;
+      transform: rotate(20deg);
+      font-size: 100px;
+    }
+
+    .delta-pattern-3 {
+      bottom: 15%;
+      left: 5%;
+      transform: rotate(-25deg);
+      font-size: 90px;
+    }
+
+    .delta-pattern-4 {
+      bottom: 8%;
+      right: 4%;
+      transform: rotate(15deg);
+      font-size: 110px;
+    }
+
+    /* Preview Cards Around Container */
+    .preview-cards {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .preview-card {
+      position: absolute;
+      width: 80px;
+      height: 112px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.25;
+    }
+
+    .preview-card svg {
+      width: 28px;
+      height: 28px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .preview-card-p {
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      top: 12%;
+      left: -40px;
+      transform: rotate(-8deg);
+      animation: float-card-p 6s ease-in-out infinite;
+    }
+
+    .preview-card-o {
+      background: linear-gradient(135deg, #2d2d2d 0%, #0a0a0a 100%);
+      top: 25%;
+      right: -35px;
+      transform: rotate(12deg);
+      animation: float-card-o 6s ease-in-out infinite 1.5s;
+    }
+
+    .preview-card-v {
+      background: linear-gradient(135deg, #8B95A8 0%, #7B8594 100%);
+      bottom: 25%;
+      left: -38px;
+      transform: rotate(-12deg);
+      animation: float-card-v 6s ease-in-out infinite 3s;
+    }
+
+    .preview-card-wc {
+      background: linear-gradient(135deg, #E8B339 0%, #8B6914 50%, #2d2d2d 100%);
+      bottom: 12%;
+      right: -42px;
+      transform: rotate(10deg);
+      animation: float-card-wc 6s ease-in-out infinite 4.5s;
+    }
+
+    @keyframes float-card-p {
+      0%, 100% { transform: translateY(0px) rotate(-8deg); }
+      50% { transform: translateY(-12px) rotate(-8deg); }
+    }
+
+    @keyframes float-card-o {
+      0%, 100% { transform: translateY(0px) rotate(12deg); }
+      50% { transform: translateY(-12px) rotate(12deg); }
+    }
+
+    @keyframes float-card-v {
+      0%, 100% { transform: translateY(0px) rotate(-12deg); }
+      50% { transform: translateY(-12px) rotate(-12deg); }
+    }
+
+    @keyframes float-card-wc {
+      0%, 100% { transform: translateY(0px) rotate(10deg); }
+      50% { transform: translateY(-12px) rotate(10deg); }
+    }
+
+    .intro-screen.hidden {
+      display: none !important;
+    }
+
+    .intro-container {
+      max-width: 680px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 56px 48px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .delta-symbol {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 32px;
+      color: #D4A030;
+      opacity: 0.2;
+      font-weight: 300;
+    }
+
+    .logo-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-image {
+      max-width: 120px;
+      max-height: 80px;
+      object-fit: contain;
+    }
+
+    .intro-title {
+      font-size: 42px;
+      font-weight: 800;
+      color: #2c2416;
+      margin: 0 0 12px 0;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .intro-subtitle {
+      font-size: 17px;
+      font-weight: 500;
+      color: #6b5d4f;
+      margin: 0 0 36px 0;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .intro-body {
+      font-size: 16px;
+      color: #4b5563;
+      line-height: 1.75;
+      margin: 0 0 40px 0;
+      text-align: left;
+    }
+
+    .how-to-section {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px solid #f3f4f6;
+    }
+
+    .how-to-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 28px 0;
+      text-align: center;
+    }
+
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .step-icon {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      background: linear-gradient(135deg, #E8B339 0%, #D4A030 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(212, 160, 48, 0.25);
+    }
+
+    .step-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .step-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 6px 0;
+    }
+
+    .step-description {
+      font-size: 15px;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .start-button {
+      margin-top: 44px;
+      width: 100%;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(232, 179, 57, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .start-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(232, 179, 57, 0.4);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 44px;
+      width: 100%;
+    }
+
+    .button-group .start-button {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .self-check-button {
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      box-shadow: 0 6px 20px rgba(232, 179, 57, 0.3);
+      border: 3px solid #D4A030;
+      position: relative;
+    }
+
+    .self-check-button::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      right: -6px;
+      bottom: -6px;
+      background: linear-gradient(135deg, #F5D17A 0%, #E8B339 50%, #C89020 100%);
+      border-radius: 14px;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    .self-check-button:hover {
+      box-shadow: 0 10px 28px rgba(232, 179, 57, 0.4);
+      border-color: #E8B339;
+    }
+
+    /* SELF-CHECK SCREEN */
+    .self-check-screen {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc8 50%, #d4c4a8 100%);
+      overflow: hidden;
+    }
+
+    .self-check-screen.active {
+      display: flex;
+    }
+
+    .self-check-header {
+      padding: 24px 32px;
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .self-check-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .self-check-title-group h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .self-check-title-group p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 2px 0 0 0;
+    }
+
+    .progress-indicator {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .self-check-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 24px;
+      background: linear-gradient(135deg, #f5f1e8 0%, #ede5d8 50%, #e8dcc8 100%);
+    }
+
+    .self-check-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .intro-message {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .intro-message h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 12px 0;
+    }
+
+    .intro-message p {
+      font-size: 15px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0 0 16px 0;
+    }
+
+    .intro-message p:last-child {
+      margin-bottom: 0;
+    }
+
+    .name-input-section {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .name-input-section label {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c2416;
+      margin-bottom: 8px;
+    }
+
+    .name-input-section input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+    }
+
+    .name-input-section input:focus {
+      outline: none;
+      border-color: #E8B339;
+    }
+
+    .rating-scale-legend {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+      border: 2px solid #E8B339;
+    }
+
+    .rating-scale-legend h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 16px 0;
+    }
+
+    .scale-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .scale-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scale-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .scale-dot-1 { background: #ef4444; }
+    .scale-dot-2 { background: #f59e0b; }
+    .scale-dot-3 { background: #eab308; }
+    .scale-dot-4 { background: #22c55e; }
+
+    .scale-item span {
+      font-size: 13px;
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    .delta-category-section {
+      margin-bottom: 32px;
+    }
+
+    .delta-category-header {
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .delta-category-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 4px 0;
+    }
+
+    .delta-category-header p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    .subcategory-section {
+      margin-bottom: 24px;
+    }
+
+    .subcategory-header {
+      background: #f5f1e8;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .subcategory-header:hover {
+      background: #ede5d8;
+    }
+
+    .subcategory-header h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0;
+    }
+
+    .expand-icon {
+      width: 20px;
+      height: 20px;
+      color: #6b7280;
+      transition: transform 0.2s ease;
+    }
+
+    .expand-icon.expanded {
+      transform: rotate(180deg);
+    }
+
+    .competency-list {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 8px;
+    }
+
+    .competency-list.expanded {
+      display: flex;
+    }
+
+    .assessment-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease;
+    }
+
+    .assessment-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-info {
+      flex: 1;
+    }
+
+    .card-info h5 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin: 0 0 6px 0;
+    }
+
+    .card-info p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .rating-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .rating-btn {
+      flex: 1;
+      min-width: 85px;
+      padding: 10px 12px;
+      border: 2px solid #e5e7eb;
+      background: #ffffff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .rating-btn:hover {
+      border-color: #d1d5db;
+      background: #f9fafb;
+    }
+
+    .rating-btn.selected {
+      background: #E8B339;
+      color: #ffffff;
+      border-color: #E8B339;
+    }
+
+    .rating-btn-1.selected { background: #ef4444; border-color: #ef4444; }
+    .rating-btn-2.selected { background: #f59e0b; border-color: #f59e0b; }
+    .rating-btn-3.selected { background: #E8B339; border-color: #E8B339; }
+    .rating-btn-4.selected { background: #22c55e; border-color: #22c55e; }
+
+    .complete-section {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(to top, #e8dcc8 70%, transparent);
+      padding: 24px 0 0 0;
+      margin-top: 32px;
+    }
+
+    .complete-button {
+      width: 100%;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .complete-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(34, 197, 94, 0.4);
+    }
+
+    .complete-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* RESULTS SCREEN */
+    .results-screen {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background: linear-gradient(135deg, #f5f1e8 0%, #ede5d8 50%, #e8dcc8 100%);
+      overflow: hidden;
+    }
+
+    .results-screen.active {
+      display: flex;
+    }
+
+    .results-header {
+      padding: 32px 32px 24px 32px;
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .results-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 8px 0;
+    }
+
+    .results-header p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    .results-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 24px;
+    }
+
+    .results-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .profile-summary {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-summary h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 8px 0;
+    }
+
+    .summary-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0 0 32px 0;
+    }
+
+    .domain-scores {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .domain-score-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .domain-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .domain-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c2416;
+    }
+
+    .domain-score {
+      font-size: 20px;
+      font-weight: 700;
+      color: #E8B339;
+    }
+
+    .score-bar-container {
+      width: 100%;
+      height: 12px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #E8B339 0%, #D4A030 100%);
+      border-radius: 6px;
+      transition: width 0.8s ease;
+    }
+
+    .insight-section {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .insight-section h4 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .insight-section p {
+      font-size: 15px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0 0 12px 0;
+    }
+
+    .insight-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .domain-interpretation {
+      background: #f9fafb;
+      border-left: 4px solid #E8B339;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+
+    .domain-interpretation h5 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 8px 0;
+    }
+
+    .domain-interpretation p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .suggestions-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .suggestions-list li {
+      background: #f9fafb;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      border-left: 3px solid #E8B339;
+    }
+
+    .reflection-prompts {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border: 2px solid #E8B339;
+    }
+
+    .reflection-prompts h4 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c2416;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prompt-item {
+      background: #f5f1e8;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      color: #4b5563;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .prompt-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .results-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .primary-action {
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(232, 179, 57, 0.3);
+    }
+
+    .primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(232, 179, 57, 0.4);
+    }
+
+    .secondary-action {
+      background: #ffffff;
+      color: #2c2416;
+      border: 2px solid #E8B339;
+    }
+
+    .secondary-action:hover {
+      background: #f5f1e8;
+      transform: translateY(-2px);
+    }
+
+    /* DECK SELECTION SCREEN */
+    .deck-selection {
+      width: 100%;
+      height: 100%;
+      display: none !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4%;
+      background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc8 50%, #d4c4a8 100%);
+      position: relative;
+    }
+
+    .intro-back-button {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #D4A030;
+      color: #2c2416;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .intro-back-button:hover {
+      background: #ffffff;
+      transform: translateX(-3px);
+      box-shadow: 0 4px 12px rgba(212, 160, 48, 0.3);
+    }
+
+    .deck-selection.active {
+      display: flex !important;
+    }
+
+    .deck-selection.hidden {
+      display: none !important;
+    }
+
+    .selection-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2c2416;
+      margin: 0 0 15px 0;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+    }
+
+    .selection-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: #5a4a3a;
+      margin: 0 0 50px 0;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .deck-option {
+      border-radius: 20px;
+      padding: 32px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      border: 3px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deck-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .deck-option > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .deck-option:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Deck-specific selection colors */
+    .deck-option-p {
+      background: linear-gradient(135deg, #f6e5ba 0%, #e8d089 35%, #d4a747 70%, #c89020 100%);
+      box-shadow: 0 8px 24px rgba(212, 160, 48, 0.25);
+    }
+
+    .deck-option-o {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 50%, #0f0f0f 100%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .deck-option-o .deck-name,
+    .deck-option-o .deck-description,
+    .deck-option-o .deck-count {
+      color: #ffffff !important;
+    }
+
+    .deck-option-v {
+      background: linear-gradient(135deg, #d4dce6 0%, #b8c4d4 35%, #9ba8bc 70%, #7b8594 100%);
+      box-shadow: 0 8px 24px rgba(139, 149, 168, 0.25);
+    }
+
+    .deck-option-wc {
+      background: linear-gradient(135deg, #f6e5ba 0%, #d4a747 25%, #a87d1f 50%, #6b4d12 75%, #1f1f1f 100%);
+      box-shadow: 0 8px 24px rgba(139, 105, 20, 0.3);
+    }
+
+    .deck-option-wc .deck-name,
+    .deck-option-wc .deck-description,
+    .deck-option-wc .deck-count {
+      color: #ffffff !important;
+    }
+
+    .deck-icon {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deck-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #1e1b4b;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .deck-description {
+      font-size: 14px;
+      color: #4b5563;
+      margin: 0 0 12px 0;
+      line-height: 1.5;
+    }
+
+    .deck-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* DRAW INTERFACE */
+    .draw-interface {
+      width: 100%;
+      height: 100%;
+      display: none !important;
+      flex-direction: column;
+      background: #f8f9fa;
+    }
+
+    .draw-interface.active {
+      display: flex !important;
+    }
+
+    .draw-header {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .draw-header.deck-p {
+      background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
+    }
+
+    .draw-header.deck-o {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0a0a0a 100%);
+    }
+
+    .draw-header.deck-v {
+      background: linear-gradient(135deg, #A8B0C0 0%, #8B95A8 50%, #7B8594 100%);
+    }
+
+    .draw-header.deck-wc {
+      background: linear-gradient(135deg, #E8B339 0%, #8B6914 35%, #2d2d2d 70%, #0a0a0a 100%);
+    }
+
+    .draw-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #ffffff;
+      font-size: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .current-deck-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .current-deck-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .current-deck-subtitle {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 2px 0 0 0;
+    }
+
+    .cards-remaining {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .draw-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 3% 4% 4% 4%;
+      padding-top: 2%;
+      overflow-y: auto;
+    }
+
+    /* CARD STATES */
+    .card-display {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 2.5 / 3.5;
+      margin-bottom: 20px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-inner.shuffling {
+      animation: shuffle 0.6s ease-in-out;
+    }
+
+    @keyframes shuffle {
+      0% {
+        transform: translateX(0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      25% {
+        transform: translateX(-80px) rotate(-12deg) scale(0.95);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateX(80px) rotate(12deg) scale(0.9);
+        opacity: 0.3;
+      }
+      75% {
+        transform: translateX(-40px) rotate(-6deg) scale(0.95);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateX(0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
+      transform: rotateY(180deg);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* Reuse existing card styles */
+    .light-accent {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.3;
+      filter: blur(40px);
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .light-accent-1 {
+      width: 140px;
+      height: 140px;
+      top: 5%;
+      left: -5%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+    }
+
+    .light-accent-2 {
+      width: 110px;
+      height: 110px;
+      top: 55%;
+      right: -3%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+      animation-delay: 2s;
+    }
+
+    .light-accent-3 {
+      width: 90px;
+      height: 90px;
+      bottom: 20%;
+      left: 15%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      33% { transform: translateY(-15px) translateX(8px); }
+      66% { transform: translateY(8px) translateX(-8px); }
+    }
+
+    .number-badge {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 50px;
+      height: 50px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      z-index: 3;
+    }
+
+    .number-text {
+      font-size: 19px;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin: 0;
+    }
+
+    .center-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 160px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .glow-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.08); opacity: 0.7; }
+    }
+
+    .center-circle {
+      position: relative;
+      width: 125px;
+      height: 125px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.25);
+    }
+
+    .icon-svg {
+      width: 58px;
+      height: 58px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.3));
+    }
+
+    .front-deck-label {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    .top-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+      z-index: 1;
+    }
+
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-svg-small {
+      width: 18px;
+      height: 18px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .back-deck-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+    }
+
+    .content-panel {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 20px 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin: 0 0 10px 0;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .reflection-prompt {
+      font-size: 13px;
+      font-weight: 400;
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 0 0 auto 0;
+      text-align: left;
+      flex: 1;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .skill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 4px 8px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      font-size: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #D4A030;
+    }
+
+    .delta-category {
+      font-size: 8px;
+      font-weight: 600;
+      color: #9ca3af;
+      margin: 6px 0 0 0;
+      text-align: left;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ACTION BUTTONS */
+    .action-buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .action-button {
+      flex: 1;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .primary-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .secondary-button {
+      background: #ffffff;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .secondary-button:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    /* Deck-specific button colors */
+    .deck-p .primary-button {
+      background: linear-gradient(135deg, #E8B339 0%, #C89020 100%);
+      box-shadow: 0 4px 12px rgba(232, 179, 57, 0.4);
+    }
+
+    .deck-p .primary-button:hover {
+      box-shadow: 0 8px 20px rgba(232, 179, 57, 0.5);
+    }
+
+    .deck-p .secondary-button {
+      background: #ffffff;
+      color: #D4A030;
+      border: 2px solid #D4A030;
+    }
+
+    .deck-o .primary-button {
+      background: linear-gradient(135deg, #2d2d2d 0%, #0a0a0a 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .deck-o .primary-button:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .deck-o .secondary-button {
+      background: #ffffff;
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+    }
+
+    .deck-v .primary-button {
+      background: linear-gradient(135deg, #8B95A8 0%, #7B8594 100%);
+      box-shadow: 0 4px 12px rgba(139, 149, 168, 0.4);
+    }
+
+    .deck-v .primary-button:hover {
+      box-shadow: 0 8px 20px rgba(139, 149, 168, 0.5);
+    }
+
+    .deck-v .secondary-button {
+      background: #ffffff;
+      color: #7B8594;
+      border: 2px solid #7B8594;
+    }
+
+    .deck-wc .primary-button {
+      background: linear-gradient(135deg, #E8B339 0%, #8B6914 50%, #2d2d2d 100%);
+      box-shadow: 0 4px 12px rgba(139, 105, 20, 0.4);
+    }
+
+    .deck-wc .primary-button:hover {
+      box-shadow: 0 8px 20px rgba(139, 105, 20, 0.5);
+    }
+
+    .deck-wc .secondary-button {
+      background: #ffffff;
+      color: #8B6914;
+      border: 2px solid #8B6914;
+    }
+
+    /* DECK COLORS */
+    .deck-p .card-front {
+      background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
+    }
+    .deck-p .card-back {
+      background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
+    }
+
+    .deck-o .card-front {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0a0a0a 100%);
+    }
+    .deck-o .card-back {
+      background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    }
+
+    .deck-v .card-front {
+      background: linear-gradient(135deg, #A8B0C0 0%, #8B95A8 50%, #7B8594 100%);
+    }
+    .deck-v .card-back {
+      background: linear-gradient(135deg, #C5CDD9 0%, #A8B0C0 50%, #8B95A8 100%);
+    }
+
+    .deck-wc .card-front {
+      background: linear-gradient(135deg, #E8B339 0%, #8B6914 35%, #2d2d2d 70%, #0a0a0a 100%);
+    }
+    .deck-wc .card-back {
+      background: linear-gradient(135deg, #F5D17A 0%, #D4A030 35%, #8B6914 70%, #3a3a3a 100%);
+    }
+
+    .instruction-text {
+      text-align: center;
+      color: #6b7280;
+      font-size: 15px;
+      margin-top: 24px;
+      font-weight: 500;
+    }
+
+    .disclaimer-text {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 11px;
+      line-height: 1.6;
+      margin-top: 20px;
+      max-width: 600px;
+      font-weight: 400;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 600px) {
+      .intro-back-button {
+        top: 16px;
+        left: 16px;
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+
+      .intro-container {
+        padding: 40px 28px;
+      }
+
+      .intro-title {
+        font-size: 32px;
+      }
+
+      .intro-subtitle {
+        font-size: 15px;
+      }
+
+      .intro-body {
+        font-size: 15px;
+      }
+
+      .how-to-title {
+        font-size: 20px;
+      }
+
+      .step-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+      }
+
+      .step-title {
+        font-size: 16px;
+      }
+
+      .step-description {
+        font-size: 14px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .selection-title {
+        font-size: 24px;
+      }
+
+      .selection-subtitle {
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
+
+      .deck-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .draw-header {
+        padding: 16px 20px;
+      }
+
+      .current-deck-name {
+        font-size: 18px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .card-display {
+        max-width: 90%;
+        min-width: 300px;
+      }
+
+      .action-buttons {
+        max-width: 90%;
+      }
+
+      .preview-card {
+        width: 60px;
+        height: 84px;
+      }
+
+      .preview-card-p {
+        left: -30px;
+      }
+
+      .preview-card-o {
+        right: -28px;
+      }
+
+      .preview-card-v {
+        left: -30px;
+      }
+
+      .preview-card-wc {
+        right: -32px;
+      }
+
+      @keyframes shuffle {
+        0% {
+          transform: translateX(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        25% {
+          transform: translateX(-50px) rotate(-10deg) scale(0.95);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateX(50px) rotate(10deg) scale(0.9);
+          opacity: 0.3;
+        }
+        75% {
+          transform: translateX(-25px) rotate(-5deg) scale(0.95);
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateX(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+
+      .self-check-content {
+        padding: 24px 16px;
+      }
+
+      .intro-message {
+        padding: 24px;
+      }
+
+      .rating-buttons {
+        gap: 6px;
+      }
+
+      .rating-btn {
+        min-width: 70px;
+        padding: 8px 8px;
+        font-size: 11px;
+      }
+
+      .results-header {
+        padding: 24px 20px 20px 20px;
+      }
+
+      .results-header h2 {
+        font-size: 24px;
+      }
+
+      .profile-summary {
+        padding: 24px 20px;
+      }
+
+      .insight-section {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper"><!-- INTRO SCREEN -->
+   <div class="intro-screen" id="introScreen"><!-- Large Delta Patterns -->
+    <div class="delta-pattern delta-pattern-1">
+     Δ
+    </div>
+    <div class="delta-pattern delta-pattern-2">
+     Δ
+    </div>
+    <div class="delta-pattern delta-pattern-3">
+     Δ
+    </div>
+    <div class="delta-pattern delta-pattern-4">
+     Δ
+    </div>
+    <div class="intro-container">
+     <div class="delta-symbol">
+      Δ
+     </div><!-- Preview Cards around the container -->
+     <div class="preview-cards">
+      <div class="preview-card preview-card-p">
+       <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 7 L6 12 L11 17" /> <path d="M18 7 L13 12 L18 17" />
+       </svg>
+      </div>
+      <div class="preview-card preview-card-o">
+       <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="9" r="4" fill="white" stroke="none" /> <rect x="10.5" y="13" width="3" height="3.5" fill="white" stroke="none" /> <rect x="9.5" y="16.5" width="5" height="0.8" fill="white" stroke="none" /> <rect x="9.5" y="18" width="5" height="0.8" fill="white" stroke="none" />
+       </svg>
+      </div>
+      <div class="preview-card preview-card-v">
+       <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 7 L18 12 L13 17" /> <path d="M6 7 L11 12 L6 17" />
+       </svg>
+      </div>
+      <div class="preview-card preview-card-wc">
+       <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />
+       </svg>
+      </div>
+     </div>
+     <div class="logo-container" id="logoContainer"><img src="" alt="Logo" class="logo-image" id="logoImage" style="display: none;">
+     </div>
+     <h1 class="intro-title">POV Early Discovery Deck</h1>
+     <p class="intro-body">The POV Deck invites you to pause, rewind, notice patterns, and imagine what comes next. Each card holds a guided question, 🏷️ competency tags, and a DELTA focus area (Cognitive, Interpersonal, Self-Leadership, Digital) to help you connect real experiences with practical insight.</p>
+     <p class="intro-body" style="font-style: italic; color: #8B6914; margin-top: 24px; margin-bottom: 0;">Come in with curiosity. Stay open. These prompts are not about having the "right" point of view; they are about discovering your POV: the patterns, instincts, and truths that have been shaping you all along.</p>
+     <div class="how-to-section">
+      <h2 class="how-to-title">How to Play</h2>
+      <div class="steps-container">
+       <div class="step-item">
+        <div class="step-icon">
+         <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" /> <path d="M7 10 L10 13 L17 10" />
+         </svg>
+        </div>
+        <div class="step-content">
+         <h3 class="step-title">Pick a deck</h3>
+         <p class="step-description">Past, Ownership, Vision, or Wild Card.</p>
+        </div>
+       </div>
+       <div class="step-item">
+        <div class="step-icon">
+         <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="12" height="16" rx="2" /> <line x1="10" y1="9" x2="14" y2="9" /> <line x1="10" y1="13" x2="14" y2="13" />
+         </svg>
+        </div>
+        <div class="step-content">
+         <h3 class="step-title">Draw a card</h3>
+         <p class="step-description">At random.</p>
+        </div>
+       </div>
+       <div class="step-item">
+        <div class="step-icon">
+         <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 L2 7 L12 12 L22 7 L12 2 Z" /> <path d="M2 17 L12 22 L22 17" /> <path d="M2 12 L12 17 L22 12" />
+         </svg>
+        </div>
+        <div class="step-content">
+         <h3 class="step-title">Reflect &amp; connect</h3>
+         <p class="step-description">Notice what story, pattern, or insight shows up.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="button-group"><button class="start-button" onclick="showDeckSelection()">Begin Your Journey</button> <button class="start-button self-check-button" onclick="showSelfCheck()">
+       <svg width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="20" x2="12" y2="10" /> <line x1="18" y1="20" x2="18" y2="4" /> <line x1="6" y1="20" x2="6" y2="16" />
+       </svg> DELTA Self-Check </button>
+     </div>
+    </div>
+   </div><!-- SELF-CHECK SCREEN -->
+   <div class="self-check-screen" id="selfCheckScreen">
+    <div class="self-check-header">
+     <div class="self-check-header-left"><button class="back-button" onclick="backToIntroFromSelfCheck()">←</button>
+      <div class="self-check-title-group">
+       <h2>
+        <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="20" x2="12" y2="10" /> <line x1="18" y1="20" x2="18" y2="4" /> <line x1="6" y1="20" x2="6" y2="16" />
+        </svg> DELTA Self-Check</h2>
+       <p>Rate yourself on 56 competencies across 4 domains</p>
+      </div>
+     </div>
+     <div class="progress-indicator" id="progressIndicator">
+      0 of 56 completed
+     </div>
+    </div>
+    <div class="self-check-content">
+     <div class="self-check-container">
+      <div class="intro-message">
+       <h3>Welcome to Your Self-Assessment</h3>
+       <p><strong>DELTA</strong> stands for <strong>Distinct Elements of Talent</strong> — a research-based framework by McKinsey &amp; Company that identified 56 skills preparing young people for the future of work.</p>
+       <p>These skills are grouped into four domains: <strong>Cognitive</strong>, <strong>Interpersonal</strong>, <strong>Self-Leadership</strong>, and <strong>Digital</strong>. They are called DELTAs because each one represents a skill you can grow and strengthen over time.</p>
+       <p>This pre-assessment helps you get a clear view of your current strengths and growth areas across all four DELTA domains.</p>
+       <p>For each skill below, rate how confident you feel. Be honest, this is for your awareness, not a score or grade.</p>
+       <p><strong>💡 Tip:</strong> Complete this assessment now, then retake it later to track your growth!</p>
+      </div>
+      <div class="name-input-section"><label for="studentName">Your Name (Optional)</label> <input type="text" id="studentName" placeholder="Enter your name">
+      </div>
+      <div class="rating-scale-legend">
+       <h4>Rating Scale</h4>
+       <div class="scale-items">
+        <div class="scale-item">
+         <div class="scale-dot scale-dot-1"></div><span>1 - Not Yet</span>
+        </div>
+        <div class="scale-item">
+         <div class="scale-dot scale-dot-2"></div><span>2 - Sometimes</span>
+        </div>
+        <div class="scale-item">
+         <div class="scale-dot scale-dot-3"></div><span>3 - Often</span>
+        </div>
+        <div class="scale-item">
+         <div class="scale-dot scale-dot-4"></div><span>4 - Always</span>
+        </div>
+       </div>
+      </div>
+      <div id="deltaCategories"></div>
+      <div class="complete-section"><button class="complete-button" id="completeButton" onclick="completeSelfCheck()" disabled> Complete Assessment </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- RESULTS SCREEN -->
+   <div class="results-screen" id="resultsScreen">
+    <div class="results-header">
+     <h2 id="resultsHeaderTitle">🎯 Your DELTA Profile</h2>
+     <p>Assessment completed on <span id="assessmentDate"></span></p>
+    </div>
+    <div class="results-content">
+     <div class="results-container">
+      <div class="profile-summary">
+       <h3>Your Scores</h3>
+       <p class="summary-subtitle">Based on your self-assessment across 56 competencies</p>
+       <div class="domain-scores" id="domainScores"></div>
+      </div>
+      <div class="insight-section">
+       <h4>📊 Domain Interpretations</h4>
+       <div id="domainInterpretations"></div>
+      </div>
+      <div class="insight-section">
+       <h4>💪 Your Strength Patterns</h4>
+       <p id="strengthPatternsText"></p>
+      </div>
+      <div class="insight-section">
+       <h4>📚 Your Learning Style</h4>
+       <p id="learningStyleText"></p>
+      </div>
+      <div class="insight-section">
+       <h4>💬 Your Communication Style</h4>
+       <p id="communicationText"></p>
+      </div>
+      <div class="insight-section">
+       <h4>🔥 What Motivates You</h4>
+       <p id="motivationText"></p>
+      </div>
+      <div class="insight-section">
+       <h4>🌱 Growth Opportunities</h4>
+       <ul class="suggestions-list" id="growthOpportunitiesList"></ul>
+      </div>
+      <div class="insight-section">
+       <h4>💡 Personalized Suggestions</h4>
+       <ul class="suggestions-list" id="suggestionsList"></ul>
+      </div>
+      <div class="reflection-prompts">
+       <h4>🤔 Reflection Prompts for You</h4>
+       <div id="reflectionPromptsList"></div>
+      </div>
+      <div class="results-actions"><button class="action-btn primary-action" onclick="showDeckSelectionFromResults()"> Explore Reflection Decks </button> <button class="action-btn secondary-action" onclick="retakeAssessment()"> Retake Assessment </button> <button class="action-btn secondary-action" onclick="backToIntroFromResults()"> Back to Home </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- DECK SELECTION SCREEN -->
+   <div class="deck-selection" id="deckSelection"><button class="intro-back-button" onclick="backToIntro()">← Back to Intro</button>
+    <h1 class="selection-title">Choose Your Deck</h1>
+    <p class="selection-subtitle">A reflection deck designed to help you explore your past, understand yourself, and shape your future with clarity and confidence.</p>
+    <div class="deck-grid">
+     <div class="deck-option deck-option-p" onclick="selectDeck('p')">
+      <div class="deck-icon">
+       <svg width="48" height="48" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="stroke: #1e1b4b; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"><path d="M11 7 L6 12 L11 17" /> <path d="M18 7 L13 12 L18 17" />
+       </svg>
+      </div>
+      <h2 class="deck-name">Past</h2>
+      <p class="deck-description">Takes you back to the moments that shaped you; your wins, failures, turning points, and lessons learned.</p>
+      <p class="deck-count">19 Cards</p>
+     </div>
+     <div class="deck-option deck-option-o" onclick="selectDeck('o')">
+      <div class="deck-icon">
+       <svg width="48" height="48" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"><circle cx="12" cy="9" r="4" fill="#ffffff" stroke="none" /> <rect x="10.5" y="13" width="3" height="3.5" fill="#ffffff" stroke="none" /> <rect x="9.5" y="16.5" width="5" height="0.8" fill="#ffffff" stroke="none" /> <rect x="9.5" y="18" width="5" height="0.8" fill="#ffffff" stroke="none" />
+       </svg>
+      </div>
+      <h2 class="deck-name">Ownership</h2>
+      <p class="deck-description">Helps you look inward, take responsibility, recognise your patterns, and understand your role in every moment.</p>
+      <p class="deck-count">15 Cards</p>
+     </div>
+     <div class="deck-option deck-option-v" onclick="selectDeck('v')">
+      <div class="deck-icon">
+       <svg width="48" height="48" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="stroke: #1e1b4b; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"><path d="M13 7 L18 12 L13 17" /> <path d="M6 7 L11 12 L6 17" />
+       </svg>
+      </div>
+      <h2 class="deck-name">Vision</h2>
+      <p class="deck-description">Guides you forward, clarifying your aspirations, intentions, and the future you want to build.</p>
+      <p class="deck-count">14 Cards</p>
+     </div>
+     <div class="deck-option deck-option-wc" onclick="selectDeck('wc')">
+      <div class="deck-icon">
+       <svg width="48" height="48" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="stroke: #ffffff; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />
+       </svg>
+      </div>
+      <h2 class="deck-name">Wild Card</h2>
+      <p class="deck-description">Shakes things up with playful, unexpected prompts designed to spark creativity and shift your perspective.</p>
+      <p class="deck-count">6 Cards</p>
+     </div>
+    </div>
+    <p class="disclaimer-text"><strong>A gentle note:</strong> The POV Deck is meant to guide reflection and meaningful conversation. It is not a therapeutic tool, and you should only explore what feels safe and comfortable for you. You are always in control of what you choose to share.</p>
+   </div><!-- DRAW INTERFACE -->
+   <div class="draw-interface" id="drawInterface">
+    <div class="draw-header">
+     <div class="draw-header-left"><button class="back-button" onclick="backToSelection()">←</button>
+      <div class="current-deck-info">
+       <h2 class="current-deck-name" id="currentDeckName">Past Deck</h2>
+       <p class="current-deck-subtitle" id="currentDeckSubtitle">Reflect on your experiences</p>
+      </div>
+     </div>
+     <div class="cards-remaining" id="cardsRemaining">
+      19 cards left
+     </div>
+    </div>
+    <div class="draw-content">
+     <div class="card-display" id="cardDisplay">
+      <div class="card-inner" id="cardInner"><!-- Card will be dynamically inserted here -->
+      </div>
+     </div>
+     <div class="action-buttons" id="actionButtons"><button class="action-button primary-button" onclick="drawCard()" id="drawButton"> Draw Card </button> <button class="action-button secondary-button" onclick="backToSelection()"> Change Deck </button>
+     </div>
+     <p class="instruction-text" id="instructionText">Click "Draw Card" to reveal a random reflection prompt</p>
+     <p class="disclaimer-text"><strong>A gentle note:</strong> The POV Deck is meant to guide reflection and meaningful conversation. It is not a therapeutic tool, and you should only explore what feels safe and comfortable for you. You are always in control of what you choose to share.</p>
+    </div>
+   </div>
+  </div>
+  <script>
+    // DELTA Competencies Data
+    const deltaCompetencies = {
+      cognitive: {
+        name: "🧠 Cognitive",
+        subtitle: "16 competencies",
+        subcategories: {
+          critical_thinking: {
+            name: "Critical Thinking",
+            competencies: [
+              { id: "structured_problem_solving", name: "Structured problem solving", description: "You can break problems into smaller steps and figure things out one part at a time." },
+              { id: "logical_reasoning", name: "Logical reasoning", description: "You make decisions based on facts and clear thinking, not guesses." },
+              { id: "understanding_biases", name: "Understanding biases", description: "You notice when your feelings or assumptions might influence your judgment." },
+              { id: "seeking_relevant_information", name: "Seeking relevant information", description: "You look for the right information instead of relying on the first thing you see." }
+            ]
+          },
+          planning_ways_of_working: {
+            name: "Planning & Ways of Working",
+            competencies: [
+              { id: "work_plan_development", name: "Work-plan development", description: "You can plan tasks in a way that helps you get things done on time." },
+              { id: "time_management_prioritization", name: "Time management and prioritization", description: "You know what needs to be done first and manage your time responsibly." },
+              { id: "agile_thinking", name: "Agile thinking", description: "You can switch plans smoothly when something unexpected happens." }
+            ]
+          },
+          communication: {
+            name: "Communication",
+            competencies: [
+              { id: "storytelling_public_speaking", name: "Storytelling and public speaking", description: "You can explain ideas clearly and in a way that keeps people interested." },
+              { id: "asking_right_questions", name: "Asking the right questions", description: "You ask thoughtful questions that help you understand things better." },
+              { id: "synthesizing_messages", name: "Synthesizing messages", description: "You can take information from different places and summarize it simply." },
+              { id: "active_listening", name: "Active listening", description: "You listen closely and show people that you understand what they're saying." }
+            ]
+          },
+          mental_flexibility: {
+            name: "Mental Flexibility",
+            competencies: [
+              { id: "creativity_imagination", name: "Creativity and imagination", description: "You come up with new or unique ideas when solving problems." },
+              { id: "translating_knowledge", name: "Translating knowledge to different contexts", description: "You can use what you've learned in one situation to help you in another." },
+              { id: "adopting_different_perspective", name: "Adopting a different perspective", description: "You can look at a situation from someone else's point of view." },
+              { id: "adaptability", name: "Adaptability", description: "You adjust well when things change around you." },
+              { id: "ability_to_learn", name: "Ability to learn", description: "You learn new skills quickly and stay open to new ways of doing things." }
+            ]
+          }
+        }
+      },
+      interpersonal: {
+        name: "🤝 Interpersonal",
+        subtitle: "14 competencies",
+        subcategories: {
+          mobilizing_systems: {
+            name: "Mobilizing Systems",
+            competencies: [
+              { id: "role_modeling", name: "Role modeling", description: "You behave in a way that others can look up to or follow." },
+              { id: "win_win_negotiations", name: "Win-win negotiations", description: "You look for solutions where everyone benefits, not just you." },
+              { id: "crafting_inspiring_vision", name: "Crafting an inspiring vision", description: "You can share ideas about the future in a way that motivates people." },
+              { id: "organizational_awareness", name: "Organizational awareness", description: "You understand how groups, teams, or systems work and how decisions get made." }
+            ]
+          },
+          developing_relationships: {
+            name: "Developing Relationships",
+            competencies: [
+              { id: "empathy", name: "Empathy", description: "You understand how others feel and respond with care." },
+              { id: "inspiring_trust", name: "Inspiring trust", description: "You behave in ways that make others feel safe and confident around you." },
+              { id: "humility", name: "Humility", description: "You stay grounded, open to feedback, and willing to admit when you are wrong." },
+              { id: "sociability", name: "Sociability", description: "You connect easily with others and build friendly relationships." }
+            ]
+          },
+          teamwork_effectiveness: {
+            name: "Teamwork Effectiveness",
+            competencies: [
+              { id: "fostering_inclusiveness", name: "Fostering inclusiveness", description: "You help make sure everyone feels welcome and included." },
+              { id: "motivating_different_personalities", name: "Motivating different personalities", description: "You can encourage people with different styles or attitudes." },
+              { id: "resolving_conflicts", name: "Resolving conflicts", description: "You help people work through disagreements calmly and fairly." },
+              { id: "collaboration", name: "Collaboration", description: "You work well with others and contribute to the group's goals." },
+              { id: "coaching", name: "Coaching", description: "You support others by giving helpful advice or guidance." },
+              { id: "empowering", name: "Empowering", description: "You help others feel confident and capable of doing things on their own." }
+            ]
+          }
+        }
+      },
+      self_leadership: {
+        name: "🧭 Self-Leadership",
+        subtitle: "16 competencies",
+        subcategories: {
+          self_awareness_management: {
+            name: "Self-Awareness & Self-Management",
+            competencies: [
+              { id: "understanding_emotions_triggers", name: "Understanding own emotions and triggers", description: "You notice what emotions you feel and why you feel them." },
+              { id: "self_control_regulation", name: "Self-control and regulation", description: "You manage your reactions, even when situations are stressful." },
+              { id: "understanding_own_strengths", name: "Understanding own strengths", description: "You know what you're good at and how to use it wisely." },
+              { id: "integrity", name: "Integrity", description: "You act in an honest and consistent way, even when no one is watching." },
+              { id: "self_motivation_wellness", name: "Self-motivation and wellness", description: "You push yourself to do your best while taking care of your well-being." },
+              { id: "self_confidence", name: "Self-confidence", description: "You believe in your ability to learn, grow, and handle challenges." }
+            ]
+          },
+          entrepreneurship: {
+            name: "Entrepreneurship",
+            competencies: [
+              { id: "courage_risk_taking", name: "Courage and risk-taking", description: "You're willing to try things even when the outcome is uncertain." },
+              { id: "driving_change_innovation", name: "Driving change and innovation", description: "You like improving things and coming up with better ways to do them." },
+              { id: "energy_passion_optimism", name: "Energy, passion, and optimism", description: "You bring enthusiasm and a positive attitude to what you do." },
+              { id: "breaking_orthodoxies", name: "Breaking orthodoxies", description: "You are open to challenging old rules and exploring new approaches." }
+            ]
+          },
+          goals_achievement: {
+            name: "Goals Achievement",
+            competencies: [
+              { id: "ownership_decisiveness", name: "Ownership and decisiveness", description: "You take responsibility for your tasks and make clear decisions." },
+              { id: "achievement_orientation", name: "Achievement orientation", description: "You work hard to reach high standards and personal goals." },
+              { id: "grit_persistence", name: "Grit and persistence", description: "You keep going even when things get hard." },
+              { id: "coping_uncertainty", name: "Coping with uncertainty", description: "You stay calm and flexible when you don't have all the answers." },
+              { id: "self_development", name: "Self-development", description: "You actively look for ways to grow and improve yourself." }
+            ]
+          }
+        }
+      },
+      digital: {
+        name: "💻 Digital",
+        subtitle: "11 competencies",
+        subcategories: {
+          digital_fluency_citizenship: {
+            name: "Digital Fluency & Citizenship",
+            competencies: [
+              { id: "digital_literacy", name: "Digital literacy", description: "You understand how to use digital tools safely and effectively." },
+              { id: "digital_learning", name: "Digital learning", description: "You use online tools and resources to learn new things." },
+              { id: "digital_collaboration", name: "Digital collaboration", description: "You work well with others using online platforms or technology." },
+              { id: "digital_ethics", name: "Digital ethics", description: "You understand what is right and wrong when using digital content or data." }
+            ]
+          },
+          software_use_development: {
+            name: "Software Use & Development",
+            competencies: [
+              { id: "programming_literacy", name: "Programming literacy", description: "You understand the basics of how coding works and can use simple programs." },
+              { id: "data_analysis_statistics", name: "Data analysis and statistics", description: "You can look at data and spot patterns or useful information." },
+              { id: "computational_algorithmic_thinking", name: "Computational and algorithmic thinking", description: "You think in structured steps to solve complex problems." }
+            ]
+          },
+          understanding_digital_systems: {
+            name: "Understanding Digital Systems",
+            competencies: [
+              { id: "data_literacy", name: "Data literacy", description: "You can read, understand, and use data to make decisions." },
+              { id: "smart_systems", name: "Smart systems", description: "You understand how systems like AI or automation work in everyday life." },
+              { id: "cybersecurity_literacy", name: "Cybersecurity literacy", description: "You know how to protect yourself and your information online." },
+              { id: "tech_translation_enablement", name: "Tech translation and enablement", description: "You can explain technology in simple terms and help others use it." }
+            ]
+          }
+        }
+      }
+    };
+
+    // Card Data (existing POV decks)
+    const decks = {
+      p: {
+        name: "Past",
+        subtitle: "Reflect on your experiences",
+        label: "P · PAST STORY",
+        icon: '<path d="M11 7 L6 12 L11 17" /><path d="M18 7 L13 12 L18 17" />',
+        iconSmall: '<path d="M11 7 L6 12 L11 17" /><path d="M18 7 L13 12 L18 17" />',
+        cards: [
+          { number: "01", title: "I Took the Lead", prompt: "Tell me about a time when you stepped up and took charge of something, even though no one asked you to.", tags: ["Initiative", "Leadership", "Ownership"], delta: "Interpersonal" },
+          { number: "02", title: "The Curveball", prompt: "Describe a situation where something unexpected happened and you had to adjust on the fly.", tags: ["Adaptability", "Problem-solving", "Composure"], delta: "Self-Leadership" },
+          { number: "03", title: "Racing the Clock", prompt: "Talk about a time when you had a really tight deadline—how did you handle it?", tags: ["Time Management", "Focus", "Execution"], delta: "Self-Leadership" },
+          { number: "04", title: "Team Chaos", prompt: "Tell me about a time you were part of a group where people were not working well together. What did you do?", tags: ["Collaboration", "Conflict Navigation", "Influence"], delta: "Interpersonal" },
+          { number: "05", title: "The Risk", prompt: "Describe a time when you decided to try something even though you were not sure how it would turn out.", tags: ["Courage", "Judgement", "Experimentation"], delta: "Self-Leadership" },
+          { number: "06", title: "Wait, What?", prompt: "Tell me about a moment when you realized you misunderstood something important. How did you fix it?", tags: ["Communication", "Humility", "Recovery"], delta: "Interpersonal" },
+          { number: "07", title: "Learning Curve", prompt: "Describe a time you had to learn something new quickly. What did you do?", tags: ["Learning Agility", "Curiosity", "Self-management"], delta: "Cognitive" },
+          { number: "08", title: "The Mystery", prompt: "Tell me about a problem you faced where you did not have all the information you needed. How did you figure it out?", tags: ["Critical Thinking", "Resourcefulness", "Resilience"], delta: "Cognitive" },
+          { number: "09", title: "Almost Quit", prompt: "Tell me about a time when something got so frustrating or hard that you almost gave up—but did not.", tags: ["Perseverance", "Motivation", "Mindset"], delta: "Self-Leadership" },
+          { number: "10", title: "Wrong Answer", prompt: "Describe a time you made a mistake. What happened, and what did you learn?", tags: ["Accountability", "Learning", "Growth Mindset"], delta: "Self-Leadership" },
+          { number: "11", title: "Earning Trust", prompt: "A time when someone did not trust you at first, but you earned their trust over time.", tags: ["Trust-building", "Reliability", "Consistency"], delta: "Interpersonal" },
+          { number: "12", title: "The Connector", prompt: "Describe a time you brought people together who did not know each other.", tags: ["Networking", "Relationship-building", "Initiative"], delta: "Interpersonal" },
+          { number: "13", title: "Reading the Room", prompt: "A time you had to understand unwritten rules or politics in a group or organization.", tags: ["Social Awareness", "Political Savvy", "Observation"], delta: "Interpersonal" },
+          { number: "14", title: "The Win-Win", prompt: "A situation where you and someone else wanted different things, and you found a solution that worked for both.", tags: ["Negotiation", "Collaboration", "Problem-solving"], delta: "Interpersonal" },
+          { number: "15", title: "The Outsider", prompt: "A time you helped someone feel included when they were being left out.", tags: ["Inclusion", "Empathy", "Leadership"], delta: "Interpersonal" },
+          { number: "16", title: "When We Clashed", prompt: "Tell me about a time you had a conflict with a teammate and how it got resolved.", tags: ["Conflict Resolution", "Communication", "Maturity"], delta: "Interpersonal" },
+          { number: "17", title: "Digging Deeper", prompt: "A time you had to find information or answers that were not obvious or easy to find.", tags: ["Research", "Persistence", "Curiosity"], delta: "Cognitive" },
+          { number: "18", title: "Making It Simple", prompt: "A time you had to explain something complicated to someone in a way they could understand.", tags: ["Clarity", "Communication", "Teaching"], delta: "Interpersonal" },
+          { number: "19", title: "The Right Thing", prompt: "A time you had to choose between what was easy and what was right.", tags: ["Integrity", "Values", "Courage"], delta: "Self-Leadership" }
+        ]
+      },
+      o: {
+        name: "Ownership",
+        subtitle: "Explore accountability and initiative",
+        label: "O · OWNERSHIP & INSIGHT",
+        icon: '<circle cx="12" cy="9" r="4" fill="white" stroke="none" /><rect x="10.5" y="13" width="3" height="3.5" fill="white" stroke="none" /><rect x="9.5" y="16.5" width="5" height="0.8" fill="white" stroke="none" /><rect x="9.5" y="18" width="5" height="0.8" fill="white" stroke="none" />',
+        iconSmall: '<circle cx="12" cy="9" r="4" fill="white" stroke="none" /><rect x="10.5" y="13" width="3" height="3.5" fill="white" stroke="none" /><rect x="9.5" y="16.5" width="5" height="0.8" fill="white" stroke="none" /><rect x="9.5" y="18" width="5" height="0.8" fill="white" stroke="none" />',
+        cards: [
+          { number: "01", title: "Owning It", prompt: "Tell me about a time when you took ownership of something—good or bad.", tags: ["Ownership", "Accountability", "Integrity"], delta: "Self-Leadership" },
+          { number: "02", title: "Better Way", prompt: "Describe a situation where you improved how something was done.", tags: ["Continuous Improvement", "Initiative", "Problem-solving"], delta: "Cognitive" },
+          { number: "03", title: "Follow Through", prompt: "Tell me about a goal or commitment you made. How did you make sure you followed through?", tags: ["Discipline", "Reliability", "Execution"], delta: "Self-Leadership" },
+          { number: "04", title: "Feedback Check", prompt: "Describe a time when you asked for feedback. What did you learn?", tags: ["Self-awareness", "Openness", "Learning"], delta: "Self-Leadership" },
+          { number: "05", title: "Tough Call", prompt: "Tell me about a time when you had to make a difficult decision. How did you decide?", tags: ["Decision-making", "Judgement", "Courage"], delta: "Cognitive" },
+          { number: "06", title: "Accountability Moment", prompt: "Describe a time when someone depended on you. How did you show up?", tags: ["Responsibility", "Reliability", "Ownership"], delta: "Self-Leadership" },
+          { number: "07", title: "Going the Extra Mile", prompt: "Tell me about a time you did more than what was expected of you.", tags: ["Commitment", "Work Ethic", "Initiative"], delta: "Self-Leadership" },
+          { number: "08", title: "My Part", prompt: "Describe a time when something did not go well, and you reflected on your role in it.", tags: ["Reflection", "Humility", "Growth Mindset"], delta: "Self-Leadership" },
+          { number: "09", title: "Initiative Check", prompt: "Tell me about something you started or created without being told to do it.", tags: ["Proactiveness", "Creativity", "Ownership"], delta: "Self-Leadership" },
+          { number: "10", title: "Prioritizing", prompt: "Tell me about a time when you had multiple things to do and had to decide what mattered most.", tags: ["Prioritisation", "Time Management", "Judgement"], delta: "Cognitive" },
+          { number: "11", title: "Pride Before Fall", prompt: "A moment when you had to set aside your pride or ego for something more important.", tags: ["Humility", "Maturity", "Teamwork"], delta: "Interpersonal" },
+          { number: "12", title: "Helping Someone Grow", prompt: "A time you helped someone improve at something — how did you approach it?", tags: ["Coaching", "Support", "Empathy"], delta: "Interpersonal" },
+          { number: "13", title: "Different Motivators", prompt: "When working with others, how do you figure out what drives each person?", tags: ["Empathy", "Motivation", "People Insight"], delta: "Interpersonal" },
+          { number: "14", title: "My Blind Spot", prompt: "A time you realized you were biased or making assumptions about something or someone.", tags: ["Self-awareness", "Bias Awareness", "Reflection"], delta: "Self-Leadership" },
+          { number: "15", title: "Breaking It Down", prompt: "Describe how you approach a big, complex task from start to finish.", tags: ["Planning", "Structure", "Analytical Thinking"], delta: "Cognitive" }
+        ]
+      },
+      v: {
+        name: "Vision",
+        subtitle: "Envision your future",
+        label: "V · VISION & FUTURE",
+        icon: '<path d="M13 7 L18 12 L13 17" /><path d="M6 7 L11 12 L6 17" />',
+        iconSmall: '<path d="M13 7 L18 12 L13 17" /><path d="M6 7 L11 12 L6 17" />',
+        cards: [
+          { number: "01", title: "Future You", prompt: "What does success look like for you in the next 2–3 years?", tags: ["Aspiration", "Self-direction", "Goal-setting"], delta: "Self-Leadership" },
+          { number: "02", title: "Inspire Me", prompt: "Who do you look up to, and why?", tags: ["Role Models", "Values", "Inspiration"], delta: "Interpersonal" },
+          { number: "03", title: "Your Why", prompt: "What motivates you to work hard or keep going when things are tough?", tags: ["Motivation", "Purpose", "Resilience"], delta: "Self-Leadership" },
+          { number: "04", title: "Impact Vision", prompt: "What kind of impact do you want to have on your community, team, or field?", tags: ["Impact", "Contribution", "Leadership"], delta: "Interpersonal" },
+          { number: "05", title: "If You Could…", prompt: "If you could solve one problem in the world, what would it be and why?", tags: ["Problem-sensing", "Empathy", "Vision"], delta: "Cognitive" },
+          { number: "06", title: "Values Check", prompt: "What is something you believe in strongly, and how do you show it through your actions?", tags: ["Values", "Integrity", "Consistency"], delta: "Self-Leadership" },
+          { number: "07", title: "The Bigger Picture", prompt: "How do your current goals connect to something bigger than yourself?", tags: ["Systems Thinking", "Meaning", "Long-term View"], delta: "Cognitive" },
+          { number: "08", title: "Dream Role", prompt: "Describe a role or opportunity that excites you. What about it appeals to you?", tags: ["Career Vision", "Motivation", "Self-knowledge"], delta: "Self-Leadership" },
+          { number: "09", title: "Growth Vision", prompt: "What is one skill or strength you want to develop, and why does it matter to you?", tags: ["Learning Agility", "Development", "Intentionality"], delta: "Self-Leadership" },
+          { number: "10", title: "Legacy Thoughts", prompt: "If people remembered you for one thing, what would you want it to be?", tags: ["Legacy", "Identity", "Purpose"], delta: "Self-Leadership" },
+          { number: "11", title: "The Change I'd Make", prompt: "If you could change one rule or system in your school or community, what would it be and how would you get others on board?", tags: ["Change-making", "Influence", "Initiative"], delta: "Interpersonal" },
+          { number: "12", title: "Leading by Doing", prompt: "A time when people followed your example without you asking them to.", tags: ["Role Modelling", "Informal Leadership", "Behaviour"], delta: "Interpersonal" },
+          { number: "13", title: "Plan B (and C)", prompt: "Tell me about a time when your original plan fell apart and you had to quickly adjust.", tags: ["Adaptability", "Resilience", "Planning"], delta: "Self-Leadership" },
+          { number: "14", title: "The Unknown Path", prompt: "Describe a time you committed to something even though you did not know how it would turn out.", tags: ["Risk-taking", "Courage", "Uncertainty"], delta: "Self-Leadership" }
+        ]
+      },
+      wc: {
+        name: "Wild Card",
+        subtitle: "Diverse self-discovery prompts",
+        label: "POV WILD CARD",
+        icon: '<path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />',
+        iconSmall: '<path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />',
+        cards: [
+          { number: "01", title: "Strengths Spotlight", prompt: "What do people often come to you for help with?", tags: ["Strengths", "Reputation", "Self-awareness"], delta: "Self-Leadership" },
+          { number: "02", title: "Growth Edge", prompt: "What is one thing you wish you were better at?", tags: ["Honesty", "Development", "Growth Mindset"], delta: "Self-Leadership" },
+          { number: "03", title: "Reputation Reflection", prompt: "If I asked your friends or teammates to describe you in three words, what would they say?", tags: ["Self-image", "Feedback", "Reflection"], delta: "Interpersonal" },
+          { number: "04", title: "Pressure Test", prompt: "How do you react when you are stressed or under pressure?", tags: ["Coping", "Emotional Awareness", "Resilience"], delta: "Self-Leadership" },
+          { number: "05", title: "Collaboration Check", prompt: "How do you prefer to work—alone, with a partner, or in a group? Why?", tags: ["Work Style", "Collaboration", "Self-knowledge"], delta: "Interpersonal" },
+          { number: "06", title: "Breaking the Rules", prompt: "When is it okay to break rules or do things differently than expected?", tags: ["Judgement", "Creativity", "Ethics"], delta: "Cognitive" }
+        ]
+      }
+    };
+
+    let currentDeck = null;
+    let availableCards = [];
+    let currentCard = null;
+    let isFlipped = false;
+    let isShuffling = false;
+
+    // Self-check data
+    let selfCheckRatings = {};
+    let totalCompetencies = 0;
+
+    function showDeckSelection() {
+      const introScreen = document.getElementById('introScreen');
+      const deckSelection = document.getElementById('deckSelection');
+      
+      introScreen.classList.add('hidden');
+      deckSelection.classList.add('active');
+    }
+
+    function showDeckSelectionFromResults() {
+      const resultsScreen = document.getElementById('resultsScreen');
+      const deckSelection = document.getElementById('deckSelection');
+      
+      resultsScreen.classList.remove('active');
+      deckSelection.classList.add('active');
+    }
+
+    function backToIntro() {
+      const introScreen = document.getElementById('introScreen');
+      const deckSelection = document.getElementById('deckSelection');
+      
+      deckSelection.classList.remove('active');
+      introScreen.classList.remove('hidden');
+    }
+
+    function backToIntroFromResults() {
+      const introScreen = document.getElementById('introScreen');
+      const resultsScreen = document.getElementById('resultsScreen');
+      
+      resultsScreen.classList.remove('active');
+      introScreen.classList.remove('hidden');
+    }
+
+    function showSelfCheck() {
+      const introScreen = document.getElementById('introScreen');
+      const selfCheckScreen = document.getElementById('selfCheckScreen');
+      
+      introScreen.classList.add('hidden');
+      selfCheckScreen.classList.add('active');
+      
+      initializeSelfCheck();
+    }
+
+    function backToIntroFromSelfCheck() {
+      const introScreen = document.getElementById('introScreen');
+      const selfCheckScreen = document.getElementById('selfCheckScreen');
+      
+      selfCheckScreen.classList.remove('active');
+      introScreen.classList.remove('hidden');
+    }
+
+    function initializeSelfCheck() {
+      selfCheckRatings = {};
+      totalCompetencies = 0;
+
+      const savedRatings = localStorage.getItem('pov_selfcheck_ratings');
+      if (savedRatings) {
+        try {
+          selfCheckRatings = JSON.parse(savedRatings) || {};
+        } catch (e) {
+          console.warn('Failed to parse saved self-check ratings', e);
+          selfCheckRatings = {};
+        }
+      }
+
+      const savedName = localStorage.getItem('pov_student_name');
+      if (savedName) {
+        document.getElementById('studentName').value = savedName;
+      }
+
+      Object.keys(deltaCompetencies).forEach(domainKey => {
+        const domain = deltaCompetencies[domainKey];
+        Object.keys(domain.subcategories).forEach(subcatKey => {
+          totalCompetencies += domain.subcategories[subcatKey].competencies.length;
+        });
+      });
+
+      renderSelfCheckCompetencies();
+      updateProgress();
+    }
+
+    function renderSelfCheckCompetencies() {
+      const deltaCategories = document.getElementById('deltaCategories');
+      deltaCategories.innerHTML = '';
+
+      Object.keys(deltaCompetencies).forEach(domainKey => {
+        const domain = deltaCompetencies[domainKey];
+        
+        let domainHTML = `
+          <div class="delta-category-section">
+            <div class="delta-category-header">
+              <h3>${domain.name}</h3>
+              <p>${domain.subtitle}</p>
+            </div>
+        `;
+
+        Object.keys(domain.subcategories).forEach(subcatKey => {
+          const subcat = domain.subcategories[subcatKey];
+          
+          domainHTML += `
+            <div class="subcategory-section">
+              <div class="subcategory-header" onclick="toggleSubcategory('${domainKey}_${subcatKey}')">
+                <h4>${subcat.name}</h4>
+                <svg class="expand-icon" id="expand-${domainKey}_${subcatKey}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+              <div class="competency-list" id="complist-${domainKey}_${subcatKey}">
+                ${subcat.competencies.map(comp => {
+                  const compId = `${domainKey}_${subcatKey}_${comp.id}`;
+                  const savedRating = selfCheckRatings[compId];
+
+                  return `
+                    <div class="assessment-card">
+                      <div class="card-info">
+                        <h5>${comp.name}</h5>
+                        <p>${comp.description}</p>
+                      </div>
+                      <div class="rating-buttons">
+                        ${[
+                          { value: 1, label: 'Not Yet' },
+                          { value: 2, label: 'Sometimes' },
+                          { value: 3, label: 'Often' },
+                          { value: 4, label: 'Always' }
+                        ].map(rating => `
+                          <button
+                            class="rating-btn rating-btn-${rating.value} ${savedRating === rating.value ? 'selected' : ''}"
+                            onclick="rateCompetency('${compId}', ${rating.value}, this)"
+                          >
+                            ${rating.label}
+                          </button>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        });
+
+        domainHTML += `</div>`;
+        deltaCategories.innerHTML += domainHTML;
+      });
+    }
+
+    function toggleSubcategory(subcatId) {
+      const compList = document.getElementById(`complist-${subcatId}`);
+      const expandIcon = document.getElementById(`expand-${subcatId}`);
+      
+      compList.classList.toggle('expanded');
+      expandIcon.classList.toggle('expanded');
+    }
+
+    function rateCompetency(compId, rating, btn) {
+      selfCheckRatings[compId] = rating;
+
+      const card = btn.closest('.assessment-card');
+      const buttons = card.querySelectorAll('.rating-btn');
+      buttons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      localStorage.setItem('pov_selfcheck_ratings', JSON.stringify(selfCheckRatings));
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const ratedCompetencies = Object.keys(selfCheckRatings).length;
+      
+      document.getElementById('progressIndicator').textContent = `${ratedCompetencies} of ${totalCompetencies} completed`;
+      
+      const completeButton = document.getElementById('completeButton');
+      if (ratedCompetencies === totalCompetencies) {
+        completeButton.disabled = false;
+      } else {
+        completeButton.disabled = true;
+      }
+    }
+
+    function calculateDomainScores() {
+      const domainScores = {
+        cognitive: [],
+        interpersonal: [],
+        self_leadership: [],
+        digital: []
+      };
+
+      for (const [compId, rating] of Object.entries(selfCheckRatings)) {
+        const parts = compId.split('_');
+        let domainKey;
+
+        if (parts[0] === 'self' && parts[1] === 'leadership') {
+          domainKey = 'self_leadership';
+        } else {
+          domainKey = parts[0];
+        }
+
+        if (!domainScores[domainKey]) {
+          continue;
+        }
+
+        domainScores[domainKey].push(rating);
+      }
+
+      const results = {};
+      for (const [domain, ratings] of Object.entries(domainScores)) {
+        if (ratings.length === 0) {
+          results[domain] = 0;
+          continue;
+        }
+        const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+        results[domain] = Math.round(avg * 10) / 10;
+      }
+
+      return results;
+    }
+
+    function generateInsights(scores) {
+      const studentName = document.getElementById('studentName').value.trim();
+
+      // Generate interpretations
+      const interpretations = {};
+      const domainNames = {
+        cognitive: 'Cognitive',
+        interpersonal: 'Interpersonal',
+        self_leadership: 'Self-Leadership',
+        digital: 'Digital'
+      };
+
+      for (const [domain, score] of Object.entries(scores)) {
+        if (score >= 3.5) {
+          interpretations[domain] = `Your ${domainNames[domain]} score of ${score}/4 shows strong confidence in this domain. You demonstrate excellent capabilities here.`;
+        } else if (score >= 2.5) {
+          interpretations[domain] = `Your ${domainNames[domain]} score of ${score}/4 indicates developing skills. You're on a solid growth trajectory.`;
+        } else if (score >= 1.5) {
+          interpretations[domain] = `Your ${domainNames[domain]} score of ${score}/4 shows emerging skills. This is an area with significant growth potential.`;
+        } else {
+          interpretations[domain] = `Your ${domainNames[domain]} score of ${score}/4 indicates this is a foundational area where focused development will yield great results.`;
+        }
+      }
+
+      // Identify top and bottom domains
+      const sortedDomains = Object.entries(scores)
+        .sort((a, b) => b[1] - a[1])
+        .map(([domain, score]) => ({ domain, score, name: domainNames[domain] }));
+
+      const topDomain = sortedDomains[0];
+      const bottomDomain = sortedDomains[sortedDomains.length - 1];
+
+      // Generate rich insights
+      const strengthPatterns = `Your strongest domain is ${topDomain.name} (${topDomain.score}/4). This suggests you naturally excel at ${topDomain.domain === 'cognitive' ? 'analytical thinking, planning, and problem-solving' : topDomain.domain === 'interpersonal' ? 'building relationships, collaborating, and influencing others' : topDomain.domain === 'self_leadership' ? 'self-awareness, goal-setting, and perseverance' : 'understanding and leveraging digital tools'}. You likely bring these strengths to every challenge you face.`;
+
+      const learningStyle = topDomain.domain === 'cognitive' 
+        ? 'You likely learn best through structured analysis, breaking down complex concepts, and exploring ideas deeply.'
+        : topDomain.domain === 'interpersonal'
+        ? 'You probably learn best through discussion, collaboration, and observing how others approach challenges.'
+        : topDomain.domain === 'self_leadership'
+        ? 'You may learn best through self-reflection, goal-setting, and direct hands-on experience.'
+        : 'You likely learn well through exploration of digital tools, tutorials, and interactive experiences.';
+
+      const communication = scores.cognitive >= 3 || scores.interpersonal >= 3
+        ? 'You communicate thoughtfully and adapt your style based on your audience. You likely excel at both listening and expressing ideas.'
+        : 'You are developing your communication skills. Focus on active listening, asking clarifying questions, and practicing clear expression.';
+
+      const motivation = scores.self_leadership >= 3
+        ? 'You are self-motivated and driven by internal goals. You likely find meaning in personal growth and achievement.'
+        : 'You are discovering what drives you. Reflect on what energizes you and connect your activities to your values.';
+
+      // Generate growth opportunities
+      const growthOpportunities = [
+        `Strengthen your ${bottomDomain.name} skills by seeking opportunities that challenge you in this domain.`,
+        `Focus on ${sortedDomains[sortedDomains.length - 2].name} by practicing specific competencies through real-world experiences.`,
+        `Build consistency across all domains by identifying cross-cutting skills that support multiple areas.`
+      ];
+
+      // Generate suggestions
+      const suggestions = [
+        `Seek mentorship or guidance from someone strong in ${bottomDomain.name}.`,
+        `Set a specific goal to improve one ${bottomDomain.name} competency this month.`,
+        `Reflect weekly on situations where you used your strengths and where you could grow.`,
+        `Join activities or groups that naturally develop ${bottomDomain.name} skills.`,
+        `Celebrate small wins as you develop new competencies—growth takes time!`
+      ];
+
+      // Generate reflection prompts
+      const reflectionPrompts = [
+        `What's one moment recently where you demonstrated your ${topDomain.name} strength?`,
+        `If you could improve one ${bottomDomain.name} skill right now, which would have the biggest impact on your goals?`,
+        `How do your current strengths help you overcome challenges in areas where you're still growing?`
+      ];
+
+      return {
+        student_name: studentName || 'Student',
+        interpretations,
+        strength_patterns: strengthPatterns,
+        learning_style: learningStyle,
+        communication: communication,
+        motivation: motivation,
+        growth_opportunities: growthOpportunities,
+        suggestions,
+        reflection_prompts: reflectionPrompts
+      };
+    }
+
+    function showResults(scores, insights) {
+      const selfCheckScreen = document.getElementById('selfCheckScreen');
+      const resultsScreen = document.getElementById('resultsScreen');
+      
+      selfCheckScreen.classList.remove('active');
+      resultsScreen.classList.add('active');
+
+      // Set header
+      const headerTitle = document.getElementById('resultsHeaderTitle');
+      if (insights.student_name && insights.student_name !== 'Student') {
+        headerTitle.textContent = `🎯 ${insights.student_name}'s DELTA Profile`;
+      } else {
+        headerTitle.textContent = `🎯 Your DELTA Profile`;
+      }
+
+      // Set assessment date
+      const date = new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      document.getElementById('assessmentDate').textContent = date;
+
+      // Render domain scores
+      const domainScoresEl = document.getElementById('domainScores');
+      domainScoresEl.innerHTML = '';
+
+      const domainDetails = [
+        { key: 'cognitive', emoji: '🧠', name: 'Cognitive' },
+        { key: 'interpersonal', emoji: '🤝', name: 'Interpersonal' },
+        { key: 'self_leadership', emoji: '🧭', name: 'Self-Leadership' },
+        { key: 'digital', emoji: '💻', name: 'Digital' }
+      ];
+
+      domainDetails.forEach(domain => {
+        const score = scores[domain.key];
+        const percentage = (score / 4) * 100;
+
+        const itemHTML = `
+          <div class="domain-score-item">
+            <div class="domain-header">
+              <span class="domain-name">${domain.emoji} ${domain.name}</span>
+              <span class="domain-score">${score} / 4</span>
+            </div>
+            <div class="score-bar-container">
+              <div class="score-bar-fill" style="width: ${percentage}%"></div>
+            </div>
+          </div>
+        `;
+        domainScoresEl.innerHTML += itemHTML;
+      });
+
+      // Render domain interpretations
+      const domainInterpretations = document.getElementById('domainInterpretations');
+      domainInterpretations.innerHTML = '';
+      domainDetails.forEach(domain => {
+        const interp = insights.interpretations[domain.key];
+        domainInterpretations.innerHTML += `
+          <div class="domain-interpretation">
+            <h5>${domain.emoji} ${domain.name}</h5>
+            <p>${interp}</p>
+          </div>
+        `;
+      });
+
+      // Render insights
+      document.getElementById('strengthPatternsText').textContent = insights.strength_patterns;
+      document.getElementById('learningStyleText').textContent = insights.learning_style;
+      document.getElementById('communicationText').textContent = insights.communication;
+      document.getElementById('motivationText').textContent = insights.motivation;
+
+      // Render growth opportunities
+      const growthList = document.getElementById('growthOpportunitiesList');
+      growthList.innerHTML = '';
+      insights.growth_opportunities.forEach(opp => {
+        growthList.innerHTML += `<li>${opp}</li>`;
+      });
+
+      // Render suggestions
+      const suggestionsList = document.getElementById('suggestionsList');
+      suggestionsList.innerHTML = '';
+      insights.suggestions.forEach(sug => {
+        suggestionsList.innerHTML += `<li>${sug}</li>`;
+      });
+
+      // Render reflection prompts
+      const promptsList = document.getElementById('reflectionPromptsList');
+      promptsList.innerHTML = '';
+      insights.reflection_prompts.forEach(prompt => {
+        promptsList.innerHTML += `<div class="prompt-item">${prompt}</div>`;
+      });
+    }
+
+    function retakeAssessment() {
+      const resultsScreen = document.getElementById('resultsScreen');
+      const selfCheckScreen = document.getElementById('selfCheckScreen');
+      
+      resultsScreen.classList.remove('active');
+      selfCheckScreen.classList.add('active');
+      
+      selfCheckRatings = {};
+
+      localStorage.removeItem('pov_selfcheck_ratings');
+      localStorage.removeItem('pov_last_assessment');
+      
+      document.querySelectorAll('.rating-btn.selected').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      
+      updateProgress();
+    }
+
+    function completeSelfCheck() {
+      const completeButton = document.getElementById('completeButton');
+      completeButton.disabled = true;
+      completeButton.textContent = 'Calculating Results...';
+
+      setTimeout(() => {
+        const studentName = document.getElementById('studentName').value.trim();
+        if (studentName) {
+          localStorage.setItem('pov_student_name', studentName);
+        }
+
+        const scores = calculateDomainScores();
+        const insights = generateInsights(scores);
+        const timestamp = new Date().toISOString();
+        
+        const assessmentData = {
+          student_name: insights.student_name,
+          assessment_date: timestamp,
+          cognitive_score: scores.cognitive,
+          interpersonal_score: scores.interpersonal,
+          self_leadership_score: scores.self_leadership,
+          digital_score: scores.digital,
+          cognitive_interpretation: insights.interpretations.cognitive,
+          interpersonal_interpretation: insights.interpretations.interpersonal,
+          self_leadership_interpretation: insights.interpretations.self_leadership,
+          digital_interpretation: insights.interpretations.digital,
+          strength_patterns_paragraph: insights.strength_patterns,
+          learning_style_paragraph: insights.learning_style,
+          communication_paragraph: insights.communication,
+          motivation_paragraph: insights.motivation,
+          growth_opportunity_1: insights.growth_opportunities[0],
+          growth_opportunity_2: insights.growth_opportunities[1],
+          growth_opportunity_3: insights.growth_opportunities[2],
+          suggestion_1: insights.suggestions[0],
+          suggestion_2: insights.suggestions[1],
+          suggestion_3: insights.suggestions[2],
+          suggestion_4: insights.suggestions[3],
+          suggestion_5: insights.suggestions[4],
+          reflection_prompt_1: insights.reflection_prompts[0],
+          reflection_prompt_2: insights.reflection_prompts[1],
+          reflection_prompt_3: insights.reflection_prompts[2],
+          total_competencies: totalCompetencies,
+          completed: true
+        };
+
+        localStorage.setItem('pov_last_assessment', JSON.stringify(assessmentData));
+        
+        showResults(scores, insights);
+        
+        if (window.dataSdk) {
+          window.dataSdk.create(assessmentData).catch(err => console.warn('Cloud save failed:', err));
+        }
+        
+        completeButton.textContent = 'Complete Assessment';
+      }, 300);
+    }
+
+    function selectDeck(deckKey) {
+      currentDeck = deckKey;
+      availableCards = [...decks[deckKey].cards];
+      
+      const deckSelection = document.getElementById('deckSelection');
+      const drawInterface = document.getElementById('drawInterface');
+      
+      deckSelection.classList.add('hidden');
+      drawInterface.classList.add('active');
+      
+      document.getElementById('currentDeckName').textContent = decks[deckKey].name + " Deck";
+      document.getElementById('currentDeckSubtitle').textContent = decks[deckKey].subtitle;
+      
+      const drawHeader = document.querySelector('.draw-header');
+      drawHeader.className = `draw-header deck-${deckKey}`;
+      
+      drawInterface.className = `draw-interface active deck-${deckKey}`;
+      
+      updateCardsRemaining();
+      
+      document.getElementById('cardInner').innerHTML = '';
+      document.getElementById('instructionText').textContent = 'Click "Draw Card" to reveal a random reflection prompt';
+      
+      const primaryBtn = document.getElementById('drawButton');
+      if (primaryBtn) {
+        primaryBtn.textContent = 'Draw Card';
+      }
+    }
+
+    function backToSelection() {
+      const deckSelection = document.getElementById('deckSelection');
+      const drawInterface = document.getElementById('drawInterface');
+      
+      drawInterface.classList.remove('active');
+      deckSelection.classList.remove('hidden');
+      
+      currentDeck = null;
+      currentCard = null;
+      isFlipped = false;
+      isShuffling = false;
+    }
+
+    function drawCard() {
+      if (isShuffling) return;
+
+      if (availableCards.length === 0) {
+        availableCards = [...decks[currentDeck].cards];
+      }
+
+      const randomIndex = Math.floor(Math.random() * availableCards.length);
+      currentCard = availableCards[randomIndex];
+      availableCards.splice(randomIndex, 1);
+      
+      updateCardsRemaining();
+      
+      isShuffling = true;
+      const drawButton = document.getElementById('drawButton');
+      drawButton.disabled = true;
+      
+      const cardInner = document.getElementById('cardInner');
+      cardInner.classList.add('shuffling');
+      
+      setTimeout(() => {
+        renderCard();
+        cardInner.classList.remove('shuffling');
+        isShuffling = false;
+        drawButton.disabled = false;
+      }, 600);
+      
+      document.getElementById('instructionText').textContent = 'Click the card to flip and see your reflection prompt';
+      drawButton.textContent = 'Draw Another';
+    }
+
+    function renderCard() {
+      isFlipped = false;
+      const deck = decks[currentDeck];
+      const cardInner = document.getElementById('cardInner');
+      
+      cardInner.className = 'card-inner';
+      
+      cardInner.innerHTML = `
+        <!-- FRONT -->
+        <div class="card-face card-front">
+          <div class="light-accent light-accent-1"></div>
+          <div class="light-accent light-accent-2"></div>
+          <div class="light-accent light-accent-3"></div>
+          <div class="number-badge">
+            <p class="number-text">${currentCard.number}</p>
+          </div>
+          <div class="center-glow">
+            <div class="glow-ring"></div>
+            <div class="center-circle">
+              <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                ${deck.icon}
+              </svg>
+            </div>
+          </div>
+          <p class="front-deck-label">${deck.label}</p>
+        </div>
+
+        <!-- BACK -->
+        <div class="card-face card-back">
+          <div class="top-section">
+            <div class="icon-circle">
+              <svg class="icon-svg-small" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                ${deck.iconSmall}
+              </svg>
+            </div>
+            <p class="back-deck-label">${deck.label}</p>
+          </div>
+          <div class="content-panel">
+            <h2 class="panel-title">${currentCard.title}</h2>
+            <p class="reflection-prompt">${currentCard.prompt}</p>
+            <div class="skill-tags">
+              ${currentCard.tags.map(tag => `<span class="skill-tag">${tag}</span>`).join('')}
+            </div>
+            <p class="delta-category">DELTA: ${currentCard.delta}</p>
+          </div>
+        </div>
+      `;
+      
+      const cardFront = cardInner.querySelector('.card-front');
+      const cardBack = cardInner.querySelector('.card-back');
+      
+      if (currentDeck === 'p') {
+        cardFront.style.background = 'linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%)';
+        cardBack.style.background = 'linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%)';
+      } else if (currentDeck === 'o') {
+        cardFront.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0a0a0a 100%)';
+        cardBack.style.background = 'linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 50%, #1a1a1a 100%)';
+      } else if (currentDeck === 'v') {
+        cardFront.style.background = 'linear-gradient(135deg, #A8B0C0 0%, #8B95A8 50%, #7B8594 100%)';
+        cardBack.style.background = 'linear-gradient(135deg, #C5CDD9 0%, #A8B0C0 50%, #8B95A8 100%)';
+      } else if (currentDeck === 'wc') {
+        cardFront.style.background = 'linear-gradient(135deg, #E8B339 0%, #8B6914 35%, #2d2d2d 70%, #0a0a0a 100%)';
+        cardBack.style.background = 'linear-gradient(135deg, #F5D17A 0%, #D4A030 35%, #8B6914 70%, #3a3a3a 100%)';
+      }
+
+      cardInner.addEventListener('click', flipCard);
+    }
+
+    function flipCard() {
+      if (isShuffling) return;
+      
+      const cardInner = document.getElementById('cardInner');
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        cardInner.classList.add('flipped');
+      } else {
+        cardInner.classList.remove('flipped');
+      }
+    }
+
+    function updateCardsRemaining() {
+      const remaining = availableCards.length;
+      const total = decks[currentDeck].cards.length;
+      document.getElementById('cardsRemaining').textContent = `${remaining} of ${total} cards left`;
+    }
+
+    // Data SDK initialization
+    const dataHandler = {
+      onDataChanged(data) {
+        // Data is saved
+      }
+    };
+
+    if (window.dataSdk) {
+      window.dataSdk.init(dataHandler);
+    }
+
+    const defaultConfig = {
+      app_title: "POV Reflection Cards",
+      logo_url: "",
+      primary_color: "#667eea",
+      accent_color: "#764ba2",
+      background_color: "#f8f9fa",
+      text_color: "#1e1b4b",
+      font_family: "Inter",
+      font_size: 15
+    };
+
+    async function onConfigChange(config) {
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontSize = config.font_size || defaultConfig.font_size;
+      const baseFontStack = '-apple-system, BlinkMacSystemFont, sans-serif';
+
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      const selectionTitle = document.querySelector('.selection-title');
+      if (selectionTitle) {
+        selectionTitle.style.fontSize = `${baseFontSize * 2.13}px`;
+      }
+      
+      const deckNames = document.querySelectorAll('.deck-name');
+      deckNames.forEach(el => {
+        el.style.fontSize = `${baseFontSize * 1.6}px`;
+      });
+
+      const logoImage = document.getElementById('logoImage');
+      const logoUrl = config.logo_url || defaultConfig.logo_url;
+      if (logoImage && logoUrl && logoUrl.trim() !== '') {
+        logoImage.src = logoUrl;
+        logoImage.style.display = 'block';
+      } else if (logoImage) {
+        logoImage.style.display = 'none';
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ primary_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["app_title", config.app_title || defaultConfig.app_title],
+        ["logo_url", config.logo_url || defaultConfig.logo_url]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a6aa54ca46c10de',t:'MTc2NDUwODg2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html> 
