@@ -485,63 +485,7 @@ html, body {
       border-color: #E8B339;
     }
 
-   <script>
-(function(){
-  const nameInput = document.getElementById('participant-name');
-  const nameHelp = document.querySelector('#name-input-section .name-help');
-  const startButtons = Array.from(document.querySelectorAll('.start-button, .self-check-button'));
-
-  function showError() {
-    if (!nameInput) return;
-    nameInput.classList.add('input-error');
-    if (nameHelp) nameHelp.style.display = 'block';
-    nameInput.setAttribute('aria-invalid', 'true');
-    nameInput.focus();
-  }
-
-  function clearError() {
-    if (!nameInput) return;
-    nameInput.classList.remove('input-error');
-    if (nameHelp) nameHelp.style.display = 'none';
-    nameInput.removeAttribute('aria-invalid');
-  }
-
-  function validName() {
-    if (!nameInput) return true;
-    return nameInput.value && nameInput.value.trim().length > 0;
-  }
-
-  // Prevent progression if name is missing
-  startButtons.forEach(btn => {
-    btn.addEventListener('click', function(e){
-      if (!validName()) {
-        e.preventDefault();
-        e.stopPropagation();
-        showError();
-      } else {
-        clearError();
-      }
-    }, { capture: true });
-  });
-
-  // Block form submission where applicable
-  document.addEventListener('submit', function(e){
-    if (!validName()) {
-      e.preventDefault();
-      e.stopPropagation();
-      showError();
-    }
-  }, true);
-
-  // Clear error state when user types
-  if (nameInput) {
-    nameInput.addEventListener('input', function(){
-      if (validName()) clearError();
-    });
-  }
-})();
- </script>
-   .rating-scale-legend {
+    .rating-scale-legend {
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       padding: 20px;
@@ -1938,6 +1882,62 @@ html, body {
 
   <style>@view-transition { navigation: auto; }</style>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+  <script>
+(function(){
+  const nameInput = document.getElementById('studentName');
+  const nameHelp = document.querySelector('#name-input-section .name-help');
+  const startButtons = Array.from(document.querySelectorAll('.start-button, .self-check-button'));
+
+  function showError() {
+    if (!nameInput) return;
+    nameInput.classList.add('input-error');
+    if (nameHelp) nameHelp.style.display = 'block';
+    nameInput.setAttribute('aria-invalid', 'true');
+    nameInput.focus();
+  }
+
+  function clearError() {
+    if (!nameInput) return;
+    nameInput.classList.remove('input-error');
+    if (nameHelp) nameHelp.style.display = 'none';
+    nameInput.removeAttribute('aria-invalid');
+  }
+
+  function validName() {
+    if (!nameInput) return true;
+    return nameInput.value && nameInput.value.trim().length > 0;
+  }
+
+  // Prevent progression if name is missing
+  startButtons.forEach(btn => {
+    btn.addEventListener('click', function(e){
+      if (!validName()) {
+        e.preventDefault();
+        e.stopPropagation();
+        showError();
+      } else {
+        clearError();
+      }
+    }, { capture: true });
+  });
+
+  // Block form submission where applicable
+  document.addEventListener('submit', function(e){
+    if (!validName()) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError();
+    }
+  }, true);
+
+  // Clear error state when user types
+  if (nameInput) {
+    nameInput.addEventListener('input', function(){
+      if (validName()) clearError();
+    });
+  }
+})();
+  </script>
  </head>
  <body>
   <div class="app-wrapper"><!-- INTRO SCREEN -->
@@ -3192,6 +3192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoImage.style.display = 'block';
       } else if (logoImage) {
         logoImage.style.display = 'none';
+      }
     }
 
     function mapToCapabilities(config) {
