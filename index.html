@@ -17,6 +17,7 @@
   background: #f8f9fa;
 }
 
+
     html, body {
       height: 100%;
     }
@@ -1024,6 +1025,19 @@
       max-width: 500px;
     }
 
+    .selection-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.selection-logo-img {
+  width: 400px;     /* forces actual displayed size */
+  height: auto;
+  display: block;
+  margin: 0 auto 16px auto;
+}
     .deck-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1235,8 +1249,8 @@
     .card-display {
       perspective: 1000px;
       width: 100%;
-      max-width: 340px;
-      aspect-ratio: 2.5 / 3.5;
+      max-width: 360px;
+      aspect-ratio: 3/4;
       margin-bottom: 20px;
     }
 
@@ -1286,20 +1300,24 @@
       backface-visibility: hidden;
       border-radius: 20px;
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    }
 
+      display: flex;
+      flex-direction: column;
+      padding: 18px 16px;
+      box-sizing: border-box;
+}
     .card-front {
       background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
     }
 
     .card-back {
-      background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
-      transform: rotateY(180deg);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
+  background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;       /* less padding = more room for content */
+  box-sizing: border-box;
+}
 
     /* Reuse existing card styles */
     .light-accent {
@@ -1475,6 +1493,27 @@
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
       white-space: nowrap;
     }
+
+.section-heading {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin: 12px 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-bullet-list {
+  margin: 0 0 4px 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.card-bullet-list li {
+  margin-bottom: 4px;
+}
 
     .content-panel {
       background: #ffffff;
@@ -1911,7 +1950,10 @@
      </div>
      <div class="logo-container" id="logoContainer"><img src="" alt="Logo" class="logo-image" id="logoImage" style="display: none;">
      </div>
-     <h1 class="intro-title">POV Early Discovery Deck</h1>
+     <div class="intro-header-block">
+  <img src="povlogo.svg" class="intro-header-block-logo" alt="POV Logo">
+  <h1 class="intro-title">POV Early Discovery Deck</h1>
+</div>
      <p class="intro-body">The POV Deck invites you to pause, rewind, notice patterns, and imagine what comes next. Each card holds a guided question, 🏷️ competency tags, and a DELTA focus area (Cognitive, Interpersonal, Self-Leadership, Digital) to help you connect real experiences with practical insight.</p>
      <p class="intro-body" style="font-style: italic; color: #8B6914; margin-top: 24px; margin-bottom: 0;">Come in with curiosity. Stay open. These prompts are not about having the "right" point of view; they are about discovering your POV: the patterns, instincts, and truths that have been shaping you all along.</p>
      <div class="how-to-section">
@@ -2070,8 +2112,12 @@
     </div>
    </div><!-- DECK SELECTION SCREEN -->
    <div class="deck-selection" id="deckSelection"><button class="intro-back-button" onclick="backToIntro()">← Back to Intro</button>
+    <div class="selection-logo">
+  <img src="logoonlytp.svg" alt="POV Logo" class="selection-logo-img">
+</div>
+
     <h1 class="selection-title">Choose Your Deck</h1>
-    <p class="selection-subtitle">A reflection deck designed to help you explore your past, understand yourself, and shape your future with clarity and confidence.</p>
+    <p class="selection-subtitle">A reflection deck made from the ❤️, designed to help you explore your past, understand yourself, and shape your future with clarity and confidence.</p>
     <div class="deck-grid">
      <div class="deck-option deck-option-p" onclick="selectDeck('p')">
       <div class="deck-icon">
@@ -2295,27 +2341,317 @@
         icon: '<path d="M11 7 L6 12 L11 17" /><path d="M18 7 L13 12 L18 17" />',
         iconSmall: '<path d="M11 7 L6 12 L11 17" /><path d="M18 7 L13 12 L18 17" />',
         cards: [
-          { number: "01", title: "I Took the Lead", prompt: "Tell me about a time when you stepped up and took charge of something, even though no one asked you to.", tags: ["Initiative", "Leadership", "Ownership"], delta: "Interpersonal" },
-          { number: "02", title: "The Curveball", prompt: "Describe a situation where something unexpected happened and you had to adjust on the fly.", tags: ["Adaptability", "Problem-solving", "Composure"], delta: "Self-Leadership" },
-          { number: "03", title: "Racing the Clock", prompt: "Talk about a time when you had a really tight deadline—how did you handle it?", tags: ["Time Management", "Focus", "Execution"], delta: "Self-Leadership" },
-          { number: "04", title: "Team Chaos", prompt: "Tell me about a time you were part of a group where people were not working well together. What did you do?", tags: ["Collaboration", "Conflict Navigation", "Influence"], delta: "Interpersonal" },
-          { number: "05", title: "The Risk", prompt: "Describe a time when you decided to try something even though you were not sure how it would turn out.", tags: ["Courage", "Judgement", "Experimentation"], delta: "Self-Leadership" },
-          { number: "06", title: "Wait, What?", prompt: "Tell me about a moment when you realized you misunderstood something important. How did you fix it?", tags: ["Communication", "Humility", "Recovery"], delta: "Interpersonal" },
-          { number: "07", title: "Learning Curve", prompt: "Describe a time you had to learn something new quickly. What did you do?", tags: ["Learning Agility", "Curiosity", "Self-management"], delta: "Cognitive" },
-          { number: "08", title: "The Mystery", prompt: "Tell me about a problem you faced where you did not have all the information you needed. How did you figure it out?", tags: ["Critical Thinking", "Resourcefulness", "Resilience"], delta: "Cognitive" },
-          { number: "09", title: "Almost Quit", prompt: "Tell me about a time when something got so frustrating or hard that you almost gave up—but did not.", tags: ["Perseverance", "Motivation", "Mindset"], delta: "Self-Leadership" },
-          { number: "10", title: "Wrong Answer", prompt: "Describe a time you made a mistake. What happened, and what did you learn?", tags: ["Accountability", "Learning", "Growth Mindset"], delta: "Self-Leadership" },
-          { number: "11", title: "Earning Trust", prompt: "A time when someone did not trust you at first, but you earned their trust over time.", tags: ["Trust-building", "Reliability", "Consistency"], delta: "Interpersonal" },
-          { number: "12", title: "The Connector", prompt: "Describe a time you brought people together who did not know each other.", tags: ["Networking", "Relationship-building", "Initiative"], delta: "Interpersonal" },
-          { number: "13", title: "Reading the Room", prompt: "A time you had to understand unwritten rules or politics in a group or organization.", tags: ["Social Awareness", "Political Savvy", "Observation"], delta: "Interpersonal" },
-          { number: "14", title: "The Win-Win", prompt: "A situation where you and someone else wanted different things, and you found a solution that worked for both.", tags: ["Negotiation", "Collaboration", "Problem-solving"], delta: "Interpersonal" },
-          { number: "15", title: "The Outsider", prompt: "A time you helped someone feel included when they were being left out.", tags: ["Inclusion", "Empathy", "Leadership"], delta: "Interpersonal" },
-          { number: "16", title: "When We Clashed", prompt: "Tell me about a time you had a conflict with a teammate and how it got resolved.", tags: ["Conflict Resolution", "Communication", "Maturity"], delta: "Interpersonal" },
-          { number: "17", title: "Digging Deeper", prompt: "A time you had to find information or answers that were not obvious or easy to find.", tags: ["Research", "Persistence", "Curiosity"], delta: "Cognitive" },
-          { number: "18", title: "Making It Simple", prompt: "A time you had to explain something complicated to someone in a way they could understand.", tags: ["Clarity", "Communication", "Teaching"], delta: "Interpersonal" },
-          { number: "19", title: "The Right Thing", prompt: "A time you had to choose between what was easy and what was right.", tags: ["Integrity", "Values", "Courage"], delta: "Self-Leadership" }
-        ]
-      },
+          {
+  
+  title: "1. Structured problem solving",
+  prompt: "Think about a time you had to solve a messy or confusing problem at school. How did you start breaking it down?",
+  tags: ["Cognitive", "Problem-solving", "DELTA"],
+  delta: "Cognitive",
+
+    whatGoodLooksLike: [
+    "You break big problems into smaller, clearer pieces.",
+    "You look for root causes, not just quick fixes.",
+    "You test options before deciding what to do."
+  ],
+  selfQuestions: [
+    "Do I pause to understand a problem before reacting?",
+    "How often do I jump to a solution without exploring other options?"
+  ],
+  actions: [
+    "Take one current challenge and write three smaller parts of it.",
+    "Ask one person how they would approach the same problem and compare."
+  ]
+},
+          {
+    
+    title: "2. The Curveball",
+    prompt: "Describe a situation where something unexpected happened and you had to adjust on the fly.",
+    tags: ["Adaptability", "Problem-solving", "Composure"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You stay calm when plans change suddenly.",
+      "You can quickly think of another way forward.",
+      "You focus on what you can control instead of just feeling stuck."
+    ],
+    selfQuestions: [
+      "When plans change, do I freeze, complain, or adapt?",
+      "How quickly can I shift my mindset from “this is ruined” to “what can I do now?”"
+    ]
+  },
+          {
+    
+    title: "3. Racing the Clock",
+    prompt: "Talk about a time when you had a really tight deadline, how did you handle it?",
+    tags: ["Time Management", "Focus", "Execution"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You break work into smaller tasks with mini-deadlines.",
+      "You focus on what matters most instead of trying to do everything perfectly.",
+      "You communicate early if you need help or more time."
+    ],
+    selfQuestions: [
+      "Do I plan ahead or only react when the deadline is very close?",
+      "What do I usually sacrifice first: quality, sleep, or communication?"
+    ]
+  },
+          {
+    
+    title: "4. Team Chaos",
+    prompt: "Tell me about a time you were part of a group where people were not working well together. What did you do?",
+    tags: ["Collaboration", "Conflict Navigation", "Influence"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You try to understand everyone’s point of view before taking sides.",
+      "You bring people back to the shared goal, not just the argument.",
+      "You speak up calmly instead of adding more drama."
+    ],
+    selfQuestions: [
+      "When a team breaks down, do I withdraw, join the conflict, or help calm it?",
+      "What is one thing I can do next time to make teamwork smoother?"
+    ]
+  },
+          {
+    
+    title: "5. The Risk",
+    prompt: "Describe a time when you decided to try something even though you were not sure how it would turn out.",
+    tags: ["Courage", "Judgement", "Experimentation"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You think about possible outcomes instead of acting blindly.",
+      "You are willing to feel uncomfortable if there is something meaningful to learn.",
+      "You see failures as experiments, not proof that you are not good enough."
+    ],
+    selfQuestions: [
+      "Do I avoid risks completely, or do I take them without thinking?",
+      "What is one small, smart risk I could take in the next month?"
+    ]
+  },
+          {
+    
+    title: "6. Wait, What?",
+    prompt: "Tell me about a moment when you realized you misunderstood something important. How did you fix it?",
+    tags: ["Communication", "Humility", "Recovery"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You admit the misunderstanding instead of pretending everything is fine.",
+      "You ask clarifying questions to really understand what is needed.",
+      "You take responsibility for your part and correct it quickly."
+    ],
+    selfQuestions: [
+      "How comfortable am I with saying, “Sorry, I misunderstood”?",
+      "Do I check my understanding, or just assume I am right?"
+    ]
+  },
+          {
+    
+    title: "7. Learning Curve",
+    prompt: "Describe a time you had to learn something new quickly. What did you do?",
+    tags: ["Learning Agility", "Curiosity", "Self-management"],
+    delta: "Cognitive",
+    whatGoodLooksLike: [
+      "You look for tutorials, people, or resources instead of giving up.",
+      "You are okay with being a beginner for a while.",
+      "You practice in small steps instead of trying to master everything at once."
+    ],
+    selfQuestions: [
+      "How do I usually react when I feel ‘slow’ at learning something new?",
+      "Who or what do I turn to first when I am stuck?"
+    ]
+  },
+          {
+    
+    title: "8. The Mystery",
+    prompt: "Tell me about a problem you faced where you did not have all the information you needed. How did you figure it out?",
+    tags: ["Critical Thinking", "Resourcefulness", "Resilience"],
+    delta: "Cognitive",
+    whatGoodLooksLike: [
+      "You identify what you already know and what you still need to find out.",
+      "You look for reliable sources or people to ask.",
+      "You are able to move forward with a good enough answer, not a perfect one."
+    ],
+    selfQuestions: [
+      "Do I stop when I do not know something, or do I keep exploring?",
+      "How can I get better at checking if my information is trustworthy?"
+    ]
+  },
+          {
+    
+    title: "9. Almost Quit",
+    prompt: "Tell me about a time when something got so frustrating or hard that you almost gave up—but did not.",
+    tags: ["Perseverance", "Motivation", "Mindset"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You remember why this goal matters to you personally.",
+      "You break the work into tiny next steps instead of thinking about the whole mountain.",
+      "You ask for support or encouragement when you need it."
+    ],
+    selfQuestions: [
+      "What usually makes me want to quit: boredom, fear, or feeling alone?",
+      "What helped me keep going the last time I pushed through something hard?"
+    ]
+  },
+          {
+    
+    title: "10. Wrong Answer",
+    prompt: "Describe a time you made a mistake. What happened, and what did you learn?",
+    tags: ["Accountability", "Learning", "Growth Mindset"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You can say, “That was my mistake” without blaming others.",
+      "You reflect on what you would do differently next time.",
+      "You fix what you can instead of only feeling guilty."
+    ],
+    selfQuestions: [
+      "How do I normally react when I am wrong?",
+      "What recent mistake could I still turn into a lesson?"
+    ]
+  },
+          {
+    
+    title: "11. Earning Trust",
+    prompt: "A time when someone did not trust you at first, but you earned their trust over time.",
+    tags: ["Trust-building", "Reliability", "Consistency"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You keep your promises, even on small things.",
+      "You show up on time and do what you said you would do.",
+      "You are honest, even when the truth is uncomfortable."
+    ],
+    selfQuestions: [
+      "What do people rely on me for right now?",
+      "If someone watched my actions for a week, would they see me as reliable?"
+    ]
+  },
+          {
+    
+    title: "12. The Connector",
+    prompt: "Describe a time you brought people together who did not know each other.",
+    tags: ["Networking", "Relationship-building", "Initiative"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You notice who might benefit from knowing each other.",
+      "You make introductions in a way that feels warm, not awkward.",
+      "You think about mutual benefit, not just your own advantage."
+    ],
+    selfQuestions: [
+      "Do I pay attention to who might work well together?",
+      "How comfortable am I with introducing people or starting conversations?"
+    ]
+  },
+          {
+    
+    title: "13. Reading the Room",
+    prompt: "A time you had to understand unwritten rules or politics in a group or organization.",
+    tags: ["Social Awareness", "Political Savvy", "Observation"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You notice tone, body language, and patterns, not just words.",
+      "You observe who has influence and how decisions really get made.",
+      "You adjust how you communicate without losing your values."
+    ],
+    selfQuestions: [
+      "How quickly do I usually pick up on the ‘unspoken’ rules in a group?",
+      "Have I ever ignored the room and pushed too hard, too fast?"
+    ]
+  },
+          {
+    
+    title: "14. The Win-Win",
+    prompt: "A situation where you and someone else wanted different things, and you found a solution that worked for both.",
+    tags: ["Negotiation", "Collaboration", "Problem-solving"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You listen to what the other person really needs, not just what they say first.",
+      "You are willing to compromise on less important points.",
+      "You look for creative options so both sides gain something."
+    ],
+    selfQuestions: [
+      "Do I usually aim to ‘win’, or do I try to find win-win solutions?",
+      "What is one conflict where I could have listened more before defending my side?"
+    ]
+  },
+          {
+    
+    title: "15. The Outsider",
+    prompt: "A time you helped someone feel included when they were being left out.",
+    tags: ["Inclusion", "Empathy", "Leadership"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You notice when someone is quiet, excluded, or not invited in.",
+      "You take small actions, like sitting with them or involving them in conversation.",
+      "You challenge unfair jokes or behaviour in a respectful way."
+    ],
+    selfQuestions: [
+      "How often do I act when I notice someone being left out?",
+      "Have I ever been the one left out, and what did I wish others had done?"
+    ]
+  },
+         {
+    
+    title: "16. When We Clashed",
+    prompt: "Tell me about a time you had a conflict with a teammate and how it got resolved.",
+    tags: ["Conflict Resolution", "Communication", "Maturity"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You talk about the issue directly instead of avoiding the person.",
+      "You listen to their side without interrupting.",
+      "You focus on solving the problem, not winning the argument."
+    ],
+    selfQuestions: [
+      "When I am upset, do I shut down, attack, or try to understand?",
+      "What helped the last time I turned a conflict into a better relationship?"
+    ]
+  },
+          {
+    
+    title: "17. Digging Deeper",
+    prompt: "A time you had to find information or answers that were not obvious or easy to find.",
+    tags: ["Research", "Persistence", "Curiosity"],
+    delta: "Cognitive",
+    whatGoodLooksLike: [
+      "You search beyond the first page or first source.",
+      "You compare different sources instead of believing the first thing you see.",
+      "You are patient with the process of investigating."
+    ],
+    selfQuestions: [
+      "Am I satisfied with quick answers, or do I dig deeper when something matters?",
+      "Where could I practice better research habits in my current work or study?"
+    ]
+  },
+          {
+    
+    title: "18. Making It Simple",
+    prompt: "A time you had to explain something complicated to someone in a way they could understand.",
+    tags: ["Clarity", "Communication", "Teaching"],
+    delta: "Interpersonal",
+    whatGoodLooksLike: [
+      "You remove jargon and use simple language.",
+      "You check in to see if the other person is following.",
+      "You use examples, stories, or visuals to make the idea clearer."
+    ],
+    selfQuestions: [
+      "Do people often say, “Oh, now I get it” when I explain things?",
+      "Where could I slow down and explain more clearly in my daily life?"
+    ]
+  },
+          {
+    
+    title: "19. The Right Thing",
+    prompt: "A time you had to choose between what was easy and what was right.",
+    tags: ["Integrity", "Values", "Courage"],
+    delta: "Self-Leadership",
+    whatGoodLooksLike: [
+      "You act in line with your values, even when no one is watching.",
+      "You think about the long-term impact, not just short-term comfort.",
+      "You are willing to disappoint others if it means doing what feels right."
+    ],
+    selfQuestions: [
+      "What do I stand for, even when it costs me something?",
+      "When was the last time I chose the harder but more honest path?"
+    ]
+      }
+]
+},
       o: {
         name: "Ownership",
         subtitle: "Explore accountability and initiative",
@@ -2323,23 +2659,250 @@
         icon: '<circle cx="12" cy="9" r="4" fill="white" stroke="none" /><rect x="10.5" y="13" width="3" height="3.5" fill="white" stroke="none" /><rect x="9.5" y="16.5" width="5" height="0.8" fill="white" stroke="none" /><rect x="9.5" y="18" width="5" height="0.8" fill="white" stroke="none" />',
         iconSmall: '<circle cx="12" cy="9" r="4" fill="white" stroke="none" /><rect x="10.5" y="13" width="3" height="3.5" fill="white" stroke="none" /><rect x="9.5" y="16.5" width="5" height="0.8" fill="white" stroke="none" /><rect x="9.5" y="18" width="5" height="0.8" fill="white" stroke="none" />',
         cards: [
-          { number: "01", title: "Owning It", prompt: "Tell me about a time when you took ownership of something—good or bad.", tags: ["Ownership", "Accountability", "Integrity"], delta: "Self-Leadership" },
-          { number: "02", title: "Better Way", prompt: "Describe a situation where you improved how something was done.", tags: ["Continuous Improvement", "Initiative", "Problem-solving"], delta: "Cognitive" },
-          { number: "03", title: "Follow Through", prompt: "Tell me about a goal or commitment you made. How did you make sure you followed through?", tags: ["Discipline", "Reliability", "Execution"], delta: "Self-Leadership" },
-          { number: "04", title: "Feedback Check", prompt: "Describe a time when you asked for feedback. What did you learn?", tags: ["Self-awareness", "Openness", "Learning"], delta: "Self-Leadership" },
-          { number: "05", title: "Tough Call", prompt: "Tell me about a time when you had to make a difficult decision. How did you decide?", tags: ["Decision-making", "Judgement", "Courage"], delta: "Cognitive" },
-          { number: "06", title: "Accountability Moment", prompt: "Describe a time when someone depended on you. How did you show up?", tags: ["Responsibility", "Reliability", "Ownership"], delta: "Self-Leadership" },
-          { number: "07", title: "Going the Extra Mile", prompt: "Tell me about a time you did more than what was expected of you.", tags: ["Commitment", "Work Ethic", "Initiative"], delta: "Self-Leadership" },
-          { number: "08", title: "My Part", prompt: "Describe a time when something did not go well, and you reflected on your role in it.", tags: ["Reflection", "Humility", "Growth Mindset"], delta: "Self-Leadership" },
-          { number: "09", title: "Initiative Check", prompt: "Tell me about something you started or created without being told to do it.", tags: ["Proactiveness", "Creativity", "Ownership"], delta: "Self-Leadership" },
-          { number: "10", title: "Prioritizing", prompt: "Tell me about a time when you had multiple things to do and had to decide what mattered most.", tags: ["Prioritisation", "Time Management", "Judgement"], delta: "Cognitive" },
-          { number: "11", title: "Pride Before Fall", prompt: "A moment when you had to set aside your pride or ego for something more important.", tags: ["Humility", "Maturity", "Teamwork"], delta: "Interpersonal" },
-          { number: "12", title: "Helping Someone Grow", prompt: "A time you helped someone improve at something — how did you approach it?", tags: ["Coaching", "Support", "Empathy"], delta: "Interpersonal" },
-          { number: "13", title: "Different Motivators", prompt: "When working with others, how do you figure out what drives each person?", tags: ["Empathy", "Motivation", "People Insight"], delta: "Interpersonal" },
-          { number: "14", title: "My Blind Spot", prompt: "A time you realized you were biased or making assumptions about something or someone.", tags: ["Self-awareness", "Bias Awareness", "Reflection"], delta: "Self-Leadership" },
-          { number: "15", title: "Breaking It Down", prompt: "Describe how you approach a big, complex task from start to finish.", tags: ["Planning", "Structure", "Analytical Thinking"], delta: "Cognitive" }
-        ]
-      },
+          {
+      
+      title: "1. Owning It",
+      prompt: "Tell me about a time when you took ownership of something—good or bad.",
+      tags: ["Ownership", "Accountability", "Integrity"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You admit your part in the outcome, even when it is uncomfortable.",
+        "You focus on fixing the situation instead of giving excuses.",
+        "You follow through until things are back on track."
+      ],
+      selfQuestions: [
+        "When something goes wrong, do I look at my own part first?",
+        "How do I usually respond when I realise I made a mistake?"
+      ]
+  },
+          {
+          
+      title: "2. Better Way",
+      prompt: "Describe a situation where you improved how something was done.",
+      tags: ["Continuous Improvement", "Initiative", "Problem-solving"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You notice when a process is slow, confusing, or wasteful.",
+        "You suggest specific, practical changes instead of only pointing out problems.",
+        "You help others adjust to the new way of working."
+      ],
+      selfQuestions: [
+        "Do I speak up when I see a better way of doing things?",
+        "How comfortable am I with changing routines that are not working well?"
+      ]
+  },
+          
+          {
+      
+      title: "3. Follow Through",
+      prompt: "Tell me about a goal or commitment you made. How did you make sure you followed through?",
+      tags: ["Discipline", "Reliability", "Execution"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You honour your commitments even when you no longer feel motivated.",
+        "You plan your time so you can finish what you promised.",
+        "People can trust that if you say you will do something, it gets done."
+      ],
+      selfQuestions: [
+        "How often do I complete what I say I will do, on time?",
+        "What usually gets in the way of my follow-through?"
+      ]
+    },
+    
+          {
+      
+      title: "4. Feedback Check",
+      prompt: "Describe a time when you asked for feedback. What did you learn?",
+      tags: ["Self-awareness", "Openness", "Learning"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You invite feedback instead of waiting for others to bring it up.",
+        "You listen without becoming defensive or shutting down.",
+        "You use feedback to adjust your behaviour or approach."
+      ],
+      selfQuestions: [
+        "When was the last time I actively asked someone for honest feedback?",
+        "How do I react inside when I hear something I do not like?"
+      ]
+    },
+          {
+     
+      title: "5. Tough Call",
+      prompt: "Tell me about a time when you had to make a difficult decision. How did you decide?",
+      tags: ["Decision-making", "Judgement", "Courage"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You slow down to think through options instead of reacting quickly.",
+        "You weigh both short-term impact and long-term consequences.",
+        "You are willing to choose a harder path if it feels more correct."
+      ],
+      selfQuestions: [
+        "What do I pay attention to most when I make a tough decision?",
+        "Do I avoid hard choices, or do I face them directly?"
+      ]
+    },
+    {
+      
+      title: "6. Accountability Moment",
+      prompt: "Describe a time when someone depended on you. How did you show up?",
+      tags: ["Responsibility", "Reliability", "Ownership"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You understand clearly what others expect from you.",
+        "You keep the person updated instead of disappearing when things get hard.",
+        "You feel responsible for the outcome, not only for your task."
+      ],
+      selfQuestions: [
+        "When others rely on me, how dependable am I, really?",
+        "How do I behave when I realise I might let someone down?"
+      ]
+    },
+    {
+      
+      title: "7. Going the Extra Mile",
+      prompt: "Tell me about a time you did more than what was expected of you.",
+      tags: ["Commitment", "Work Ethic", "Initiative"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You notice needs that are not written in the instructions.",
+        "You are willing to put in extra effort when it truly matters.",
+        "You care about the quality of the outcome, not only about finishing."
+      ],
+      selfQuestions: [
+        "What kind of situations inspire me to go beyond the minimum?",
+        "Do I save my best energy only for myself, or also for the team?"
+      ]
+    },
+    {
+      
+      title: "8. My Part",
+      prompt: "Describe a time when something did not go well, and you reflected on your role in it.",
+      tags: ["Reflection", "Humility", "Growth Mindset"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You are able to admit when you contributed to a problem.",
+        "You focus on learning rather than blaming others.",
+        "You adjust how you act next time, based on what you learned."
+      ],
+      selfQuestions: [
+        "When things go wrong, do I mainly blame others or reflect on myself first?",
+        "What is one pattern I have noticed in how I contribute to problems?"
+      ]
+    },
+    {
+      
+      title: "9. Initiative Check",
+      prompt: "Tell me about something you started or created without being told to do it.",
+      tags: ["Proactiveness", "Creativity", "Ownership"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You do not wait for permission to start something useful or meaningful.",
+        "You see gaps or opportunities and move toward them.",
+        "You are willing to try, even if there is a risk it may not work perfectly."
+      ],
+      selfQuestions: [
+        "When was the last time I started something on my own?",
+        "What usually holds me back from taking initiative?"
+      ]
+    },
+    {
+      
+      title: "10. Prioritizing",
+      prompt: "Tell me about a time when you had multiple things to do and had to decide what mattered most.",
+      tags: ["Prioritisation", "Time Management", "Judgement"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You look at deadlines, impact, and importance before choosing where to start.",
+        "You are able to say no or delay less important tasks.",
+        "You adjust your plan when new information or urgency appears."
+      ],
+      selfQuestions: [
+        "How do I currently decide what to do first when I am busy?",
+        "Do I spend more time on urgent tasks, or on the tasks that really matter?"
+      ]
+    },
+    {
+      
+      title: "11. Pride Before Fall",
+      prompt: "A moment when you had to set aside your pride or ego for something more important.",
+      tags: ["Humility", "Maturity", "Teamwork"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You can admit when someone else has a better idea or solution.",
+        "You apologise sincerely when your ego has caused harm.",
+        "You choose the outcome that serves the group, not only your image."
+      ],
+      selfQuestions: [
+        "How do I react when I am proven wrong in front of others?",
+        "When was the last time I chose to listen instead of pushing my own way?"
+      ]
+    },
+    {
+      
+      title: "12. Helping Someone Grow",
+      prompt: "A time you helped someone improve at something — how did you approach it?",
+      tags: ["Coaching", "Support", "Empathy"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You start by understanding what the other person needs and feels.",
+        "You give feedback that is honest but also kind and specific.",
+        "You stay patient as they practice and make mistakes."
+      ],
+      selfQuestions: [
+        "Do I enjoy seeing others grow, or do I feel threatened by it?",
+        "How good am I at giving feedback that helps rather than hurts?"
+      ]
+    },
+    {
+      
+      title: "13. Different Motivators",
+      prompt: "When working with others, how do you figure out what drives each person?",
+      tags: ["Empathy", "Motivation", "People Insight"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You notice what excites or frustrates different people.",
+        "You adjust how you speak or delegate based on what matters to them.",
+        "You understand that not everyone is motivated by the same goals."
+      ],
+      selfQuestions: [
+        "Do I pay attention to what motivates people around me?",
+        "How could I work differently with someone who is very unlike me?"
+      ]
+    },
+    {
+      
+      title: "14. My Blind Spot",
+      prompt: "A time you realized you were biased or making assumptions about something or someone.",
+      tags: ["Self-awareness", "Bias Awareness", "Reflection"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You can admit when your first impression was unfair or incomplete.",
+        "You are curious about perspectives that challenge your views.",
+        "You try to correct your behaviour after noticing a bias."
+      ],
+      selfQuestions: [
+        "What kinds of people or situations do I judge too quickly?",
+        "How do I react when someone points out a bias I have?"
+      ]
+    },
+    {
+      
+      title: "15. Breaking It Down",
+      prompt: "Describe how you approach a big, complex task from start to finish.",
+      tags: ["Planning", "Structure", "Analytical Thinking"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You break large tasks into smaller, manageable steps.",
+        "You set realistic timelines and checkpoints.",
+        "You review progress and adjust the plan when needed."
+      ],
+      selfQuestions: [
+        "Do I usually plan tasks, or do I jump in and hope it works out?",
+        "What could I change in my planning to make big tasks feel less overwhelming?"
+      ]
+    }
+  ]
+},
       v: {
         name: "Vision",
         subtitle: "Envision your future",
@@ -2347,22 +2910,232 @@
         icon: '<path d="M13 7 L18 12 L13 17" /><path d="M6 7 L11 12 L6 17" />',
         iconSmall: '<path d="M13 7 L18 12 L13 17" /><path d="M6 7 L11 12 L6 17" />',
         cards: [
-          { number: "01", title: "Future You", prompt: "What does success look like for you in the next 2–3 years?", tags: ["Aspiration", "Self-direction", "Goal-setting"], delta: "Self-Leadership" },
-          { number: "02", title: "Inspire Me", prompt: "Who do you look up to, and why?", tags: ["Role Models", "Values", "Inspiration"], delta: "Interpersonal" },
-          { number: "03", title: "Your Why", prompt: "What motivates you to work hard or keep going when things are tough?", tags: ["Motivation", "Purpose", "Resilience"], delta: "Self-Leadership" },
-          { number: "04", title: "Impact Vision", prompt: "What kind of impact do you want to have on your community, team, or field?", tags: ["Impact", "Contribution", "Leadership"], delta: "Interpersonal" },
-          { number: "05", title: "If You Could…", prompt: "If you could solve one problem in the world, what would it be and why?", tags: ["Problem-sensing", "Empathy", "Vision"], delta: "Cognitive" },
-          { number: "06", title: "Values Check", prompt: "What is something you believe in strongly, and how do you show it through your actions?", tags: ["Values", "Integrity", "Consistency"], delta: "Self-Leadership" },
-          { number: "07", title: "The Bigger Picture", prompt: "How do your current goals connect to something bigger than yourself?", tags: ["Systems Thinking", "Meaning", "Long-term View"], delta: "Cognitive" },
-          { number: "08", title: "Dream Role", prompt: "Describe a role or opportunity that excites you. What about it appeals to you?", tags: ["Career Vision", "Motivation", "Self-knowledge"], delta: "Self-Leadership" },
-          { number: "09", title: "Growth Vision", prompt: "What is one skill or strength you want to develop, and why does it matter to you?", tags: ["Learning Agility", "Development", "Intentionality"], delta: "Self-Leadership" },
-          { number: "10", title: "Legacy Thoughts", prompt: "If people remembered you for one thing, what would you want it to be?", tags: ["Legacy", "Identity", "Purpose"], delta: "Self-Leadership" },
-          { number: "11", title: "The Change I'd Make", prompt: "If you could change one rule or system in your school or community, what would it be and how would you get others on board?", tags: ["Change-making", "Influence", "Initiative"], delta: "Interpersonal" },
-          { number: "12", title: "Leading by Doing", prompt: "A time when people followed your example without you asking them to.", tags: ["Role Modelling", "Informal Leadership", "Behaviour"], delta: "Interpersonal" },
-          { number: "13", title: "Plan B (and C)", prompt: "Tell me about a time when your original plan fell apart and you had to quickly adjust.", tags: ["Adaptability", "Resilience", "Planning"], delta: "Self-Leadership" },
-          { number: "14", title: "The Unknown Path", prompt: "Describe a time you committed to something even though you did not know how it would turn out.", tags: ["Risk-taking", "Courage", "Uncertainty"], delta: "Self-Leadership" }
-        ]
-      },
+          {
+      
+      title: "1. Future You",
+      prompt: "What does success look like for you in the next 2–3 years?",
+      tags: ["Aspiration", "Self-direction", "Goal-setting"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You can describe success in clear and specific terms, not only as a vague dream.",
+        "Your picture of success includes both results and how you want to feel or behave.",
+        "You see a connection between your future goals and what you are doing today."
+      ],
+      selfQuestions: [
+        "If I woke up in two years feeling proud, what would be true about my life?",
+        "Which parts of my current routine are moving me toward that picture, and which are not?"
+      ]
+    },
+          {
+      
+      title: "2. Inspire Me",
+      prompt: "Who do you look up to, and why?",
+      tags: ["Role Models", "Values", "Inspiration"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You notice specific qualities in others that you want to develop in yourself.",
+        "You admire people for their character and behaviour, not only for status.",
+        "You use role models as inspiration, not as a reason to feel smaller."
+      ],
+      selfQuestions: [
+        "What do my role models reveal about what I truly value?",
+        "Which of their qualities am I already practising in small ways?"
+      ]
+    },
+    {
+      
+      title: "3. Your Why",
+      prompt: "What motivates you to work hard or keep going when things are tough?",
+      tags: ["Motivation", "Purpose", "Resilience"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You can name reasons that feel meaningful to you, not only external pressure.",
+        "You remind yourself of your why when you feel tired or discouraged.",
+        "Your motivation is linked to growth, contribution, or a bigger picture."
+      ],
+      selfQuestions: [
+        "When I almost give up, what thought or reason pulls me back?",
+        "Is my motivation coming from fear, from expectation, or from something deeper?"
+      ]
+    },
+    {
+      
+      title: "4. Impact Vision",
+      prompt: "What kind of impact do you want to have on your community, team, or field?",
+      tags: ["Impact", "Contribution", "Leadership"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You think beyond personal success and consider how others are affected.",
+        "You can imagine specific changes you would like to see around you.",
+        "You believe your actions, even small, can make a real difference."
+      ],
+      selfQuestions: [
+        "If I disappeared for a year, what would I want people to miss about me?",
+        "Where do I already have a small impact that I could grow over time?"
+      ]
+    },
+    {
+      
+      title: "5. If You Could…",
+      prompt: "If you could solve one problem in the world, what would it be and why?",
+      tags: ["Problem-sensing", "Empathy", "Vision"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You notice problems that affect people, not only yourself.",
+        "You can explain why that problem matters deeply to you.",
+        "You think about possible ways to start influencing that issue, even at a small scale."
+      ],
+      selfQuestions: [
+        "Which real-world issues stay in my mind long after I hear about them?",
+        "What is one small action I could take that aligns with this concern?"
+      ]
+    },
+    {
+      
+      title: "6. Values Check",
+      prompt: "What is something you believe in strongly, and how do you show it through your actions?",
+      tags: ["Values", "Integrity", "Consistency"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You can name a value that truly guides your decisions.",
+        "Your daily choices match what you say you care about.",
+        "You notice when your behaviour starts to move away from your values."
+      ],
+      selfQuestions: [
+        "If someone watched my week, what would they say I value most?",
+        "When have I protected a value, even when it cost me time, comfort, or approval?"
+      ]
+    },
+    {
+      
+      title: "7. The Bigger Picture",
+      prompt: "How do your current goals connect to something bigger than yourself?",
+      tags: ["Systems Thinking", "Meaning", "Long-term View"],
+      delta: "Cognitive",
+      whatGoodLooksLike: [
+        "You see links between your study, work, and wider systems like community or industry.",
+        "You understand that your growth can benefit others, not only you.",
+        "You are able to connect small tasks to a larger purpose."
+      ],
+      selfQuestions: [
+        "Where does my personal growth create value for others as well?",
+        "How does this season of my life fit into a larger story I am building?"
+      ]
+    },
+    {
+      
+      title: "8. Dream Role",
+      prompt: "Describe a role or opportunity that excites you. What about it appeals to you?",
+      tags: ["Career Vision", "Motivation", "Self-knowledge"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You can picture a role in enough detail to imagine a day in that life.",
+        "You know which parts of the role energise you most.",
+        "You start noticing paths or skills that could move you toward that kind of work."
+      ],
+      selfQuestions: [
+        "Which elements of my dream role could I begin to practise now?",
+        "Does this role excite me because of status, or because of the work itself?"
+      ]
+    },
+    {
+      
+      title: "9. Growth Vision",
+      prompt: "What is one skill or strength you want to develop, and why does it matter to you?",
+      tags: ["Learning Agility", "Development", "Intentionality"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You choose growth areas that truly matter, not only what looks good on paper.",
+        "You can explain how this skill links to your future plans.",
+        "You are willing to practise, fail, and try again to build it."
+      ],
+      selfQuestions: [
+        "Which skill, if I improved it, would make many other things easier?",
+        "What is one simple way I could start strengthening this skill this month?"
+      ]
+    },
+    {
+      
+      title: "10. Legacy Thoughts",
+      prompt: "If people remembered you for one thing, what would you want it to be?",
+      tags: ["Legacy", "Identity", "Purpose"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You think about how your behaviour affects people over time.",
+        "You care about being consistent, not only impressive in rare moments.",
+        "You want your impact to be kind, useful, or inspiring, not only successful."
+      ],
+      selfQuestions: [
+        "Right now, what would people honestly say I am known for?",
+        "What is one small behaviour I could repeat that supports the legacy I want?"
+      ]
+    },
+    {
+      
+      title: "11. The Change I'd Make",
+      prompt: "If you could change one rule or system in your school or community, what would it be and how would you get others on board?",
+      tags: ["Change-making", "Influence", "Initiative"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You can see how a rule or system impacts different people, not only yourself.",
+        "You think about realistic steps, not only ideal outcomes.",
+        "You involve others by listening, explaining, and inviting ideas."
+      ],
+      selfQuestions: [
+        "What feels unfair or outdated around me, and why?",
+        "How comfortable am I with speaking up and organising others around a change?"
+      ]
+    },
+    {
+      
+      title: "12. Leading by Doing",
+      prompt: "A time when people followed your example without you asking them to.",
+      tags: ["Role Modelling", "Informal Leadership", "Behaviour"],
+      delta: "Interpersonal",
+      whatGoodLooksLike: [
+        "You understand that people notice your behaviour more than your words.",
+        "You act in a way you would be proud for others to copy.",
+        "You use your influence quietly, without needing credit."
+      ],
+      selfQuestions: [
+        "If others copied my usual behaviour, would that help or hurt the group?",
+        "When have I seen my actions shift how others behave?"
+      ]
+    },
+    {
+      
+      title: "13. Plan B (and C)",
+      prompt: "Tell me about a time when your original plan fell apart and you had to quickly adjust.",
+      tags: ["Adaptability", "Resilience", "Planning"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You accept that plans may change instead of staying stuck in frustration.",
+        "You can redesign your approach without losing your main goal.",
+        "You learn from what did not work and carry that lesson forward."
+      ],
+      selfQuestions: [
+        "How do I usually respond when plans fall apart unexpectedly?",
+        "Do I treat changes as failure, or as information to adjust with?"
+      ]
+    },
+    {
+      
+      title: "14. The Unknown Path",
+      prompt: "Describe a time you committed to something even though you did not know how it would turn out.",
+      tags: ["Risk-taking", "Courage", "Uncertainty"],
+      delta: "Self-Leadership",
+      whatGoodLooksLike: [
+        "You are willing to move forward without having every answer.",
+        "You manage your fear by preparing what you can and accepting what you cannot control.",
+        "You look back at uncertain steps as important parts of your growth."
+      ],
+      selfQuestions: [
+        "What level of uncertainty makes me freeze, and why?",
+        "When has taking a thoughtful risk led to growth or new opportunities for me?"
+      ]
+    }
+  ]
+},
       wc: {
         name: "Wild Card",
         subtitle: "Diverse self-discovery prompts",
@@ -2966,74 +3739,99 @@ if (savedName) {
       document.getElementById('instructionText').textContent = 'Click the card to flip and see your reflection prompt';
       drawButton.textContent = 'Draw Another';
     }
+function renderCard() {
+  isFlipped = false;
+  const deck = decks[currentDeck];
+  const cardInner = document.getElementById('cardInner');
 
-    function renderCard() {
-      isFlipped = false;
-      const deck = decks[currentDeck];
-      const cardInner = document.getElementById('cardInner');
-      
-      cardInner.className = 'card-inner';
-      
-      cardInner.innerHTML = `
-        <!-- FRONT -->
-        <div class="card-face card-front">
-          <div class="light-accent light-accent-1"></div>
-          <div class="light-accent light-accent-2"></div>
-          <div class="light-accent light-accent-3"></div>
-          <div class="number-badge">
-            <p class="number-text">${currentCard.number}</p>
-          </div>
-          <div class="center-glow">
-            <div class="glow-ring"></div>
-            <div class="center-circle">
-              <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                ${deck.icon}
-              </svg>
-            </div>
-          </div>
-          <p class="front-deck-label">${deck.label}</p>
+  cardInner.className = 'card-inner';
+
+  // Build extra sections for the BACK only
+  let extraSections = "";
+
+  if (currentCard.whatGoodLooksLike && currentCard.whatGoodLooksLike.length) {
+    extraSections += `
+      <h3 class="section-heading">What good looks like</h3>
+      <ul class="card-bullet-list">
+        ${currentCard.whatGoodLooksLike.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    `;
+  }
+
+  if (currentCard.selfQuestions && currentCard.selfQuestions.length) {
+    extraSections += `
+      <h3 class="section-heading">Ask yourself</h3>
+      <ul class="card-bullet-list">
+        ${currentCard.selfQuestions.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    `;
+  }
+
+  
+
+  cardInner.innerHTML = `
+    <!-- FRONT: question + tags -->
+    <div class="card-face card-front">
+      <div class="top-section">
+        <div class="icon-circle">
+          <svg class="icon-svg-small" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            ${deck.iconSmall}
+          </svg>
         </div>
+        <p class="back-deck-label">${deck.label}</p>
+      </div>
+      <div class="content-panel">
+        <h2 class="panel-title">${currentCard.title}</h2>
+        <p class="reflection-prompt">${currentCard.prompt}</p>
 
-        <!-- BACK -->
-        <div class="card-face card-back">
-          <div class="top-section">
-            <div class="icon-circle">
-              <svg class="icon-svg-small" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                ${deck.iconSmall}
-              </svg>
-            </div>
-            <p class="back-deck-label">${deck.label}</p>
-          </div>
-          <div class="content-panel">
-            <h2 class="panel-title">${currentCard.title}</h2>
-            <p class="reflection-prompt">${currentCard.prompt}</p>
-            <div class="skill-tags">
-              ${currentCard.tags.map(tag => `<span class="skill-tag">${tag}</span>`).join('')}
-            </div>
-            <p class="delta-category">DELTA: ${currentCard.delta}</p>
-          </div>
+        <div class="skill-tags">
+          ${currentCard.tags.map(tag => `<span class="skill-tag">${tag}</span>`).join('')}
         </div>
-      `;
-      
-      const cardFront = cardInner.querySelector('.card-front');
-      const cardBack = cardInner.querySelector('.card-back');
-      
-      if (currentDeck === 'p') {
-        cardFront.style.background = 'linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%)';
-        cardBack.style.background = 'linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%)';
-      } else if (currentDeck === 'o') {
-        cardFront.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0a0a0a 100%)';
-        cardBack.style.background = 'linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 50%, #1a1a1a 100%)';
-      } else if (currentDeck === 'v') {
-        cardFront.style.background = 'linear-gradient(135deg, #A8B0C0 0%, #8B95A8 50%, #7B8594 100%)';
-        cardBack.style.background = 'linear-gradient(135deg, #C5CDD9 0%, #A8B0C0 50%, #8B95A8 100%)';
-      } else if (currentDeck === 'wc') {
-        cardFront.style.background = 'linear-gradient(135deg, #E8B339 0%, #8B6914 35%, #2d2d2d 70%, #0a0a0a 100%)';
-        cardBack.style.background = 'linear-gradient(135deg, #F5D17A 0%, #D4A030 35%, #8B6914 70%, #3a3a3a 100%)';
-      }
+        <p class="delta-category">DELTA: ${currentCard.delta}</p>
+      </div>
+    </div>
 
-      cardInner.addEventListener('click', flipCard);
-    }
+    <!-- BACK: deeper coaching / actions -->
+    <div class="card-face card-back">
+      <div class="top-section">
+        <div class="icon-circle">
+          <svg class="icon-svg-small" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            ${deck.iconSmall}
+          </svg>
+        </div>
+        <p class="back-deck-label">${deck.label}</p>
+      </div>
+      <div class="content-panel">
+        <h2 class="panel-title">${currentCard.title}</h2>
+        ${
+          extraSections
+            ? extraSections
+            : '<p class="reflection-prompt" style="font-size:13px;">Use this side for notes or extra reflections.</p>'
+        }
+      </div>
+    </div>
+  `;
+
+  const cardFront = cardInner.querySelector('.card-front');
+  const cardBack = cardInner.querySelector('.card-back');
+
+  if (currentDeck === 'p') {
+    cardFront.style.background = 'linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%)';
+    cardBack.style.background  = 'linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%)';
+  } else if (currentDeck === 'o') {
+    cardFront.style.background = 'linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 50%, #1a1a1a 100%)';
+    cardBack.style.background  = 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0a0a0a 100%)';
+  } else if (currentDeck === 'v') {
+    cardFront.style.background = 'linear-gradient(135deg, #C5CDD9 0%, #A8B0C0 50%, #8B95A8 100%)';
+    cardBack.style.background  = 'linear-gradient(135deg, #A8B0C0 0%, #8B95A8 50%, #7B8594 100%)';
+  } else if (currentDeck === 'wc') {
+    cardFront.style.background = 'linear-gradient(135deg, #F5D17A 0%, #D4A030 35%, #8B6914 70%, #3a3a3a 100%)';
+    cardBack.style.background  = 'linear-gradient(135deg, #E8B339 0%, #8B6914 35%, #2d2d2d 70%, #0a0a0a 100%)';
+  }
+
+  cardInner.addEventListener('click', flipCard);
+}
+
 
     function flipCard() {
       if (isShuffling) return;
