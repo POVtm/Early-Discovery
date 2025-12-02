@@ -1253,6 +1253,16 @@
       aspect-ratio: 3/4;
       margin-bottom: 20px;
     }
+    
+     .card-display {
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+    .card-inner {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
 
     .card-inner {
       position: relative;
@@ -1293,29 +1303,41 @@
       }
     }
 
-    .card-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 20px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-
-      display: flex;
-      flex-direction: column;
-      padding: 18px 16px;
-      box-sizing: border-box;
+ .card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;  /* SUPER IMPORTANT for iOS */
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
-    .card-front {
-      background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
-    }
 
-    .card-back {
-  background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
-  transform: rotateY(180deg);
+/* Both sides use the same layout */
+.card-front,
+.card-back {
   display: flex;
   flex-direction: column;
-  padding: 12px 10px;       /* less padding = more room for content */
+  padding: 18px 16px;   /* You can tweak this if needed */
+  box-sizing: border-box;
+}
+
+.card-front {
+  background: linear-gradient(135deg, #E8B339 0%, #D4A030 50%, #C89020 100%);
+}
+
+/* Back face only keeps flip + iOS fixes */
+.card-back {
+  background: linear-gradient(135deg, #F5D17A 0%, #E8C45F 50%, #D4A030 100%);
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);   /* needed for iOS mobile */
+  backface-visibility: hidden;          /* prevents mirrored text */
+  -webkit-backface-visibility: hidden;  /* iOS fix */
+}
+
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
   box-sizing: border-box;
 }
 
@@ -3143,12 +3165,12 @@
         icon: '<path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />',
         iconSmall: '<path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z" />',
         cards: [
-          { number: "01", title: "Strengths Spotlight", prompt: "What do people often come to you for help with?", tags: ["Strengths", "Reputation", "Self-awareness"], delta: "Self-Leadership" },
-          { number: "02", title: "Growth Edge", prompt: "What is one thing you wish you were better at?", tags: ["Honesty", "Development", "Growth Mindset"], delta: "Self-Leadership" },
-          { number: "03", title: "Reputation Reflection", prompt: "If I asked your friends or teammates to describe you in three words, what would they say?", tags: ["Self-image", "Feedback", "Reflection"], delta: "Interpersonal" },
-          { number: "04", title: "Pressure Test", prompt: "How do you react when you are stressed or under pressure?", tags: ["Coping", "Emotional Awareness", "Resilience"], delta: "Self-Leadership" },
-          { number: "05", title: "Collaboration Check", prompt: "How do you prefer to work—alone, with a partner, or in a group? Why?", tags: ["Work Style", "Collaboration", "Self-knowledge"], delta: "Interpersonal" },
-          { number: "06", title: "Breaking the Rules", prompt: "When is it okay to break rules or do things differently than expected?", tags: ["Judgement", "Creativity", "Ethics"], delta: "Cognitive" }
+          {  title: "1. Strengths Spotlight", prompt: "What do people often come to you for help with?", tags: ["Strengths", "Reputation", "Self-awareness"], delta: "Self-Leadership" },
+          {  title: "2. Growth Edge", prompt: "What is one thing you wish you were better at?", tags: ["Honesty", "Development", "Growth Mindset"], delta: "Self-Leadership" },
+          {  title: "3. Reputation Reflection", prompt: "If I asked your friends or teammates to describe you in three words, what would they say?", tags: ["Self-image", "Feedback", "Reflection"], delta: "Interpersonal" },
+          {  title: "4. Pressure Test", prompt: "How do you react when you are stressed or under pressure?", tags: ["Coping", "Emotional Awareness", "Resilience"], delta: "Self-Leadership" },
+          {  title: "5. Collaboration Check", prompt: "How do you prefer to work—alone, with a partner, or in a group? Why?", tags: ["Work Style", "Collaboration", "Self-knowledge"], delta: "Interpersonal" },
+          {  title: "6. Breaking the Rules", prompt: "When is it okay to break rules or do things differently than expected?", tags: ["Judgement", "Creativity", "Ethics"], delta: "Cognitive" }
         ]
       }
     };
