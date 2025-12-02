@@ -7,21 +7,19 @@
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <style>
-    body {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      display: block;            
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f8f9fa;
+    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  display: block;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f8f9fa;
 }
 
-html, body {
-      min-height: 100%;
-}
-
+    html, body {
+      height: 100%;
+    }
 
     .app-wrapper {
       width: 100%;
@@ -416,6 +414,7 @@ html, body {
       color: #ffffff;
     }
 
+
     .self-check-content {
       flex: 1;
       overflow-y: auto;
@@ -484,64 +483,12 @@ html, body {
       outline: none;
       border-color: #E8B339;
     }
-
-   <script>
-(function(){
-  const nameInput = document.getElementById('participant-name');
-  const nameHelp = document.querySelector('#name-input-section .name-help');
-  const startButtons = Array.from(document.querySelectorAll('.start-button, .self-check-button'));
-
-  function showError() {
-    if (!nameInput) return;
-    nameInput.classList.add('input-error');
-    if (nameHelp) nameHelp.style.display = 'block';
-    nameInput.setAttribute('aria-invalid', 'true');
-    nameInput.focus();
-  }
-
-  function clearError() {
-    if (!nameInput) return;
-    nameInput.classList.remove('input-error');
-    if (nameHelp) nameHelp.style.display = 'none';
-    nameInput.removeAttribute('aria-invalid');
-  }
-
-  function validName() {
-    if (!nameInput) return true;
-    return nameInput.value && nameInput.value.trim().length > 0;
-  }
-
-  // Prevent progression if name is missing
-  startButtons.forEach(btn => {
-    btn.addEventListener('click', function(e){
-      if (!validName()) {
-        e.preventDefault();
-        e.stopPropagation();
-        showError();
-      } else {
-        clearError();
-      }
-    }, { capture: true });
-  });
-
-  // Block form submission where applicable
-  document.addEventListener('submit', function(e){
-    if (!validName()) {
-      e.preventDefault();
-      e.stopPropagation();
-      showError();
+    
+    #nameCheck {
+    transition: opacity 0.2s ease;
     }
-  }, true);
 
-  // Clear error state when user types
-  if (nameInput) {
-    nameInput.addEventListener('input', function(){
-      if (validName()) clearError();
-    });
-  }
-})();
- </script>
-   .rating-scale-legend {
+    .rating-scale-legend {
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       padding: 20px;
@@ -1914,28 +1861,14 @@ html, body {
         padding: 24px 20px;
       }
     }
+ #studentName:required {
+    border-left: 3px solid #d00000;
+  }
+
+  #studentName:focus:invalid {
+    border-color: #d00000;
+  }
   </style>
-  <style>
-  html, body {
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: auto !important;
-  }
-
-  .app-wrapper {
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow: visible !important;
-  }
-
-  .intro-screen {
-    height: auto !important;
-    min-height: 100vh !important;
-    justify-content: flex-start !important;
-    padding-top: 40px !important;
-  }
-</style>
-
   <style>@view-transition { navigation: auto; }</style>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
@@ -1976,7 +1909,7 @@ html, body {
        </svg>
       </div>
      </div>
-     <div class="logo-container" id="logoContainer"><img src="POVtransparent" alt="Logo" class="logo-image" id="logoImage" style="display: block;">
+     <div class="logo-container" id="logoContainer"><img src="" alt="Logo" class="logo-image" id="logoImage" style="display: none;">
      </div>
      <h1 class="intro-title">POV Early Discovery Deck</h1>
      <p class="intro-body">The POV Deck invites you to pause, rewind, notice patterns, and imagine what comes next. Each card holds a guided question, 🏷️ competency tags, and a DELTA focus area (Cognitive, Interpersonal, Self-Leadership, Digital) to help you connect real experiences with practical insight.</p>
@@ -2047,9 +1980,12 @@ html, body {
        <p><strong>💡 Tip:</strong> Complete this assessment now, then retake it later to track your growth!</p>
       </div>
       <div class="name-input-section">
-      <label for="studentName">Your Name <span style="color: #d00000">*</span></label>
-      <div style="display:flex; align-items:center; gap:8px;">
+  <label for="studentName">
+    Your Name <span style="color:#d00000">*</span>
+  </label>
+
   <input type="text" id="studentName" placeholder="Enter your name" required oninput="validateNameField()">
+
   <p id="nameError" style="
       display:none;
       color:#d00000;
@@ -2060,11 +1996,6 @@ html, body {
     Required
   </p>
 </div>
-  <span id="nameCheck" 
-      style="font-size:18px; color:#22c55e; font-weight:700;">
-  ✓
-</span>
-
       </div>
       <div class="rating-scale-legend">
        <h4>Rating Scale</h4>
@@ -2889,9 +2820,10 @@ if (savedName) {
   completeButton.textContent = 'Calculating Results...';
 
   setTimeout(() => {
-    const studentName = document.getElementById('studentName').value.trim();
+    const nameInput = document.getElementById('studentName');
+    const studentName = nameInput.value.trim();
 
-    
+    // Name is required
     if (!studentName) {
   alert("Please enter your name before completing the assessment.");
 
@@ -2900,7 +2832,7 @@ if (savedName) {
   const validIconEl = document.getElementById('nameValidIcon');
 
   if (nameInputEl) {
-    
+    // 5️⃣ Smooth scroll to the field
     nameInputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     nameInputEl.focus();
   }
@@ -2913,9 +2845,8 @@ if (savedName) {
   return;
 }
 
-    if (studentName) {
-      localStorage.setItem('pov_student_name', studentName);
-    }
+
+    localStorage.setItem('pov_student_name', studentName);
 
     const scores = calculateDomainScores();
     const insights = generateInsights(scores);
@@ -3121,8 +3052,7 @@ if (savedName) {
       const total = decks[currentDeck].cards.length;
       document.getElementById('cardsRemaining').textContent = `${remaining} of ${total} cards left`;
     }
-
-   
+// Name field: live validation + autosave + green check
 document.addEventListener('DOMContentLoaded', () => {
   const nameInput = document.getElementById('studentName');
   const errorText = document.getElementById('nameError');
@@ -3133,23 +3063,25 @@ document.addEventListener('DOMContentLoaded', () => {
   nameInput.addEventListener('input', () => {
     const value = nameInput.value.trim();
 
-    
+    // 4️⃣ Auto-save name as they type
     localStorage.setItem('pov_student_name', value);
 
     if (value === "") {
-      
+      // show error, hide check
       if (errorText) errorText.classList.add('visible');
       if (validIcon) validIcon.classList.remove('visible');
     } else {
+      // hide error, show check
       if (errorText) errorText.classList.remove('visible');
       if (validIcon) validIcon.classList.add('visible');
     }
   });
 });
 
+    // Data SDK initialization
     const dataHandler = {
       onDataChanged(data) {
-        
+        // Data is saved
       }
     };
 
@@ -3192,6 +3124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoImage.style.display = 'block';
       } else if (logoImage) {
         logoImage.style.display = 'none';
+      }
     }
 
     function mapToCapabilities(config) {
@@ -3238,24 +3171,18 @@ document.addEventListener('DOMContentLoaded', () => {
         mapToEditPanelValues
       });
     }
-    function validateNameField() {
+function validateNameField() {
   const nameInput = document.getElementById('studentName');
   const errorText = document.getElementById('nameError');
-  const checkmark = document.getElementById('nameCheck');
 
-  const value = nameInput.value.trim();
-
-  if (value === "") {
+  if (nameInput.value.trim() === "") {
     errorText.style.display = "block";
     nameInput.style.borderColor = "#d00000";
-    checkmark.classList.remove("visible");
   } else {
     errorText.style.display = "none";
-    nameInput.style.borderColor = "#22c55e";
-    checkmark.classList.add("visible");
+    nameInput.style.borderColor = "#e5e7eb";
   }
 }
-
 
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a6aa54ca46c10de',t:'MTc2NDUwODg2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
