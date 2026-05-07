@@ -3,162 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POV Early Discovery Assessment</title>
+<title>POV DELTA Assessment</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --gold:#F0B429;--gold-light:#FDF3D8;--gold-mid:#C89010;
-  --beige:#F5F0E8;--beige-dark:#EDE6D6;
+  --beige:#F5F0E8;--beige-dark:#EDE6D6;--beige-deeper:#D9CEBF;
   --black:#1A1A1A;--near-black:#2C2A26;
-  --off-white:#FAFAF7;--mid-gray:#8C8680;
+  --off-white:#FAFAF7;--warm-gray:#F2F0EB;
+  --mid-gray:#8C8680;--text:#2C2A26;
   --red:#EF4444;--amber:#F59E0B;--green:#22C55E;
+  --cog:#4F86C6;--int:#7B5EA7;--slf:#E8754A;--dig:#2DAA9E;
 }
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--beige);color:var(--near-black);min-height:100vh}
-/* SCREENS */
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--beige);color:var(--text);min-height:100vh}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-/* NAV */
+
+/* TOP BAR */
 .top-bar{background:var(--near-black);padding:1rem 2rem;display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
 .top-bar img{width:32px;height:32px;object-fit:contain}
 .top-bar-text{font-size:13px;font-weight:500;color:white;letter-spacing:0.5px}
 .top-bar-text span{color:var(--gold)}
+
 /* INTRO */
 #introScreen{background:linear-gradient(135deg,#F5F0E8,#EDE6D6)}
 .intro-body{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
-.intro-card{background:white;border-radius:20px;padding:3rem 2.5rem;max-width:580px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,0.08)}
-.intro-card h1{font-size:2rem;font-weight:700;color:var(--near-black);margin-bottom:0.5rem;letter-spacing:-0.5px}
-.intro-card .sub{font-size:15px;color:var(--mid-gray);margin-bottom:2rem;line-height:1.65}
-.form-group{margin-bottom:1.25rem}
-.form-group label{display:block;font-size:13px;font-weight:500;color:var(--near-black);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.5px}
-.form-group input{width:100%;padding:0.75rem 1rem;border:1.5px solid #E8E4DC;border-radius:10px;font-size:15px;font-family:inherit;transition:border-color 0.2s;background:var(--off-white)}
+.intro-card{background:white;border-radius:20px;padding:3rem 2.5rem;max-width:620px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,0.08)}
+.intro-card h1{font-size:2rem;font-weight:700;color:var(--near-black);margin-bottom:0.4rem;letter-spacing:-0.5px}
+.intro-card .sub{font-size:14px;color:var(--mid-gray);margin-bottom:1.75rem;line-height:1.65}
+.form-group{margin-bottom:1.1rem}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--near-black);margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px}
+.form-group input{width:100%;padding:0.7rem 1rem;border:1.5px solid #E8E4DC;border-radius:10px;font-size:15px;font-family:inherit;transition:border-color 0.2s;background:var(--off-white)}
 .form-group input:focus{outline:none;border-color:var(--gold)}
-.divider{height:1px;background:#E8E4DC;margin:1.75rem 0}
-.how-title{font-size:15px;font-weight:600;color:var(--near-black);margin-bottom:1rem}
-.steps{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem}
-.step-row{display:flex;align-items:flex-start;gap:0.75rem}
-.step-num{width:26px;height:26px;border-radius:50%;background:var(--gold-light);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold-mid);flex-shrink:0;margin-top:2px}
-.step-text{font-size:14px;color:var(--mid-gray);line-height:1.55}
+.divider{height:1px;background:#E8E4DC;margin:1.5rem 0}
+.categories-preview{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.75rem}
+.cat-pill{border-radius:10px;padding:0.75rem 1rem;display:flex;align-items:center;gap:0.6rem;font-size:13px;font-weight:500}
+.cat-pill .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cat-pill.cog{background:#EBF2FB;color:#2D5F9A} .cat-pill.cog .dot{background:var(--cog)}
+.cat-pill.int{background:#F3EFF8;color:#5A3D8A} .cat-pill.int .dot{background:var(--int)}
+.cat-pill.slf{background:#FDF0EB;color:#B54A1E} .cat-pill.slf .dot{background:var(--slf)}
+.cat-pill.dig{background:#E8F7F6;color:#1A7A71} .cat-pill.dig .dot{background:var(--dig)}
+.how-title{font-size:14px;font-weight:600;color:var(--near-black);margin-bottom:0.85rem}
+.steps{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.75rem}
+.step-row{display:flex;align-items:flex-start;gap:0.65rem}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--gold-light);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold-mid);flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:var(--mid-gray);line-height:1.55}
 .step-text strong{color:var(--near-black)}
+.est-time{background:var(--gold-light);border-radius:8px;padding:0.6rem 1rem;font-size:13px;color:var(--gold-mid);font-weight:500;text-align:center;margin-bottom:1.5rem}
 .btn-primary{width:100%;padding:0.95rem;background:var(--gold);color:var(--black);border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.15s;font-family:inherit}
 .btn-primary:hover{background:var(--gold-mid);color:white;transform:translateY(-1px)}
 .btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-/* ASSESSMENT */
+
+/* ASSESS */
 #assessScreen{background:var(--beige)}
-.assess-header{background:var(--near-black);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.assess-header{background:var(--near-black);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .assess-header-left{display:flex;align-items:center;gap:0.75rem}
-.assess-header img{width:28px;height:28px;object-fit:contain}
-.assess-header-title{font-size:14px;font-weight:500;color:white}
-.progress-pill{background:rgba(240,180,41,0.2);border:1px solid var(--gold);color:var(--gold);font-size:12px;font-weight:600;padding:0.35rem 0.9rem;border-radius:100px}
-.assess-body{flex:1;overflow-y:auto;padding:2rem}
-.assess-container{max-width:820px;margin:0 auto}
-.candidate-banner{background:white;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.75rem;border:1px solid #E8E4DC;display:flex;align-items:center;gap:0.75rem;font-size:14px;color:var(--mid-gray)}
+.assess-header img{width:26px;height:26px;object-fit:contain}
+.assess-header-title{font-size:13px;font-weight:500;color:white}
+.progress-pill{font-size:12px;font-weight:600;padding:0.3rem 0.85rem;border-radius:100px;background:rgba(240,180,41,0.2);border:1px solid var(--gold);color:var(--gold)}
+.assess-body{flex:1;overflow-y:auto;padding:1.75rem}
+.assess-container{max-width:800px;margin:0 auto}
+.candidate-banner{background:white;border-radius:10px;padding:0.85rem 1.25rem;margin-bottom:1.5rem;border:1px solid #E8E4DC;font-size:13px;color:var(--mid-gray);display:flex;align-items:center;gap:0.6rem}
 .candidate-banner strong{color:var(--near-black)}
-.scale-legend{background:var(--gold-light);border:1px solid rgba(240,180,41,0.4);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
-.scale-legend-title{font-size:12px;font-weight:600;color:var(--gold-mid);text-transform:uppercase;letter-spacing:0.8px;margin-right:0.5rem}
-.scale-dot-item{display:flex;align-items:center;gap:0.4rem;font-size:12px;color:var(--near-black)}
-.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.sdot-1{background:var(--red)} .sdot-2{background:var(--amber)} .sdot-3{background:var(--gold)} .sdot-4{background:var(--green)}
-/* CATEGORY */
-.category-block{margin-bottom:2rem}
-.cat-header{background:var(--near-black);border-radius:12px 12px 0 0;padding:1rem 1.5rem}
-.cat-header h3{font-size:16px;font-weight:600;color:white;margin-bottom:0.2rem}
-.cat-header p{font-size:12px;color:rgba(255,255,255,0.5)}
+.scale-legend{background:var(--gold-light);border:1px solid rgba(240,180,41,0.35);border-radius:10px;padding:0.85rem 1.25rem;margin-bottom:1.5rem;display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center}
+.sl-title{font-size:11px;font-weight:600;color:var(--gold-mid);text-transform:uppercase;letter-spacing:0.8px}
+.sl-item{display:flex;align-items:center;gap:0.35rem;font-size:12px;color:var(--near-black)}
+.sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sdot-1{background:var(--red)}.sdot-2{background:var(--amber)}.sdot-3{background:var(--gold)}.sdot-4{background:var(--green)}
+
+/* CATEGORY BLOCKS */
+.cat-block{margin-bottom:1.75rem}
+.cat-header{padding:1rem 1.5rem;border-radius:12px 12px 0 0}
+.cat-header.cog{background:var(--cog)}.cat-header.int{background:var(--int)}.cat-header.slf{background:var(--slf)}.cat-header.dig{background:var(--dig)}
+.cat-header h3{font-size:15px;font-weight:600;color:white;margin-bottom:0.15rem}
+.cat-header p{font-size:11px;color:rgba(255,255,255,0.75)}
 .cat-body{background:white;border-radius:0 0 12px 12px;border:1px solid #E8E4DC;border-top:none;overflow:hidden}
-/* QUESTION */
-.q-item{padding:1.25rem 1.5rem;border-bottom:1px solid #F2F0EB}
+
+/* SKILL GROUP */
+.sg-block{border-bottom:1px solid #F2F0EB}
+.sg-block:last-child{border-bottom:none}
+.sg-label{padding:0.75rem 1.5rem 0.25rem;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--mid-gray)}
+.q-item{padding:0.85rem 1.5rem 1.1rem;border-bottom:1px solid #F8F6F2}
 .q-item:last-child{border-bottom:none}
-.q-label{font-size:14px;font-weight:500;color:var(--near-black);margin-bottom:0.3rem}
-.q-desc{font-size:12px;color:var(--mid-gray);margin-bottom:0.85rem;line-height:1.55}
-.rating-btns{display:flex;gap:0.5rem;flex-wrap:wrap}
-.rbtn{flex:1;min-width:90px;padding:0.55rem 0.5rem;border:1.5px solid #E8E4DC;border-radius:8px;font-size:12px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;text-align:center;background:white;font-family:inherit}
+.q-label{font-size:14px;font-weight:500;color:var(--near-black);margin-bottom:0.25rem}
+.q-desc{font-size:12px;color:var(--mid-gray);margin-bottom:0.75rem;line-height:1.5}
+.rating-btns{display:flex;gap:0.4rem;flex-wrap:wrap}
+.rbtn{flex:1;min-width:85px;padding:0.5rem 0.4rem;border:1.5px solid #E8E4DC;border-radius:8px;font-size:11px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:all 0.2s;text-align:center;background:white;font-family:inherit}
 .rbtn:hover{border-color:#ccc}
 .rbtn.sel-1{background:var(--red);border-color:var(--red);color:white}
 .rbtn.sel-2{background:var(--amber);border-color:var(--amber);color:white}
 .rbtn.sel-3{background:var(--gold);border-color:var(--gold);color:var(--black)}
 .rbtn.sel-4{background:var(--green);border-color:var(--green);color:white}
-.assess-footer{background:white;border-top:1px solid #E8E4DC;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.progress-bar-wrap{flex:1;height:6px;background:#E8E4DC;border-radius:3px;margin:0 1.5rem;overflow:hidden}
-.progress-bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.4s}
-.answered-count{font-size:13px;color:var(--mid-gray);white-space:nowrap}
-.btn-submit{padding:0.75rem 2rem;background:var(--gold);color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit}
+
+.assess-footer{background:white;border-top:1px solid #E8E4DC;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.prog-wrap{flex:1;height:6px;background:#E8E4DC;border-radius:3px;margin:0 1.25rem;overflow:hidden}
+.prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.4s}
+.ans-count{font-size:12px;color:var(--mid-gray);white-space:nowrap}
+.btn-submit{padding:0.7rem 1.75rem;background:var(--gold);color:var(--black);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit}
 .btn-submit:hover{background:var(--gold-mid);color:white}
 .btn-submit:disabled{opacity:0.45;cursor:not-allowed}
+
 /* RESULTS */
 #resultsScreen{background:var(--beige)}
-.results-header{background:var(--gold);padding:2rem;text-align:center;flex-shrink:0}
-.results-header h2{font-size:1.6rem;font-weight:700;color:var(--black);margin-bottom:0.3rem}
-.results-header p{font-size:14px;color:rgba(0,0,0,0.6)}
-.results-body{flex:1;overflow-y:auto;padding:2rem}
-.results-container{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}
-.result-card{background:white;border-radius:14px;padding:1.5rem;border:1px solid #E8E4DC}
-.result-card h3{font-size:16px;font-weight:600;color:var(--near-black);margin-bottom:1rem}
-.score-row{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:0.5rem}
-.score-item{display:flex;align-items:center;gap:0.75rem}
-.score-label{font-size:13px;color:var(--near-black);min-width:180px;font-weight:500}
-.score-bar-bg{flex:1;height:8px;background:#F2F0EB;border-radius:4px;overflow:hidden}
-.score-bar{height:100%;border-radius:4px;transition:width 0.6s}
-.score-val{font-size:12px;font-weight:600;color:var(--mid-gray);min-width:36px;text-align:right}
-.flag-bar{background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:1rem 1.25rem;margin-top:0.75rem}
-.flag-bar h4{font-size:13px;font-weight:600;color:#B91C1C;margin-bottom:0.5rem}
-.flag-item{font-size:13px;color:#991B1B;margin-bottom:0.25rem}
-.summary-box{background:var(--gold-light);border:1px solid rgba(240,180,41,0.4);border-radius:10px;padding:1.25rem}
-.summary-box pre{font-size:12px;color:var(--near-black);white-space:pre-wrap;font-family:inherit;line-height:1.7}
-.copy-btn{margin-top:0.75rem;padding:0.5rem 1.25rem;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.2s}
+.results-header{background:var(--gold);padding:1.75rem 2rem;text-align:center;flex-shrink:0}
+.results-header h2{font-size:1.5rem;font-weight:700;color:var(--black);margin-bottom:0.25rem}
+.results-header p{font-size:13px;color:rgba(0,0,0,0.6)}
+.results-body{flex:1;overflow-y:auto;padding:1.75rem}
+.results-container{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:1.1rem}
+.r-card{background:white;border-radius:14px;padding:1.4rem;border:1px solid #E8E4DC}
+.r-card h3{font-size:15px;font-weight:600;color:var(--near-black);margin-bottom:1rem}
+.cat-score-row{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem}
+.cat-score-label{font-size:13px;font-weight:500;color:var(--near-black);min-width:160px}
+.cat-score-bar-bg{flex:1;height:9px;background:#F2F0EB;border-radius:5px;overflow:hidden}
+.cat-score-bar{height:100%;border-radius:5px;transition:width 0.7s}
+.cat-score-val{font-size:12px;font-weight:600;color:var(--mid-gray);min-width:70px;text-align:right}
+.sg-score-section{margin-bottom:1rem}
+.sg-score-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--mid-gray);margin-bottom:0.5rem}
+.sg-score-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.35rem}
+.sg-score-label{font-size:12px;color:var(--near-black);min-width:190px}
+.sg-score-bar-bg{flex:1;height:6px;background:#F2F0EB;border-radius:3px;overflow:hidden}
+.sg-score-bar{height:100%;border-radius:3px}
+.sg-score-val{font-size:11px;font-weight:600;color:var(--mid-gray);min-width:36px;text-align:right}
+.flag-box{background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:1rem 1.25rem}
+.flag-box h4{font-size:13px;font-weight:600;color:#B91C1C;margin-bottom:0.5rem}
+.flag-item{font-size:12px;color:#991B1B;margin-bottom:0.25rem}
+.summary-box{background:var(--gold-light);border:1px solid rgba(240,180,41,0.4);border-radius:10px;padding:1.1rem}
+.summary-box pre{font-size:11px;color:var(--near-black);white-space:pre-wrap;font-family:inherit;line-height:1.7}
+.copy-btn{margin-top:0.65rem;padding:0.45rem 1.1rem;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit}
 .copy-btn:hover{background:var(--gold-mid);color:white}
-.sending-msg{text-align:center;font-size:14px;color:var(--mid-gray);padding:1rem}
+.prompt-item{background:var(--gold-light);border-left:3px solid var(--gold);padding:0.7rem 1rem;margin-bottom:0.5rem;border-radius:0 8px 8px 0;font-size:13px;font-style:italic;color:var(--near-black);line-height:1.6}
+.send-msg{text-align:center;font-size:13px;color:var(--mid-gray);padding:0.75rem}
+
 /* DASHBOARD */
 #dashScreen{background:var(--beige)}
-.dash-header{background:var(--near-black);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dash-header{background:var(--near-black);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .dash-header-left{display:flex;align-items:center;gap:0.75rem}
-.dash-header img{width:28px;height:28px;object-fit:contain}
-.dash-header-title{font-size:14px;font-weight:500;color:white}
-.dash-body{flex:1;overflow-y:auto;padding:2rem}
-.dash-container{max-width:900px;margin:0 auto}
-.dash-meta{display:flex;gap:1rem;margin-bottom:1.75rem;flex-wrap:wrap}
-.meta-card{background:white;border-radius:12px;padding:1rem 1.5rem;border:1px solid #E8E4DC;flex:1;min-width:150px;text-align:center}
-.meta-card .n{font-size:28px;font-weight:700;color:var(--gold-mid);font-family:Georgia,serif}
-.meta-card .l{font-size:11px;color:var(--mid-gray);text-transform:uppercase;letter-spacing:0.8px;margin-top:0.2rem}
-.submissions-list{display:flex;flex-direction:column;gap:1rem}
+.dash-header img{width:26px;height:26px;object-fit:contain}
+.dash-title{font-size:13px;font-weight:500;color:white}
+.dash-body{flex:1;overflow-y:auto;padding:1.75rem}
+.dash-container{max-width:920px;margin:0 auto}
+.dash-meta{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.meta-card{background:white;border-radius:12px;padding:0.9rem 1.25rem;flex:1;min-width:130px;text-align:center;border:1px solid #E8E4DC}
+.meta-card .n{font-size:26px;font-weight:700;color:var(--gold-mid);font-family:Georgia,serif}
+.meta-card .l{font-size:10px;color:var(--mid-gray);text-transform:uppercase;letter-spacing:0.7px;margin-top:0.15rem}
+.sub-list{display:flex;flex-direction:column;gap:1rem}
 .sub-card{background:white;border-radius:14px;border:1px solid #E8E4DC;overflow:hidden}
-.sub-card-header{padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.2s}
-.sub-card-header:hover{background:#FAFAF7}
-.sub-card-name{font-size:15px;font-weight:600;color:var(--near-black)}
-.sub-card-meta{font-size:12px;color:var(--mid-gray);margin-top:0.15rem}
-.sub-card-right{display:flex;align-items:center;gap:0.75rem}
-.overall-badge{font-size:12px;font-weight:600;padding:0.3rem 0.75rem;border-radius:100px}
-.badge-high{background:#DCFCE7;color:#166534}
-.badge-mid{background:var(--gold-light);color:#7A5800}
-.badge-low{background:#FEF2F2;color:#991B1B}
-.flag-pill{background:#FEE2E2;color:#B91C1C;font-size:11px;font-weight:600;padding:0.2rem 0.6rem;border-radius:100px}
-.sub-card-body{display:none;padding:1.25rem;border-top:1px solid #F2F0EB}
-.sub-card-body.open{display:block}
-.sub-scores{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem}
-.sub-score-row{display:flex;align-items:center;gap:0.75rem;font-size:13px}
-.sub-score-label{min-width:200px;color:var(--near-black);font-weight:500}
-.sub-score-bar-bg{flex:1;height:7px;background:#F2F0EB;border-radius:3px;overflow:hidden}
-.sub-score-bar{height:100%;border-radius:3px}
-.sub-score-val{min-width:36px;text-align:right;font-size:12px;font-weight:600;color:var(--mid-gray)}
-.sub-flags{background:#FEF2F2;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:13px;color:#991B1B}
-.sub-flags strong{display:block;margin-bottom:0.3rem}
-.sub-answers-toggle{font-size:13px;color:var(--gold-mid);cursor:pointer;font-weight:500;margin-bottom:0.75rem;display:inline-block}
-.sub-answers{display:none;background:#FAFAF7;border-radius:8px;padding:1rem;border:1px solid #F2F0EB}
+.sub-card-hdr{padding:0.9rem 1.25rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.2s}
+.sub-card-hdr:hover{background:#FAFAF7}
+.sub-name{font-size:14px;font-weight:600;color:var(--near-black)}
+.sub-meta{font-size:11px;color:var(--mid-gray);margin-top:0.1rem}
+.sub-right{display:flex;align-items:center;gap:0.6rem}
+.overall-badge{font-size:11px;font-weight:600;padding:0.25rem 0.7rem;border-radius:100px}
+.badge-hi{background:#DCFCE7;color:#166534}.badge-mid{background:var(--gold-light);color:#7A5800}.badge-lo{background:#FEF2F2;color:#991B1B}
+.flag-pill{background:#FEE2E2;color:#B91C1C;font-size:10px;font-weight:600;padding:0.18rem 0.55rem;border-radius:100px}
+.sub-body{display:none;padding:1.25rem;border-top:1px solid #F2F0EB}
+.sub-body.open{display:block}
+.sub-cat-scores{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;margin-bottom:1rem}
+.sub-cat-item{display:flex;align-items:center;gap:0.5rem;font-size:12px}
+.sub-cat-bar-bg{flex:1;height:6px;background:#F2F0EB;border-radius:3px;overflow:hidden}
+.sub-cat-bar{height:100%;border-radius:3px}
+.sub-cat-val{font-size:11px;font-weight:600;color:var(--mid-gray);min-width:30px;text-align:right}
+.sub-flags{background:#FEF2F2;border-radius:8px;padding:0.7rem 1rem;margin-bottom:1rem;font-size:12px;color:#991B1B}
+.sub-flags strong{display:block;margin-bottom:0.25rem}
+.ans-toggle{font-size:12px;color:var(--gold-mid);cursor:pointer;font-weight:500;margin-bottom:0.6rem;display:inline-block}
+.sub-answers{display:none;background:#FAFAF7;border-radius:8px;padding:0.9rem;border:1px solid #F2F0EB;margin-bottom:1rem}
 .sub-answers.open{display:block}
-.ans-item{font-size:12px;color:var(--mid-gray);margin-bottom:0.5rem;padding-left:0.5rem;border-left:2px solid #E8E4DC;line-height:1.5}
+.ans-cat{margin-bottom:0.75rem}
+.ans-cat-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--mid-gray);margin-bottom:0.4rem}
+.ans-item{font-size:11px;color:var(--mid-gray);margin-bottom:0.35rem;padding-left:0.5rem;border-left:2px solid #E8E4DC;line-height:1.5}
 .ans-item strong{color:var(--near-black);display:block}
-.sub-copy-btn{padding:0.45rem 1rem;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit}
+.sub-copy{padding:0.4rem 0.9rem;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit}
+
 /* LOGIN */
 #loginScreen{background:var(--beige);align-items:center;justify-content:center}
-.login-card{background:white;border-radius:16px;padding:2.5rem;max-width:380px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.08)}
-.login-card img{width:60px;margin:0 auto 1.25rem;display:block}
-.login-card h2{font-size:1.3rem;font-weight:700;text-align:center;margin-bottom:0.25rem}
-.login-card p{font-size:13px;color:var(--mid-gray);text-align:center;margin-bottom:1.75rem}
-.login-error{color:var(--red);font-size:13px;text-align:center;margin-top:0.75rem;display:none}
+.login-card{background:white;border-radius:16px;padding:2.25rem;max-width:360px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.08)}
+.login-card img{width:52px;margin:0 auto 1.1rem;display:block}
+.login-card h2{font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:0.2rem}
+.login-card p{font-size:12px;color:var(--mid-gray);text-align:center;margin-bottom:1.5rem}
+.login-err{color:var(--red);font-size:12px;text-align:center;margin-top:0.6rem;display:none}
 </style>
 </head>
 <body>
 
-<!-- ===== INTRO SCREEN ===== -->
+<!-- INTRO -->
 <div id="introScreen" class="screen active">
   <div class="top-bar">
     <img src="data:image/png;base64,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" alt="POV">
@@ -166,511 +195,499 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--beige);color:va
   </div>
   <div class="intro-body">
     <div class="intro-card">
-      <h1>Early Discovery</h1>
-      <p class="sub">A reflective self-assessment to help you understand your current competency profile — honestly and without judgment.</p>
-      <div class="form-group">
-        <label>Your full name</label>
-        <input type="text" id="candName" placeholder="e.g. Priya Sharma" autocomplete="name">
-      </div>
-      <div class="form-group">
-        <label>Your email</label>
-        <input type="email" id="candEmail" placeholder="e.g. priya@email.com" autocomplete="email">
-      </div>
+      <h1>POV DELTA Assessment</h1>
+      <p class="sub">A reflective self-assessment based on McKinsey's Distinct Elements of Talent framework — helping you understand your current strengths and growth areas honestly and without judgment.</p>
+      <div class="form-group"><label>Your full name</label><input type="text" id="candName" placeholder="e.g. Priya Sharma" autocomplete="name"></div>
+      <div class="form-group"><label>Your email</label><input type="email" id="candEmail" placeholder="e.g. priya@email.com" autocomplete="email"></div>
       <div class="divider"></div>
+      <div class="categories-preview">
+        <div class="cat-pill cog"><span class="dot"></span>Cognitive</div>
+        <div class="cat-pill int"><span class="dot"></span>Interpersonal</div>
+        <div class="cat-pill slf"><span class="dot"></span>Self-leadership</div>
+        <div class="cat-pill dig"><span class="dot"></span>Digital</div>
+      </div>
+      <div class="est-time">⏱ Estimated time: 15–20 minutes · 39 questions across 13 skill groups</div>
       <div class="how-title">How this works</div>
       <div class="steps">
-        <div class="step-row"><div class="step-num">1</div><div class="step-text"><strong>Rate yourself</strong> across 4 competency domains using a simple 1–4 scale</div></div>
-        <div class="step-row"><div class="step-num">2</div><div class="step-text"><strong>Be honest</strong> — there are no right or wrong answers, only your genuine view of yourself</div></div>
-        <div class="step-row"><div class="step-num">3</div><div class="step-text"><strong>Receive your reflection report</strong> immediately, with insight into your strengths and growth areas</div></div>
+        <div class="step-row"><div class="step-num">1</div><div class="step-text"><strong>Rate yourself</strong> across 4 DELTA categories using a simple 1–4 scale</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text"><strong>Be honest</strong> — there are no right or wrong answers, only your genuine view of yourself today</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text"><strong>Receive your report</strong> immediately with scores, insights, and reflection prompts per category</div></div>
       </div>
-      <button class="btn-primary" id="startBtn" onclick="startAssessment()" disabled>Begin Assessment →</button>
+      <button class="btn-primary" id="startBtn" onclick="startAssessment()" disabled>Begin DELTA Assessment →</button>
     </div>
   </div>
 </div>
 
-<!-- ===== ASSESSMENT SCREEN ===== -->
+<!-- ASSESSMENT -->
 <div id="assessScreen" class="screen">
   <div class="assess-header">
     <div class="assess-header-left">
       <img src="data:image/png;base64,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" alt="POV">
-      <div class="assess-header-title">POV Early Discovery</div>
+      <div class="assess-header-title">POV DELTA Assessment</div>
     </div>
-    <div class="progress-pill" id="progressPill">0 / 0 answered</div>
+    <div class="progress-pill" id="progressPill">0 / 39 answered</div>
   </div>
   <div class="assess-body">
     <div class="assess-container">
-      <div class="candidate-banner" id="candBanner">👤 <span id="bannerName"></span> &nbsp;·&nbsp; <span id="bannerEmail"></span></div>
+      <div class="candidate-banner">👤 <strong id="bannerName"></strong> &nbsp;·&nbsp; <span id="bannerEmail"></span></div>
       <div class="scale-legend">
-        <span class="scale-legend-title">Rating scale:</span>
-        <span class="scale-dot-item"><span class="sdot sdot-1"></span>1 — Not yet / Rarely</span>
-        <span class="scale-dot-item"><span class="sdot sdot-2"></span>2 — Sometimes</span>
-        <span class="scale-dot-item"><span class="sdot sdot-3"></span>3 — Often</span>
-        <span class="scale-dot-item"><span class="sdot sdot-4"></span>4 — Consistently / Strongly</span>
+        <span class="sl-title">Scale:</span>
+        <span class="sl-item"><span class="sdot sdot-1"></span>1 — Not yet / Rarely</span>
+        <span class="sl-item"><span class="sdot sdot-2"></span>2 — Sometimes</span>
+        <span class="sl-item"><span class="sdot sdot-3"></span>3 — Often</span>
+        <span class="sl-item"><span class="sdot sdot-4"></span>4 — Consistently / Strongly</span>
       </div>
       <div id="questionsContainer"></div>
     </div>
   </div>
   <div class="assess-footer">
-    <div class="answered-count" id="answeredCount">0 of 0 answered</div>
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div></div>
-    <button class="btn-submit" id="submitBtn" onclick="submitAssessment()" disabled>Submit & See Results →</button>
+    <div class="ans-count" id="ansCount">0 of 39</div>
+    <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <button class="btn-submit" id="submitBtn" onclick="submitAssessment()" disabled>Submit &amp; See Results →</button>
   </div>
 </div>
 
-<!-- ===== RESULTS SCREEN ===== -->
+<!-- RESULTS -->
 <div id="resultsScreen" class="screen">
   <div class="results-header">
-    <h2 id="resultsTitle">Your Reflection Report</h2>
+    <h2 id="resultsTitle">Your DELTA Report</h2>
     <p id="resultsSubtitle"></p>
   </div>
   <div class="results-body">
     <div class="results-container" id="resultsContainer">
-      <div class="sending-msg" id="sendingMsg">⏳ Sending your results securely...</div>
+      <div class="send-msg" id="sendingMsg">⏳ Sending results securely...</div>
     </div>
   </div>
 </div>
 
-<!-- ===== LOGIN SCREEN ===== -->
+<!-- LOGIN -->
 <div id="loginScreen" class="screen">
   <div class="login-card">
     <img src="data:image/png;base64,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" alt="POV">
     <h2>May's Dashboard</h2>
     <p>Enter the dashboard password to view all submissions.</p>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="dashPassword" placeholder="Enter password" onkeyup="if(event.key==='Enter')checkLogin()">
-    </div>
+    <div class="form-group"><label>Password</label><input type="password" id="dashPassword" placeholder="Enter password" onkeyup="if(event.key==='Enter')checkLogin()"></div>
     <button class="btn-primary" onclick="checkLogin()">Access Dashboard →</button>
-    <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+    <div class="login-err" id="loginError">Incorrect password. Please try again.</div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD SCREEN ===== -->
+<!-- DASHBOARD -->
 <div id="dashScreen" class="screen">
   <div class="dash-header">
     <div class="dash-header-left">
       <img src="data:image/png;base64,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" alt="POV">
-      <div class="dash-header-title">POV™ Results Dashboard</div>
+      <div class="dash-title">POV™ DELTA Results Dashboard</div>
     </div>
-    <button onclick="logout()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:0.4rem 1rem;border-radius:8px;font-size:13px;cursor:pointer">Log out</button>
+    <button onclick="logout()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:0.35rem 0.9rem;border-radius:8px;font-size:12px;cursor:pointer">Log out</button>
   </div>
   <div class="dash-body">
     <div class="dash-container">
       <div class="dash-meta" id="dashMeta"></div>
-      <div class="submissions-list" id="submissionsList"></div>
+      <div class="sub-list" id="subList"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────────
-const DASH_PASSWORD = "pov2024may"; // Change this!
-const YOUR_EMAIL = "may.sang@outlook.com";
-
-// EmailJS config — sign up free at emailjs.com, fill these in:
+const DASH_PASSWORD = "pov2024may";
+const YOUR_EMAIL    = "may.sang@outlook.com";
 const EMAILJS_SERVICE_ID  = "service_POV";
-const EMAILJS_TEMPLATE_ID = "hwmzdg8";
+const EMAILJS_TEMPLATE_ID = "template_rjk3owq";
 const EMAILJS_PUBLIC_KEY  = "lCx9YhU8P2nsk2IW8";
 
-// ── COMPETENCY DATA ──────────────────────────────────────────────────────────
-const DOMAINS = [
+// ─── FULL DELTA QUESTION DATA ─────────────────────────────────────────────────
+const CATEGORIES = [
   {
-    id: "self_awareness",
-    name: "Self-Awareness & Reflection",
-    desc: "Understanding your own patterns, strengths, and areas for growth",
-    questions: [
-      { id:"sa1", label:"I can clearly articulate my key strengths", desc:"You know what you are naturally good at and can explain them with examples" },
-      { id:"sa2", label:"I recognise when I am under stress and how it affects me", desc:"You notice your own reactions in challenging situations" },
-      { id:"sa3", label:"I actively seek feedback and reflect on it", desc:"You are open to other people's perspectives on your performance" },
-      { id:"sa4", label:"I understand my values and what motivates me", desc:"You know what drives your decisions and energy at work" },
-      { id:"sa5", label:"I can identify my growth areas without being defensive", desc:"You can discuss what you are still developing, honestly and constructively" }
+    id:"cognitive", name:"Cognitive", color:"var(--cog)", cls:"cog",
+    desc:"How you think, communicate, plan, and solve problems",
+    skillGroups:[
+      { id:"critical", name:"Critical Thinking & Structured Problem Solving", questions:[
+        { id:"cg1", label:"I break complex problems into parts before acting", desc:"You analyse situations methodically rather than reacting to the surface issue" },
+        { id:"cg2", label:"I use evidence and data to support my conclusions", desc:"Your reasoning is grounded in facts rather than assumptions or gut feel" },
+        { id:"cg3", label:"I identify the root cause of a problem, not just the symptom", desc:"You look deeper to understand why something is happening, not just what is happening" }
+      ]},
+      { id:"communication", name:"Communication", questions:[
+        { id:"cm1", label:"I express my ideas clearly, whether speaking or in writing", desc:"Others understand your point of view without needing to ask for clarification" },
+        { id:"cm2", label:"I adapt my communication style to suit my audience", desc:"You adjust your tone, language, and approach depending on who you are speaking with" },
+        { id:"cm3", label:"I listen actively and check my understanding before responding", desc:"You give others space to finish and summarise what you heard before reacting" }
+      ]},
+      { id:"mental_flex", name:"Mental Flexibility", questions:[
+        { id:"mf1", label:"I remain open to changing my view when presented with new information", desc:"You update your thinking when evidence challenges your original position" },
+        { id:"mf2", label:"I can handle ambiguity and work effectively without complete clarity", desc:"You stay productive and composed even when the full picture is not yet available" },
+        { id:"mf3", label:"I approach unfamiliar challenges with curiosity rather than resistance", desc:"You lean into new situations as learning opportunities rather than threats" }
+      ]},
+      { id:"planning", name:"Planning & Ways of Working", questions:[
+        { id:"pl1", label:"I set clear priorities and work toward them consistently", desc:"You know what matters most and organise your effort accordingly" },
+        { id:"pl2", label:"I manage my time well and meet my commitments", desc:"Others can rely on you to deliver what you said you would, when you said you would" },
+        { id:"pl3", label:"I review and adjust my approach when something is not working", desc:"You reflect on your methods and are willing to change course if needed" }
+      ]}
     ]
   },
   {
-    id: "communication",
-    name: "Communication & Influence",
-    desc: "How you express yourself, listen, and connect with others",
-    questions: [
-      { id:"cm1", label:"I communicate my ideas clearly and confidently", desc:"Others understand your point of view when you explain it" },
-      { id:"cm2", label:"I listen actively and do not interrupt or assume", desc:"You give others space to finish and check your understanding" },
-      { id:"cm3", label:"I adapt how I communicate depending on the person or context", desc:"You adjust your tone and approach based on your audience" },
-      { id:"cm4", label:"I can handle difficult conversations without shutting down", desc:"You remain composed and engaged when topics become uncomfortable" },
-      { id:"cm5", label:"I can persuade or influence others using logic and empathy", desc:"You can bring people along with your thinking in a respectful way" }
+    id:"interpersonal", name:"Interpersonal", color:"var(--int)", cls:"int",
+    desc:"How you work with, influence, and develop others",
+    skillGroups:[
+      { id:"teamwork", name:"Teamwork Effectiveness", questions:[
+        { id:"tw1", label:"I contribute positively to team goals, even when my role is small", desc:"You show up fully for the team regardless of whether the task is high-profile" },
+        { id:"tw2", label:"I share credit and acknowledge the contributions of others", desc:"You recognise that results come from collective effort, not individual performance alone" },
+        { id:"tw3", label:"I address tension or misalignment in a team without letting it fester", desc:"You raise difficult dynamics constructively rather than avoiding or escalating them" }
+      ]},
+      { id:"coaching", name:"Developing Others & Coaching", questions:[
+        { id:"co1", label:"I notice when others are struggling and offer support proactively", desc:"You pay attention to the people around you and step in before being asked" },
+        { id:"co2", label:"I give feedback that is honest, specific, and constructive", desc:"Your feedback helps others improve rather than simply evaluating their performance" },
+        { id:"co3", label:"I create space for others to think through challenges themselves", desc:"You guide rather than solve — helping others build their own capability" }
+      ]},
+      { id:"influence", name:"Influence & Inspiring Others", questions:[
+        { id:"in1", label:"I can bring others along with my thinking in a respectful way", desc:"You persuade through logic and empathy rather than pressure or authority" },
+        { id:"in2", label:"I build trust with people quickly across different backgrounds", desc:"Others feel safe and valued in your presence, regardless of their role or seniority" },
+        { id:"in3", label:"I inspire others to act by connecting tasks to a bigger purpose", desc:"You help people see why their contribution matters, not just what they need to do" }
+      ]},
+      { id:"empathy", name:"Empathy & Inclusion", questions:[
+        { id:"em1", label:"I notice and consider the emotions of others in interactions", desc:"You are attuned to how people are feeling, not just what they are saying" },
+        { id:"em2", label:"I actively include people who may be overlooked or marginalised", desc:"You make space for different voices and ensure quieter members feel heard" },
+        { id:"em3", label:"I can navigate conflict or disagreement with empathy and composure", desc:"You manage tense situations without becoming reactive or dismissive" }
+      ]}
     ]
   },
   {
-    id: "initiative",
-    name: "Initiative & Problem Solving",
-    desc: "How you approach challenges, decisions, and taking action",
-    questions: [
-      { id:"in1", label:"I take ownership of tasks without waiting to be told", desc:"You step up proactively rather than waiting for direction" },
-      { id:"in2", label:"I break down complex problems into manageable steps", desc:"You can think through challenges systematically and calmly" },
-      { id:"in3", label:"I make decisions even when I do not have all the information", desc:"You can act with reasonable confidence under ambiguity" },
-      { id:"in4", label:"I look for improvements, not just ways to complete the task", desc:"You think beyond the minimum and consider how things could be better" },
-      { id:"in5", label:"I recover well from setbacks and keep moving forward", desc:"You process failure constructively and do not lose momentum" }
+    id:"selfleadership", name:"Self-leadership", color:"var(--slf)", cls:"slf",
+    desc:"How you lead yourself — your awareness, drive, and resilience",
+    skillGroups:[
+      { id:"selfawareness", name:"Self-Awareness & Self-Management", questions:[
+        { id:"sa1", label:"I understand my own emotional triggers and how they affect my behaviour", desc:"You recognise when you are reactive and can regulate your response in the moment" },
+        { id:"sa2", label:"I know my key strengths and can articulate them with examples", desc:"You are clear about what you are naturally good at and can explain it concisely" },
+        { id:"sa3", label:"I actively seek feedback and use it to grow", desc:"You treat feedback as useful information rather than criticism to defend against" }
+      ]},
+      { id:"entrepreneurship", name:"Entrepreneurship & Innovation", questions:[
+        { id:"en1", label:"I take initiative without waiting to be told", desc:"You step up proactively and identify what needs to be done without being directed" },
+        { id:"en2", label:"I am comfortable with taking calculated risks", desc:"You act with confidence when the outcome is uncertain, rather than waiting for guarantees" },
+        { id:"en3", label:"I challenge the status quo and look for better ways of doing things", desc:"You question existing approaches and propose improvements rather than accepting things as they are" }
+      ]},
+      { id:"goalachieve", name:"Goals Achievement", questions:[
+        { id:"ga1", label:"I take full ownership of my outcomes, including when things go wrong", desc:"You hold yourself accountable without deflecting blame or making excuses" },
+        { id:"ga2", label:"I persist through setbacks and maintain momentum under pressure", desc:"You recover well from failure and keep moving forward rather than getting stuck" },
+        { id:"ga3", label:"I invest consistently in my own growth and development", desc:"You take deliberate steps to learn and improve, not just when required to" }
+      ]}
     ]
   },
   {
-    id: "collaboration",
-    name: "Collaboration & Interpersonal",
-    desc: "How you work with and relate to others",
-    questions: [
-      { id:"co1", label:"I contribute positively in team settings", desc:"Others would describe you as someone who adds value in group work" },
-      { id:"co2", label:"I build trust with people quickly", desc:"You create a sense of reliability and safety with those you work with" },
-      { id:"co3", label:"I manage conflict or disagreement in a constructive way", desc:"You address tension without it becoming personal or destructive" },
-      { id:"co4", label:"I support others when they need help, even without being asked", desc:"You notice when colleagues are struggling and offer support naturally" },
-      { id:"co5", label:"I work well with people who are different from me", desc:"You are effective across different cultures, backgrounds, and personalities" }
+    id:"digital", name:"Digital", color:"var(--dig)", cls:"dig",
+    desc:"How you engage with digital tools, data, and technology",
+    skillGroups:[
+      { id:"digitalfluency", name:"Digital Fluency & Citizenship", questions:[
+        { id:"df1", label:"I am comfortable using digital tools to communicate and collaborate", desc:"You use platforms, apps, and digital channels confidently and effectively" },
+        { id:"df2", label:"I continuously update my digital skills as tools and platforms evolve", desc:"You stay current with technology rather than waiting to be trained" },
+        { id:"df3", label:"I engage with digital content and data responsibly and ethically", desc:"You consider privacy, accuracy, and impact when using or sharing digital information" }
+      ]},
+      { id:"dataliteracy", name:"Data Literacy & Analysis", questions:[
+        { id:"dl1", label:"I can interpret basic data and draw meaningful conclusions from it", desc:"You read charts, reports, and figures and can explain what they mean in plain language" },
+        { id:"dl2", label:"I use data to support my decisions rather than relying on intuition alone", desc:"You bring evidence into your thinking process rather than going on feeling" },
+        { id:"dl3", label:"I am comfortable with uncertainty in data and can communicate it clearly", desc:"You understand that data has limits and you communicate those limits honestly" }
+      ]},
+      { id:"digadapt", name:"Adapting to Digital Systems", questions:[
+        { id:"da1", label:"I learn new digital tools and systems quickly", desc:"You adapt to unfamiliar technology without becoming overwhelmed or dependent on others" },
+        { id:"da2", label:"I understand how digital systems affect my work and organisation", desc:"You see the connection between technology choices and business or workflow outcomes" },
+        { id:"da3", label:"I apply digital thinking to improve how I or my team works", desc:"You use technology to solve real problems, not just to follow trends" }
+      ]}
     ]
   }
 ];
 
-const TOTAL_Qs = DOMAINS.reduce((s,d)=>s+d.questions.length, 0);
+const TOTAL_Qs = CATEGORIES.reduce((s,c)=>s+c.skillGroups.reduce((ss,sg)=>ss+sg.questions.length,0),0);
 let answers = {};
-let currentCandidate = { name:"", email:"" };
+let candidate = {name:"",email:""};
 
-// ── ROUTING ─────────────────────────────────────────────────────────────────
-function showScreen(id) {
+// ROUTING
+function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
-// Check if URL has ?dashboard
-window.onload = function() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("dashboard") === "1") showScreen("loginScreen");
+window.onload=function(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get("dashboard")==="1") showScreen("loginScreen");
   else showScreen("introScreen");
-  initIntroValidation();
+  initValidation();
 };
 
-// ── INTRO VALIDATION ─────────────────────────────────────────────────────────
-function initIntroValidation() {
-  const btn = document.getElementById("startBtn");
-  const nameEl = document.getElementById("candName");
-  const emailEl = document.getElementById("candEmail");
-  function check() {
-    const valid = nameEl.value.trim().length > 1 && /^[^@]+@[^@]+\.[^@]+$/.test(emailEl.value.trim());
-    btn.disabled = !valid;
-  }
-  nameEl.addEventListener("input", check);
-  emailEl.addEventListener("input", check);
+function initValidation(){
+  const btn=document.getElementById("startBtn");
+  const n=document.getElementById("candName");
+  const e=document.getElementById("candEmail");
+  function chk(){btn.disabled=!(n.value.trim().length>1&&/^[^@]+@[^@]+\.[^@]+$/.test(e.value.trim()));}
+  n.addEventListener("input",chk); e.addEventListener("input",chk);
 }
 
-// ── START ASSESSMENT ─────────────────────────────────────────────────────────
-function startAssessment() {
-  currentCandidate.name  = document.getElementById("candName").value.trim();
-  currentCandidate.email = document.getElementById("candEmail").value.trim();
-  answers = {};
+function startAssessment(){
+  candidate.name=document.getElementById("candName").value.trim();
+  candidate.email=document.getElementById("candEmail").value.trim();
+  answers={};
   buildQuestions();
-  document.getElementById("bannerName").textContent  = currentCandidate.name;
-  document.getElementById("bannerEmail").textContent = currentCandidate.email;
+  document.getElementById("bannerName").textContent=candidate.name;
+  document.getElementById("bannerEmail").textContent=candidate.email;
   showScreen("assessScreen");
   updateProgress();
 }
 
-function buildQuestions() {
-  const container = document.getElementById("questionsContainer");
-  container.innerHTML = "";
-  DOMAINS.forEach(domain => {
-    const block = document.createElement("div");
-    block.className = "category-block";
-    block.innerHTML = `
-      <div class="cat-header">
-        <h3>${domain.name}</h3>
-        <p>${domain.desc}</p>
-      </div>
-      <div class="cat-body">
-        ${domain.questions.map(q => `
-          <div class="q-item" id="qi-${q.id}">
-            <div class="q-label">${q.label}</div>
-            <div class="q-desc">${q.desc}</div>
-            <div class="rating-btns">
-              ${[1,2,3,4].map(r => `
-                <button class="rbtn" id="rb-${q.id}-${r}" onclick="rate('${q.id}',${r})">
-                  ${r} — ${["Not yet","Sometimes","Often","Consistently"][r-1]}
-                </button>`).join("")}
-            </div>
-          </div>`).join("")}
-      </div>`;
-    container.appendChild(block);
+function buildQuestions(){
+  const c=document.getElementById("questionsContainer");
+  c.innerHTML="";
+  CATEGORIES.forEach(cat=>{
+    const block=document.createElement("div");
+    block.className="cat-block";
+    let sgHtml="";
+    cat.skillGroups.forEach(sg=>{
+      sgHtml+=`<div class="sg-block"><div class="sg-label">${sg.name}</div>`;
+      sg.questions.forEach(q=>{
+        sgHtml+=`<div class="q-item" id="qi-${q.id}">
+          <div class="q-label">${q.label}</div>
+          <div class="q-desc">${q.desc}</div>
+          <div class="rating-btns">
+            ${[1,2,3,4].map(r=>`<button class="rbtn" id="rb-${q.id}-${r}" onclick="rate('${q.id}',${r})">${r} — ${["Not yet","Sometimes","Often","Consistently"][r-1]}</button>`).join("")}
+          </div></div>`;
+      });
+      sgHtml+="</div>";
+    });
+    block.innerHTML=`<div class="cat-header ${cat.cls}"><h3>${cat.name}</h3><p>${cat.desc}</p></div><div class="cat-body">${sgHtml}</div>`;
+    c.appendChild(block);
   });
 }
 
-function rate(qid, val) {
-  answers[qid] = val;
-  [1,2,3,4].forEach(r => {
-    const btn = document.getElementById(`rb-${qid}-${r}`);
-    btn.className = "rbtn" + (r === val ? ` sel-${r}` : "");
+function rate(qid,val){
+  answers[qid]=val;
+  [1,2,3,4].forEach(r=>{
+    const b=document.getElementById(`rb-${qid}-${r}`);
+    b.className="rbtn"+(r===val?` sel-${r}`:"");
   });
   updateProgress();
 }
 
-function updateProgress() {
-  const answered = Object.keys(answers).length;
-  const pct = Math.round((answered / TOTAL_Qs) * 100);
-  document.getElementById("progressPill").textContent    = `${answered} / ${TOTAL_Qs} answered`;
-  document.getElementById("answeredCount").textContent   = `${answered} of ${TOTAL_Qs} answered`;
-  document.getElementById("progressBarFill").style.width = pct + "%";
-  document.getElementById("submitBtn").disabled = answered < TOTAL_Qs;
+function updateProgress(){
+  const a=Object.keys(answers).length;
+  const pct=Math.round((a/TOTAL_Qs)*100);
+  document.getElementById("progressPill").textContent=`${a} / ${TOTAL_Qs} answered`;
+  document.getElementById("ansCount").textContent=`${a} of ${TOTAL_Qs}`;
+  document.getElementById("progFill").style.width=pct+"%";
+  document.getElementById("submitBtn").disabled=a<TOTAL_Qs;
 }
 
-// ── SUBMIT ────────────────────────────────────────────────────────────────────
-function submitAssessment() {
-  const scores = computeScores();
-  const flags  = computeFlags(scores);
-  const ts     = new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"});
-
-  // Save to localStorage for dashboard
-  const submissions = JSON.parse(localStorage.getItem("pov_submissions") || "[]");
-  submissions.unshift({ name: currentCandidate.name, email: currentCandidate.email, ts, scores, flags, answers: {...answers} });
-  localStorage.setItem("pov_submissions", JSON.stringify(submissions));
-
+function submitAssessment(){
+  const scores=computeScores();
+  const flags=computeFlags(scores);
+  const ts=new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"});
+  const subs=JSON.parse(localStorage.getItem("pov_delta_subs")||"[]");
+  subs.unshift({name:candidate.name,email:candidate.email,ts,scores,flags,answers:{...answers}});
+  localStorage.setItem("pov_delta_subs",JSON.stringify(subs));
   showScreen("resultsScreen");
-  document.getElementById("resultsTitle").textContent   = `Your Reflection Report`;
-  document.getElementById("resultsSubtitle").textContent = `${currentCandidate.name} · ${ts}`;
-
-  // Render results
-  setTimeout(() => renderResults(scores, flags), 300);
-
-  // Send email
-  sendEmail(scores, flags, ts);
+  document.getElementById("resultsTitle").textContent="Your DELTA Report";
+  document.getElementById("resultsSubtitle").textContent=`${candidate.name} · ${ts}`;
+  setTimeout(()=>renderResults(scores,flags),300);
+  sendEmail(scores,flags,ts);
 }
 
-function computeScores() {
-  const scores = {};
-  DOMAINS.forEach(d => {
-    const vals = d.questions.map(q => answers[q.id] || 0);
-    const avg  = vals.reduce((a,b)=>a+b,0) / vals.length;
-    scores[d.id] = { name: d.name, avg: Math.round(avg * 10) / 10, vals, questions: d.questions };
+function computeScores(){
+  const scores={};
+  CATEGORIES.forEach(cat=>{
+    const catScore={name:cat.name,color:cat.color,cls:cat.cls,skillGroups:{}};
+    let catVals=[];
+    cat.skillGroups.forEach(sg=>{
+      const vals=sg.questions.map(q=>answers[q.id]||0);
+      const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+      catScore.skillGroups[sg.id]={name:sg.name,avg:Math.round(avg*10)/10,vals,questions:sg.questions};
+      catVals=catVals.concat(vals);
+    });
+    catScore.avg=Math.round((catVals.reduce((a,b)=>a+b,0)/catVals.length)*10)/10;
+    scores[cat.id]=catScore;
   });
   return scores;
 }
 
-function computeFlags(scores) {
-  const flags = [];
-  Object.values(scores).forEach(s => {
-    s.questions.forEach((q, i) => {
-      if (s.vals[i] === 1) flags.push({ label: q.label, domain: s.name, val: 1 });
+function computeFlags(scores){
+  const flags=[];
+  Object.values(scores).forEach(cat=>{
+    Object.values(cat.skillGroups).forEach(sg=>{
+      sg.questions.forEach((q,i)=>{
+        if(sg.vals[i]===1) flags.push({label:q.label,group:sg.name,cat:cat.name,val:1});
+      });
+      if(sg.avg<2) flags.push({label:`Low overall: ${sg.name}`,group:sg.name,cat:cat.name,val:sg.avg});
     });
-    if (s.avg < 2) flags.push({ label: `Overall low: ${s.name}`, domain: s.name, val: s.avg });
   });
   return flags;
 }
 
-function scoreColor(avg) {
-  if (avg >= 3.5) return "#22C55E";
-  if (avg >= 2.5) return "#F0B429";
-  if (avg >= 1.5) return "#F59E0B";
-  return "#EF4444";
-}
+function sColor(v){if(v>=3.5)return"#22C55E";if(v>=2.5)return"#F0B429";if(v>=1.5)return"#F59E0B";return"#EF4444";}
+function sLabel(v){if(v>=3.5)return"Strong";if(v>=2.5)return"Developing";if(v>=1.5)return"Emerging";return"Focus area";}
 
-function scoreLabel(avg) {
-  if (avg >= 3.5) return "Strong";
-  if (avg >= 2.5) return "Developing";
-  if (avg >= 1.5) return "Emerging";
-  return "Focus area";
-}
+function renderResults(scores,flags){
+  const container=document.getElementById("resultsContainer");
+  const overall=(Object.values(scores).reduce((s,c)=>s+c.avg,0)/4).toFixed(1);
 
-function renderResults(scores, flags) {
-  const container = document.getElementById("resultsContainer");
-  const overall = Object.values(scores).reduce((s,d)=>s+d.avg,0) / DOMAINS.length;
-  const summary  = buildSummaryText(scores, flags);
-
-  let html = `
-    <!-- SCORES -->
-    <div class="result-card">
-      <h3>📊 Competency Scores</h3>
-      <div class="score-row">
-        ${Object.values(scores).map(s => `
-          <div class="score-item">
-            <div class="score-label">${s.name}</div>
-            <div class="score-bar-bg"><div class="score-bar" style="width:${(s.avg/4)*100}%;background:${scoreColor(s.avg)}"></div></div>
-            <div class="score-val">${s.avg}/4 <span style="color:${scoreColor(s.avg)};font-size:10px">${scoreLabel(s.avg)}</span></div>
-          </div>`).join("")}
-      </div>
+  // Category overview
+  let html=`<div class="r-card"><h3>📊 DELTA Category Scores</h3>`;
+  Object.values(scores).forEach(cat=>{
+    html+=`<div class="cat-score-row">
+      <div class="cat-score-label" style="color:${cat.color};font-weight:600">${cat.name}</div>
+      <div class="cat-score-bar-bg"><div class="cat-score-bar" style="width:${(cat.avg/4)*100}%;background:${cat.color}"></div></div>
+      <div class="cat-score-val">${cat.avg}/4 <span style="color:${sColor(cat.avg)};font-size:10px">${sLabel(cat.avg)}</span></div>
     </div>`;
-
-  // Individual Q breakdown
-  html += `<div class="result-card"><h3>🔍 Question-by-Question View</h3>`;
-  Object.values(scores).forEach(s => {
-    html += `<div style="margin-bottom:1rem"><div style="font-size:13px;font-weight:600;color:var(--gold-mid);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.6rem">${s.name}</div>`;
-    s.questions.forEach((q,i) => {
-      const v = s.vals[i];
-      html += `<div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem;font-size:13px">
-        <span style="flex:1;color:var(--near-black)">${q.label}</span>
-        <span style="font-weight:600;color:${scoreColor(v)};min-width:20px">${v}</span>
-      </div>`;
-    });
-    html += `</div>`;
   });
-  html += `</div>`;
+  html+=`</div>`;
+
+  // Skill group breakdown per category
+  Object.values(scores).forEach(cat=>{
+    html+=`<div class="r-card"><h3 style="color:${cat.color}">${cat.name} — Skill Group Detail</h3>`;
+    Object.values(cat.skillGroups).forEach(sg=>{
+      html+=`<div class="sg-score-section">
+        <div class="sg-score-title">${sg.name}</div>`;
+      sg.questions.forEach((q,i)=>{
+        const v=sg.vals[i];
+        html+=`<div class="sg-score-row">
+          <div class="sg-score-label">${q.label}</div>
+          <div class="sg-score-bar-bg"><div class="sg-score-bar" style="width:${(v/4)*100}%;background:${sColor(v)}"></div></div>
+          <div class="sg-score-val">${v}/4</div>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
 
   // Flags
-  if (flags.length > 0) {
-    html += `<div class="result-card"><div class="flag-bar"><h4>⚠️ Areas Needing Attention</h4>
-      ${flags.map(f=>`<div class="flag-item">· ${f.label} <span style="opacity:0.7">(${f.domain})</span></div>`).join("")}
+  if(flags.length>0){
+    html+=`<div class="r-card"><div class="flag-box"><h4>⚠ Areas Needing Attention</h4>
+      ${flags.map(f=>`<div class="flag-item">· ${f.label} <span style="opacity:0.65">(${f.group})</span></div>`).join("")}
     </div></div>`;
   }
 
   // Reflection prompts
-  html += `<div class="result-card">
-    <h3>💬 Reflection Prompts</h3>
-    ${generatePrompts(scores).map(p=>`<div style="background:var(--gold-light);border-left:3px solid var(--gold);padding:0.75rem 1rem;margin-bottom:0.6rem;border-radius:0 8px 8px 0;font-size:14px;color:var(--near-black);font-style:italic">${p}</div>`).join("")}
+  const sorted=Object.values(scores).sort((a,b)=>a.avg-b.avg);
+  const lowest=sorted[0]; const highest=sorted[sorted.length-1];
+  html+=`<div class="r-card"><h3>💬 Reflection Prompts</h3>
+    <div class="prompt-item">Your ${lowest.name} score was ${lowest.avg}/4. What is one specific situation in the past month where you noticed this showing up as a gap?</div>
+    <div class="prompt-item">Your ${highest.name} score was ${highest.avg}/4 — a clear strength. How intentionally are you using this to support the areas you are still developing?</div>
+    <div class="prompt-item">If someone who works closely with you rated these same categories for you, where do you think their scores would differ most from yours — and why?</div>
+    <div class="prompt-item">What one behaviour, if you changed it this week, would have the biggest positive impact on your overall effectiveness?</div>
   </div>`;
 
   // Copyable summary
-  html += `<div class="result-card">
-    <h3>📋 POV Summary (copy for report)</h3>
+  const summary=buildSummary(scores,flags);
+  html+=`<div class="r-card"><h3>📋 POV Summary (copy for report)</h3>
     <div class="summary-box"><pre id="summaryText">${summary}</pre></div>
     <button class="copy-btn" onclick="copySummary()">Copy Summary</button>
   </div>`;
 
-  container.innerHTML = html;
+  document.getElementById("sendingMsg").style.display="none";
+  container.innerHTML=html;
 }
 
-function generatePrompts(scores) {
-  const lowest = Object.values(scores).sort((a,b)=>a.avg-b.avg)[0];
-  const highest = Object.values(scores).sort((a,b)=>b.avg-a.avg)[0];
-  return [
-    `What one behaviour, if you changed it this week, would make the biggest difference to your effectiveness?`,
-    `In ${lowest.name}, where you scored ${lowest.avg}/4, what is one specific situation that comes to mind where you could have done better?`,
-    `Your strongest area was ${highest.name} (${highest.avg}/4). How can you use this strength to support areas you are still developing?`,
-    `What would your closest colleague say about you if asked to describe your working style in three words?`
-  ];
-}
-
-function buildSummaryText(scores, flags) {
-  const name  = currentCandidate.name;
-  const ts    = new Date().toLocaleDateString("en-GB");
-  const overall = (Object.values(scores).reduce((s,d)=>s+d.avg,0)/DOMAINS.length).toFixed(1);
-  let txt = `POV EARLY DISCOVERY — SELF-ASSESSMENT SUMMARY\n`;
-  txt += `Candidate: ${name}\n`;
-  txt += `Email: ${currentCandidate.email}\n`;
-  txt += `Date: ${ts}\n`;
-  txt += `Overall Average: ${overall}/4\n\n`;
-  txt += `DOMAIN SCORES\n${"─".repeat(40)}\n`;
-  Object.values(scores).forEach(s => {
-    txt += `${s.name.padEnd(35)} ${s.avg}/4  [${scoreLabel(s.avg)}]\n`;
+function buildSummary(scores,flags){
+  const overall=(Object.values(scores).reduce((s,c)=>s+c.avg,0)/4).toFixed(1);
+  let t=`POV DELTA ASSESSMENT SUMMARY\n`;
+  t+=`Candidate: ${candidate.name}\nEmail: ${candidate.email}\nDate: ${new Date().toLocaleDateString("en-GB")}\n`;
+  t+=`Overall Average: ${overall}/4\n\nCATEGORY SCORES\n${"─".repeat(50)}\n`;
+  Object.values(scores).forEach(cat=>{
+    t+=`${cat.name.padEnd(20)} ${cat.avg}/4  [${sLabel(cat.avg)}]\n`;
+    Object.values(cat.skillGroups).forEach(sg=>{
+      t+=`  · ${sg.name.padEnd(38)} ${sg.avg}/4\n`;
+    });
   });
-  if (flags.length > 0) {
-    txt += `\nFLAGGED AREAS (score 1 or very low average)\n${"─".repeat(40)}\n`;
-    flags.forEach(f => { txt += `· ${f.label}\n`; });
+  if(flags.length>0){
+    t+=`\nFLAGGED AREAS\n${"─".repeat(50)}\n`;
+    flags.forEach(f=>{t+=`· ${f.label} (${f.cat})\n`;});
   }
-  txt += `\nGENERATED BY POV™ ASSESSMENT — may.sang@outlook.com`;
-  return txt;
+  t+=`\nGenerated by POV™ Assessment — may.sang@outlook.com`;
+  return t;
 }
 
-function copySummary() {
-  const text = document.getElementById("summaryText").textContent;
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn = document.querySelector(".copy-btn");
-    btn.textContent = "✓ Copied!";
-    setTimeout(()=>{ btn.textContent = "Copy Summary"; }, 2000);
+function copySummary(){
+  navigator.clipboard.writeText(document.getElementById("summaryText").textContent).then(()=>{
+    const b=document.querySelector(".copy-btn");b.textContent="✓ Copied!";
+    setTimeout(()=>{b.textContent="Copy Summary";},2000);
   });
 }
 
-// ── EMAIL ─────────────────────────────────────────────────────────────────────
-function sendEmail(scores, flags, ts) {
-  if (EMAILJS_PUBLIC_KEY === "lCx9YhU8P2nsk2IW8") {
-    document.getElementById("sendingMsg").style.display = "none";
-    return; // EmailJS not configured yet
-  }
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-  const summary = buildSummaryText(scores, flags);
-  const flagText = flags.length > 0 ? flags.map(f=>`⚠ ${f.label}`).join("\n") : "None";
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-    to_email: YOUR_EMAIL,
-    candidate_name: currentCandidate.name,
-    candidate_email: currentCandidate.email,
-    submitted_at: ts,
-    flags: flagText,
-    summary: summary
-  }).then(() => {
-    document.getElementById("sendingMsg").innerHTML = "✅ Results sent securely to May.";
-  }).catch(() => {
-    document.getElementById("sendingMsg").innerHTML = "⚠ Email notification failed — results are saved to dashboard.";
+function sendEmail(scores,flags,ts){
+  emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+  const summary=buildSummary(scores,flags);
+  const flagText=flags.length>0?flags.map(f=>`⚠ ${f.label} (${f.cat})`).join("\n"):"None";
+  emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+    to_email:YOUR_EMAIL,candidate_name:candidate.name,
+    candidate_email:candidate.email,submitted_at:ts,
+    flags:flagText,summary
+  }).then(()=>{
+    const m=document.getElementById("sendingMsg");
+    if(m)m.innerHTML="✅ Results sent to May.";
+  }).catch(()=>{
+    const m=document.getElementById("sendingMsg");
+    if(m)m.innerHTML="⚠ Email failed — results saved to dashboard.";
   });
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────────────
-const DASH_HASH = btoa(DASH_PASSWORD + "pov_salt_2024");
-
-function checkLogin() {
-  const input = document.getElementById("dashPassword").value;
-  if (btoa(input + "pov_salt_2024") === DASH_HASH) {
-    sessionStorage.setItem("pov_auth", DASH_HASH);
-    renderDashboard();
-    showScreen("dashScreen");
-  } else {
-    document.getElementById("loginError").style.display = "block";
-  }
+// DASHBOARD
+const DASH_HASH=btoa(DASH_PASSWORD+"pov_salt_2024");
+function checkLogin(){
+  if(btoa(document.getElementById("dashPassword").value+"pov_salt_2024")===DASH_HASH){
+    sessionStorage.setItem("pov_auth",DASH_HASH);
+    renderDashboard(); showScreen("dashScreen");
+  } else { document.getElementById("loginError").style.display="block"; }
 }
+function logout(){ sessionStorage.removeItem("pov_auth"); showScreen("loginScreen"); }
 
-function logout() {
-  sessionStorage.removeItem("pov_auth");
-  showScreen("loginScreen");
-}
-
-function renderDashboard() {
-  const submissions = JSON.parse(localStorage.getItem("pov_submissions") || "[]");
-  const metaEl = document.getElementById("dashMeta");
-  const listEl = document.getElementById("submissionsList");
-
-  const flagCount = submissions.filter(s=>s.flags&&s.flags.length>0).length;
-  metaEl.innerHTML = `
-    <div class="meta-card"><div class="n">${submissions.length}</div><div class="l">Total submissions</div></div>
-    <div class="meta-card"><div class="n">${flagCount}</div><div class="l">With flagged areas</div></div>
-    <div class="meta-card"><div class="n">${submissions.length > 0 ? (submissions.reduce((s,sub)=>{
-      const avg = Object.values(sub.scores).reduce((a,d)=>a+d.avg,0)/DOMAINS.length;
-      return s+avg;
-    },0)/submissions.length).toFixed(1) : "–"}</div><div class="l">Average overall score</div></div>`;
-
-  if (submissions.length === 0) {
-    listEl.innerHTML = `<div style="text-align:center;color:var(--mid-gray);padding:3rem;background:white;border-radius:14px;border:1px solid #E8E4DC">No submissions yet. Share the assessment link to get started.</div>`;
+function renderDashboard(){
+  const subs=JSON.parse(localStorage.getItem("pov_delta_subs")||"[]");
+  const flagCount=subs.filter(s=>s.flags&&s.flags.length>0).length;
+  const avgOverall=subs.length>0?(subs.reduce((s,sub)=>{
+    return s+(Object.values(sub.scores).reduce((a,c)=>a+c.avg,0)/4);
+  },0)/subs.length).toFixed(1):"–";
+  document.getElementById("dashMeta").innerHTML=`
+    <div class="meta-card"><div class="n">${subs.length}</div><div class="l">Submissions</div></div>
+    <div class="meta-card"><div class="n">${flagCount}</div><div class="l">Flagged</div></div>
+    <div class="meta-card"><div class="n">${avgOverall}</div><div class="l">Avg overall</div></div>
+    <div class="meta-card"><div class="n">39</div><div class="l">Questions</div></div>`;
+  if(subs.length===0){
+    document.getElementById("subList").innerHTML=`<div style="text-align:center;color:var(--mid-gray);padding:3rem;background:white;border-radius:14px;border:1px solid #E8E4DC">No submissions yet.</div>`;
     return;
   }
-
-  listEl.innerHTML = submissions.map((sub, i) => {
-    const overall = (Object.values(sub.scores).reduce((a,d)=>a+d.avg,0)/DOMAINS.length).toFixed(1);
-    const badgeClass = overall >= 3 ? "badge-high" : overall >= 2 ? "badge-mid" : "badge-low";
-    const hasFlags = sub.flags && sub.flags.length > 0;
-    const summary = buildSummaryFromSub(sub);
-    return `
-    <div class="sub-card">
-      <div class="sub-card-header" onclick="toggleSub(${i})">
-        <div>
-          <div class="sub-card-name">${sub.name}</div>
-          <div class="sub-card-meta">${sub.email} · ${sub.ts}</div>
-        </div>
-        <div class="sub-card-right">
-          ${hasFlags ? `<span class="flag-pill">⚠ ${sub.flags.length} flag${sub.flags.length>1?"s":""}</span>` : ""}
-          <span class="overall-badge ${badgeClass}">Overall: ${overall}/4</span>
+  document.getElementById("subList").innerHTML=subs.map((sub,i)=>{
+    const ov=(Object.values(sub.scores).reduce((a,c)=>a+c.avg,0)/4).toFixed(1);
+    const bc=ov>=3?"badge-hi":ov>=2?"badge-mid":"badge-lo";
+    const hasFlags=sub.flags&&sub.flags.length>0;
+    const summary=buildSummaryFromSub(sub);
+    return `<div class="sub-card">
+      <div class="sub-card-hdr" onclick="toggleSub(${i})">
+        <div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.email} · ${sub.ts}</div></div>
+        <div class="sub-right">
+          ${hasFlags?`<span class="flag-pill">⚠ ${sub.flags.length} flag${sub.flags.length>1?"s":""}</span>`:""}
+          <span class="overall-badge ${bc}">Overall: ${ov}/4</span>
         </div>
       </div>
-      <div class="sub-card-body" id="sub-body-${i}">
-        <div class="sub-scores">
-          ${Object.values(sub.scores).map(s=>`
-            <div class="sub-score-row">
-              <div class="sub-score-label">${s.name}</div>
-              <div class="sub-score-bar-bg"><div class="sub-score-bar" style="width:${(s.avg/4)*100}%;background:${scoreColor(s.avg)}"></div></div>
-              <div class="sub-score-val">${s.avg}/4</div>
+      <div class="sub-body" id="sub-body-${i}">
+        <div class="sub-cat-scores">
+          ${Object.values(sub.scores).map(cat=>`
+            <div class="sub-cat-item">
+              <span style="font-size:12px;font-weight:600;color:${cat.color};min-width:100px">${cat.name}</span>
+              <div class="sub-cat-bar-bg"><div class="sub-cat-bar" style="width:${(cat.avg/4)*100}%;background:${cat.color}"></div></div>
+              <div class="sub-cat-val">${cat.avg}/4</div>
             </div>`).join("")}
         </div>
-        ${hasFlags ? `<div class="sub-flags"><strong>⚠ Flagged areas:</strong>${sub.flags.map(f=>`<div>· ${f.label}</div>`).join("")}</div>` : ""}
-        <div class="sub-answers-toggle" onclick="toggleAnswers(${i})">▶ Show individual answers</div>
+        ${hasFlags?`<div class="sub-flags"><strong>⚠ Flagged:</strong>${sub.flags.map(f=>`<div>· ${f.label}</div>`).join("")}</div>`:""}
+        <div class="ans-toggle" onclick="toggleAns(${i})">▶ Show individual answers</div>
         <div class="sub-answers" id="sub-ans-${i}">
-          ${DOMAINS.map(d=>`
-            <div style="margin-bottom:0.75rem">
-              <div style="font-size:11px;font-weight:600;color:var(--gold-mid);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.4rem">${d.name}</div>
-              ${d.questions.map(q=>`
-                <div class="ans-item">
-                  <strong>${q.label}</strong>
-                  Rating: ${sub.answers[q.id] || "–"}/4 — ${["","Not yet","Sometimes","Often","Consistently"][sub.answers[q.id]||0]||""}
-                </div>`).join("")}
+          ${CATEGORIES.map(cat=>`
+            <div class="ans-cat">
+              <div class="ans-cat-title" style="color:${cat.color}">${cat.name}</div>
+              ${cat.skillGroups.map(sg=>`
+                <div style="margin-bottom:0.5rem;font-size:10px;font-weight:600;color:var(--mid-gray);text-transform:uppercase;letter-spacing:0.5px">${sg.name}</div>
+                ${sg.questions.map(q=>`
+                  <div class="ans-item">
+                    <strong>${q.label}</strong>
+                    ${sub.answers[q.id]||"–"}/4 — ${["","Not yet","Sometimes","Often","Consistently"][sub.answers[q.id]||0]||""}
+                  </div>`).join("")}`).join("")}
             </div>`).join("")}
         </div>
-        <div style="margin-top:1rem;display:flex;gap:0.75rem;align-items:center">
-          <button class="sub-copy-btn" onclick="copySubSummary(${i})">📋 Copy Report Summary</button>
-          <span id="copied-${i}" style="font-size:12px;color:var(--green);display:none">✓ Copied!</span>
+        <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.5rem">
+          <button class="sub-copy" onclick="copySubSummary(${i})">📋 Copy Report</button>
+          <span id="copied-${i}" style="font-size:11px;color:var(--green);display:none">✓ Copied!</span>
         </div>
         <textarea id="sub-text-${i}" style="display:none">${summary}</textarea>
       </div>
@@ -678,35 +695,31 @@ function renderDashboard() {
   }).join("");
 }
 
-function buildSummaryFromSub(sub) {
-  let txt = `POV EARLY DISCOVERY — SELF-ASSESSMENT SUMMARY\n`;
-  txt += `Candidate: ${sub.name}\nEmail: ${sub.email}\nSubmitted: ${sub.ts}\n\nDOMAIN SCORES\n${"─".repeat(40)}\n`;
-  Object.values(sub.scores).forEach(s => { txt += `${s.name.padEnd(35)} ${s.avg}/4  [${scoreLabel(s.avg)}]\n`; });
-  if (sub.flags && sub.flags.length > 0) {
-    txt += `\nFLAGGED AREAS\n${"─".repeat(40)}\n`;
-    sub.flags.forEach(f => { txt += `· ${f.label}\n`; });
+function buildSummaryFromSub(sub){
+  const ov=(Object.values(sub.scores).reduce((a,c)=>a+c.avg,0)/4).toFixed(1);
+  let t=`POV DELTA ASSESSMENT SUMMARY\nCandidate: ${sub.name}\nEmail: ${sub.email}\nSubmitted: ${sub.ts}\nOverall: ${ov}/4\n\nCATEGORY SCORES\n${"─".repeat(50)}\n`;
+  Object.values(sub.scores).forEach(cat=>{
+    t+=`${cat.name.padEnd(20)} ${cat.avg}/4  [${sLabel(cat.avg)}]\n`;
+    Object.values(cat.skillGroups).forEach(sg=>{t+=`  · ${sg.name.padEnd(38)} ${sg.avg}/4\n`;});
+  });
+  if(sub.flags&&sub.flags.length>0){
+    t+=`\nFLAGGED\n${"─".repeat(50)}\n`;
+    sub.flags.forEach(f=>{t+=`· ${f.label}\n`;});
   }
-  return txt;
+  return t;
 }
 
-function toggleSub(i) {
-  const body = document.getElementById(`sub-body-${i}`);
-  body.classList.toggle("open");
-}
-
-function toggleAnswers(i) {
-  const el  = document.getElementById(`sub-ans-${i}`);
-  const tog = el.previousElementSibling;
+function toggleSub(i){document.getElementById(`sub-body-${i}`).classList.toggle("open");}
+function toggleAns(i){
+  const el=document.getElementById(`sub-ans-${i}`);
+  const tog=el.previousElementSibling;
   el.classList.toggle("open");
-  tog.textContent = el.classList.contains("open") ? "▼ Hide individual answers" : "▶ Show individual answers";
+  tog.textContent=el.classList.contains("open")?"▼ Hide individual answers":"▶ Show individual answers";
 }
-
-function copySubSummary(i) {
-  const text = document.getElementById(`sub-text-${i}`).value;
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById(`copied-${i}`);
-    msg.style.display = "inline";
-    setTimeout(()=>{ msg.style.display = "none"; }, 2000);
+function copySubSummary(i){
+  navigator.clipboard.writeText(document.getElementById(`sub-text-${i}`).value).then(()=>{
+    const m=document.getElementById(`copied-${i}`);
+    m.style.display="inline";setTimeout(()=>{m.style.display="none";},2000);
   });
 }
 </script>
