@@ -198,6 +198,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--beige);color:va
     <div class="intro-card">
       <h1>DELTA Assessment</h1>
       <p class="sub">A reflective self-assessment based on McKinsey's Distinct Elements of Talent framework — helping you understand your current strengths and growth areas honestly and without judgment.</p>
+      <p style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:15px;color:var(--mid-gray);line-height:1.75;margin-bottom:1.75rem;padding:1rem 1.25rem;background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0">This is not a test. There are no right or wrong answers — only honest ones. Take your time, reflect on each statement, and choose what feels most true for you right now.</p>
       <div class="form-group"><label>Your full name</label><input type="text" id="candName" placeholder="e.g. Priya Sharma" autocomplete="name"></div>
       <div class="form-group"><label>Your email</label><input type="email" id="candEmail" placeholder="e.g. priya@email.com" autocomplete="email"></div>
       <div class="divider"></div>
@@ -578,6 +579,11 @@ function renderResults(scores,flags){
   </div>`;
 
   document.getElementById("sendingMsg").style.display="none";
+  html+=`<div class="r-card" style="background:var(--gold-light);border:1px solid rgba(240,180,41,0.4);text-align:center;padding:2rem">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:17px;color:var(--near-black);line-height:1.65;margin-bottom:0.75rem">"Not sure what to make of your results? That is completely normal. Sometimes a score raises more questions than answers — and that is exactly where a conversation with May begins."</div>
+    <div style="font-size:13px;color:var(--mid-gray);margin-bottom:1.5rem">Use your results as a starting point, not a conclusion.</div>
+    <a href="mailto:may.sang@outlook.com" style="display:inline-block;background:var(--gold);color:var(--black);padding:0.85rem 2rem;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none">Talk to May About Your Results →</a>
+  </div>`;
   container.innerHTML=html;
 }
 
