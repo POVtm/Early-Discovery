@@ -297,6 +297,7 @@ const YOUR_EMAIL    = "may@pointofview-pov.com";
 const EMAILJS_SERVICE_ID  = "service_POV";
 const EMAILJS_TEMPLATE_ID = "template_rjk3owq";
 const EMAILJS_PUBLIC_KEY  = "lCx9YhU8P2nsk2IW8";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbyYz5qT-xTpBClCNR5fhYzjc18-aZn82uRsEW59o3BZnGV1ob25E9LBvfDfObyRW55VDw/exec";
 
 // ─── FULL DELTA QUESTION DATA ─────────────────────────────────────────────────
 const CATEGORIES = [
@@ -485,6 +486,31 @@ function submitAssessment(){
   document.getElementById("resultsSubtitle").textContent=`${candidate.name} · ${ts}`;
   setTimeout(()=>renderResults(scores,flags),300);
   sendEmail(scores,flags,ts);
+  saveToSheet(scores,flags,ts);
+}
+
+// GOOGLE SHEET
+function saveToSheet(scores,flags,ts){
+  if(!SHEET_URL)return;
+  try{
+    const cats=Object.values(scores);
+    const row={
+      "Submitted":ts,
+      "Name":candidate.name,
+      "Email":candidate.email,
+      "Overall":Number((cats.reduce((s,c)=>s+c.avg,0)/cats.length).toFixed(1))
+    };
+    cats.forEach(cat=>{
+      row[cat.name]=cat.avg;
+      row[cat.name+" level"]=sLabel(cat.avg);
+    });
+    cats.forEach(cat=>{
+      Object.values(cat.skillGroups).forEach(sg=>{row[cat.name+" · "+sg.name]=sg.avg;});
+    });
+    row["Flag count"]=flags.length;
+    row["Flagged areas"]=flags.length?flags.map(f=>f.label+" ("+f.cat+")").join("; "):"None";
+    fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(row)}).catch(()=>{});
+  }catch(e){}
 }
 
 function computeScores(){
