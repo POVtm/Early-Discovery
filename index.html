@@ -298,6 +298,34 @@ details.r-card[open] summary{margin-bottom:1rem}
   .sg-score-label{min-width:100%}
   .j-item{font-size:11px}
 }
+.pdf-doc{width:100%;padding:0;background:#fff;color:#2c2a26;font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.55}
+.pdf-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:12px;border-bottom:3px solid #F0B429;margin-bottom:18px}
+.pdf-head img{height:52px;width:auto}
+.pdf-head-text{text-align:right}
+.pdf-title{font-family:'Playfair Display',Georgia,serif;font-size:26px;line-height:1.2}
+.pdf-meta{font-size:12px;color:#615c54}
+.pdf-sec{margin-bottom:18px}
+.pdf-sec h2{font-family:'Playfair Display',Georgia,serif!important;font-size:18px;margin-bottom:8px}
+.pdf-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.pdf-bar-name{width:120px;font-weight:600}
+.pdf-bar-bg{flex:1;height:9px;background:#f2f0eb;border-radius:5px;overflow:hidden}
+.pdf-bar{height:100%;border-radius:5px}
+.pdf-bar-val{width:130px;text-align:right;font-size:12px;color:#615c54}
+.pdf-item{padding:6px 10px;margin-bottom:6px;background:#faf9f6;border-left:3px solid #F0B429}
+.pdf-item small{display:block;font-size:11px;color:#615c54}
+.pdf-plan{padding:12px 14px;background:#fbf2dc;border:1px solid #f0d58f;border-radius:4px}
+.pdf-plan p{margin-bottom:8px;white-space:pre-wrap}
+.pdf-plan p:last-child{margin-bottom:0}
+.pdf-plan strong{display:block;font-size:12px}
+.pdf-note{margin-bottom:8px;white-space:pre-wrap}
+.pdf-note strong{display:block}
+.pdf-group{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#615c54;margin:10px 0 3px}
+.pdf-cat{font-size:14px;font-weight:600;margin-bottom:3px}
+.pdf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
+.pdf-row{display:flex;justify-content:space-between;gap:16px;padding:3px 0;border-bottom:1px solid #eee7da;font-size:12px}
+.pdf-row span:last-child{flex-shrink:0;color:#615c54}
+.pdf-foot{margin-top:18px;padding-top:10px;border-top:1px solid #ded7ca;font-size:11px;color:#615c54}
+.pdf-foot a{color:#805b0e}
 @media print{
   .screen{display:none!important}
   #resultsScreen{display:block!important}
@@ -544,6 +572,9 @@ const TRY = {
 const JOURNEY = {cognitive:"How you think",interpersonal:"How you connect",selfleadership:"How you lead yourself",digital:"How you use technology"};
 const SCALE_WORDS = ["Rarely","Sometimes","Often","Consistently"];
 const NA_TEXT = "Haven't had the opportunity";
+// PDF library, loaded only when someone presses Download PDF. Pinned to one exact version.
+const PDF_LIB_URL = "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js";
+const PDF_LIB_HASH = "sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc";
 const STEPS = CATEGORIES.flatMap(cat=>cat.skillGroups.map(sg=>({cat,sg})));
 
 const TOTAL_Qs = CATEGORIES.reduce((s,c)=>s+c.skillGroups.reduce((ss,sg)=>ss+sg.questions.length,0),0);
@@ -555,6 +586,7 @@ let plan = {label:""};
 let reflections = {};
 let latestScores = null;
 let shareState = "idle";
+let reportParts = {snapshot:"",regularTitle:"",regular:[]};
 
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
@@ -767,6 +799,7 @@ function renderResults(scores,flags){
   const naLine=naCount&&rated.length?` You marked ${naCount} statement${naCount===1?"":"s"} as "Haven't had the opportunity", and ${naCount===1?"it is":"they are"} left out of your scores.`:"";
   let html=`<div class="r-card"><h3>Your snapshot</h3>
     <p class="snap-text">${first}, this is a picture of how you see yourself over the past three months, not a measure of your ability. ${snapLine}${naLine}</p>`;
+  reportParts.snapshot=`This is a picture of how you see yourself over the past three months, not a measure of your ability. ${snapLine}${naLine}`;
   cats.forEach(cat=>{
     html+=`<div class="cat-score-row">
       <div class="cat-score-label" style="color:${cat.color};font-weight:600">${cat.name}</div>
@@ -780,7 +813,10 @@ function renderResults(scores,flags){
   const bestVal=rated.length?Math.max(...rated.map(s=>s.val)):null;
   const regular=rated.filter(s=>s.val>=3).sort((a,b)=>b.val-a.val);
   const shown=regular.length?spread(regular,"catId",3):bestVal===2?spread(rated.filter(s=>s.val===2),"catId",3):[];
-  html+=`<div class="r-card"><h3>${regular.length?"What you see yourself doing regularly":bestVal===2?"What you see yourself doing some of the time":"Where you are starting from"}</h3>`;
+  const regularTitle=regular.length?"What you see yourself doing regularly":bestVal===2?"What you see yourself doing some of the time":"Where you are starting from";
+  reportParts.regularTitle=regularTitle;
+  reportParts.regular=shown;
+  html+=`<div class="r-card"><h3>${regularTitle}</h3>`;
   if(shown.length){
     html+=`<ul class="see-list">${shown.map(s=>`<li>${s.label}<span>${ratingWord(s.val)} · ${s.group}</span></li>`).join("")}</ul>
       <p class="card-note">Choose one and think of a real moment. When did you last do this, and what happened because of it?</p>`;
@@ -861,8 +897,7 @@ function renderResults(scores,flags){
   html+=`<div class="r-card no-print"><h3>Keep your results</h3>
     <p class="keep-note">Save a copy for yourself. Your ratings have gone to May. Your notes and action plan stay with you unless you press "Share with May".</p>
     <div class="plan-actions">
-      <button class="btn-ghost" onclick="downloadResults()">Download my results</button>
-      <button class="btn-ghost" onclick="printResults()">Print or save as PDF</button>
+      <button class="btn-ghost" id="pdfBtn" onclick="downloadPdf()">Download PDF</button>
       <button class="copy-btn" id="shareBtn" onclick="shareWithMay()">Share with May</button>
     </div>
     <p class="plan-private" id="shareStatus" role="status"></p>
@@ -914,28 +949,81 @@ function emailPlan(){
 function notesText(){
   return CATEGORIES.filter(c=>(reflections[c.id]||"").trim()).map(c=>`${JOURNEY[c.id]}: ${reflections[c.id].trim()}`).join("\n\n");
 }
-function fullText(){
-  const notes=notesText();
-  let t=buildSummary(latestScores,[]);
-  if(notes)t+=`\n\nMY NOTES\n${notes}`;
-  if(plan.label)t+=`\n\n${planText()}`;
-  return t;
+function loadPdfLib(){
+  return new Promise((resolve,reject)=>{
+    if(window.html2pdf)return resolve();
+    const js=document.createElement("script");
+    js.src=PDF_LIB_URL;js.integrity=PDF_LIB_HASH;js.crossOrigin="anonymous";
+    js.onload=()=>resolve();js.onerror=()=>reject(new Error("PDF library did not load"));
+    document.head.appendChild(js);
+  });
 }
-// The Share email leads with what is new, with the scores underneath as a backup.
-function shareText(){
-  const notes=notesText();
-  const line="═".repeat(50);
-  let t=`NOTES AND ACTION PLAN SHARED BY ${candidate.name.toUpperCase()}\n${line}\n`;
-  if(notes)t+=`\nMY NOTES\n${notes}\n`;
-  if(plan.label)t+=`\n${planText()}\n`;
-  return t+`\n${line}\nSCORES (same as the first email)\n${line}\n\n${buildSummary(latestScores,[])}`;
+
+function buildReport(){
+  const cats=Object.values(latestScores);
+  const date=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Asia/Bangkok"});
+  const bars=cats.map(c=>`<div class="pdf-bar-row">
+    <div class="pdf-bar-name" style="color:${c.color}">${c.name}</div>
+    <div class="pdf-bar-bg"><div class="pdf-bar" style="width:${((c.avg||0)/4)*100}%;background:${c.color}"></div></div>
+    <div class="pdf-bar-val">${fmtScore(c.avg)}${c.avg===null?"":" · "+scaleWord(c.avg)}</div>
+  </div>`).join("");
+  const regular=reportParts.regular.map(s=>`<div class="pdf-item pdf-avoid">${s.label}<small>${ratingWord(s.val)} · ${s.group}</small></div>`).join("");
+  let planHtml="";
+  if(plan.label){
+    const action=document.getElementById("planTextBox").value.trim();
+    const when=document.getElementById("planWhen").value.trim();
+    const notice=document.getElementById("planNotice").value.trim();
+    planHtml=`<div class="pdf-sec pdf-avoid"><h2>One thing to try this week</h2><div class="pdf-plan">
+      <p><strong>What I want to practise</strong>${esc(plan.label)}</p>
+      <p><strong>What I'll try</strong>${esc(action)}</p>
+      ${when?`<p><strong>When or where</strong>${esc(when)}</p>`:""}
+      ${notice?`<p><strong>What I'll look for afterwards</strong>${esc(notice)}</p>`:""}
+    </div></div>`;
+  }
+  const noted=CATEGORIES.filter(c=>(reflections[c.id]||"").trim());
+  const notesHtml=noted.length?`<div class="pdf-sec"><h2>My notes</h2>${noted.map(c=>`<div class="pdf-note pdf-avoid"><strong>${JOURNEY[c.id]}</strong>${esc(reflections[c.id].trim())}</div>`).join("")}</div>`:"";
+  const ratings=cats.map(c=>`<div class="pdf-avoid"><div class="pdf-cat" style="color:${c.color}">${c.name}</div>${
+    Object.values(c.skillGroups).map(g=>`<div class="pdf-row"><span>${g.name}</span><span>${fmtScore(g.avg)}</span></div>`).join("")
+  }</div>`).join("");
+  const el=document.createElement("div");
+  el.className="pdf-doc";
+  el.innerHTML=`<div class="pdf-head">
+      <img src="${document.querySelector(".assess-header img").src}" alt="POV">
+      <div class="pdf-head-text"><div class="pdf-title">My DELTA Reflection</div><div class="pdf-meta">${esc(candidate.name)} · ${date}</div></div>
+    </div>
+    <div class="pdf-sec pdf-avoid"><h2>My snapshot</h2><p style="margin-bottom:10px">${reportParts.snapshot}</p>${bars}</div>
+    ${regular?`<div class="pdf-sec pdf-avoid"><h2>${reportParts.regularTitle}</h2>${regular}</div>`:""}
+    ${planHtml}${notesHtml}
+    <div class="pdf-sec pdf-avoid"><h2>My skill group scores</h2><div class="pdf-grid">${ratings}</div></div>
+    <div class="pdf-foot pdf-avoid">This is a self-reflection, not a validated measure of ability. Inspired by McKinsey &amp; Company's published research on the "Distinct Elements of Talent" (DELTAs). POV is not affiliated with or endorsed by McKinsey.<br>Point of View™ · We understand. We don't judge. · <a href="mailto:may@pointofview-pov.com">may@pointofview-pov.com</a> · <a href="https://pointofview-pov.com/">pointofview-pov.com</a></div>`;
+  return el;
 }
-function downloadResults(){
-  const url=URL.createObjectURL(new Blob([fullText()],{type:"text/plain;charset=utf-8"}));
-  const a=document.createElement("a");
-  a.href=url;a.download="My-DELTA-Results.txt";a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+
+async function downloadPdf(){
+  const b=document.getElementById("pdfBtn"),m=document.getElementById("shareStatus");
+  const y=window.scrollY;
+  b.disabled=true;b.textContent="Preparing your PDF...";
+  try{
+    await loadPdfLib();
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    window.scrollTo({top:0,behavior:"instant"});
+    await html2pdf().set({
+      margin:[12,12,14,12],filename:"My-DELTA-Reflection.pdf",
+      image:{type:"jpeg",quality:0.95},
+      html2canvas:{scale:2,x:0,y:0,scrollX:0,scrollY:0,windowWidth:703,backgroundColor:"#ffffff"},
+      jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
+      pagebreak:{mode:["css"],avoid:".pdf-avoid"},
+      enableLinks:true
+    }).from(buildReport()).save();
+    m.textContent="";
+  }catch(e){
+    m.textContent="We couldn't create the PDF here. Your browser's print window will open so you can save it from there.";
+    printResults();
+  }
+  window.scrollTo({top:y,behavior:"instant"});
+  b.disabled=false;b.textContent="Download PDF";
 }
+
 function printResults(){
   document.querySelectorAll("#resultsContainer details").forEach(d=>{d.open=true;});
   window.print();
