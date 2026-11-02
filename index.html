@@ -921,6 +921,15 @@ function fullText(){
   if(plan.label)t+=`\n\n${planText()}`;
   return t;
 }
+// The Share email leads with what is new, with the scores underneath as a backup.
+function shareText(){
+  const notes=notesText();
+  const line="═".repeat(50);
+  let t=`NOTES AND ACTION PLAN SHARED BY ${candidate.name.toUpperCase()}\n${line}\n`;
+  if(notes)t+=`\nMY NOTES\n${notes}\n`;
+  if(plan.label)t+=`\n${planText()}\n`;
+  return t+`\n${line}\nSCORES (same as the first email)\n${line}\n\n${buildSummary(latestScores,[])}`;
+}
 function downloadResults(){
   const url=URL.createObjectURL(new Blob([fullText()],{type:"text/plain;charset=utf-8"}));
   const a=document.createElement("a");
@@ -958,7 +967,7 @@ function shareWithMay(){
     candidate_email:candidate.email,
     submitted_at:new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"}),
     flags:"Shared by the participant: notes and action plan",
-    summary:fullText()
+    summary:shareText()
   }).then(()=>{
     shareState="sent";b.textContent="✓ Shared with May";
     m.textContent="Your notes and plan were sent to May.";
