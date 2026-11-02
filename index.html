@@ -248,7 +248,19 @@ h1,h2,h3,.intro-card h1,.results-header h2{font-family:'Playfair Display',Georgi
 .j-item.now{border-top-color:var(--gold-mid);color:var(--near-black);font-weight:600}
 .step-note{font-size:13px;color:var(--mid-gray);margin-bottom:1rem;line-height:1.55}
 .rbtn{min-height:44px}
-.rbtn.sel-1,.rbtn.sel-2,.rbtn.sel-3,.rbtn.sel-4{background:var(--gold);border-color:var(--gold-mid);color:var(--black)}
+.rbtn-na{flex-basis:100%}
+.reflect-box{padding:1rem 1.5rem 1.25rem;background:var(--off-white);border-top:1px solid var(--beige-deeper)}
+.reflect-box label{display:block;font-size:14px;font-weight:600;line-height:1.5;margin-bottom:.2rem}
+.reflect-box p{font-size:12px;color:var(--mid-gray);line-height:1.5;margin-bottom:.6rem}
+.intro-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-mid);margin-bottom:.5rem}
+.plan-input{width:100%;min-height:44px;padding:.6rem .8rem;border:1.5px solid var(--beige-deeper);border-radius:4px;font-family:inherit;font-size:15px}
+.plan-input:focus{outline:none;border-color:var(--gold)}
+.plan-small{min-height:72px}
+.note-block{margin-bottom:.9rem}
+.note-block h4{font-size:13px;margin-bottom:.25rem}
+.note-block p{font-size:14px;line-height:1.6;white-space:pre-wrap}
+.keep-note{font-size:13px;color:var(--mid-gray);line-height:1.6;margin-bottom:.75rem}
+.rbtn.sel-na,.rbtn.sel-1,.rbtn.sel-2,.rbtn.sel-3,.rbtn.sel-4{background:var(--gold);border-color:var(--gold-mid);color:var(--black)}
 .sdot-1{background:#F6E7BE}.sdot-2{background:#F2D585}.sdot-3{background:#F0B429}.sdot-4{background:#C89010}
 .btn-back{padding:.7rem 1rem;background:#fff;color:var(--near-black);border:1px solid var(--beige-deeper);border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
 .btn-back:hover{background:var(--warm-gray)}
@@ -286,6 +298,14 @@ details.r-card[open] summary{margin-bottom:1rem}
   .sg-score-label{min-width:100%}
   .j-item{font-size:11px}
 }
+@media print{
+  .screen{display:none!important}
+  #resultsScreen{display:block!important}
+  #sendingMsg,.no-print{display:none!important}
+  .r-card{break-inside:avoid;border-color:#ccc}
+  .results-body{padding:0;overflow:visible}
+  .results-header{padding:1rem 0}
+}
 </style>
 </head>
 <body>
@@ -300,13 +320,14 @@ details.r-card[open] summary{margin-bottom:1rem}
   </div>
   <div class="intro-body">
     <div class="intro-card">
-      <h1>DELTA Assessment</h1>
-      <p class="sub">A free reflective self-assessment from Point of View™ to help you understand your current strengths and growth areas, honestly and without judgment.</p>
+      <div class="intro-eyebrow">DELTA Assessment</div>
+      <h1>What helps you move forward?</h1>
+      <p class="sub">A free self-reflection from Point of View™. Explore how you think, connect, lead yourself and use technology, and leave with a clearer picture of your habits and one small action to try.</p>
       <p class="credit-note">Inspired by McKinsey &amp; Company's published research on the skills people need for the future of work, the "Distinct Elements of Talent" (DELTAs). POV is not affiliated with or endorsed by McKinsey.</p>
       <p style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:15px;color:var(--mid-gray);line-height:1.75;margin-bottom:1.75rem;padding:1rem 1.25rem;background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0">This is not a test. There are no right or wrong answers — only honest ones. Take your time, reflect on each statement, and choose what feels most true for you right now.</p>
       <div class="form-group"><label>Your full name</label><input type="text" id="candName" placeholder="e.g. Priya Sharma" autocomplete="name"></div>
       <div class="form-group"><label>Your email</label><input type="email" id="candEmail" placeholder="e.g. priya@email.com" autocomplete="email"></div>
-      <p class="privacy-note">🔒 Your name, email and answers go to May Sanguanchati at Point of View™ to prepare your report and, if you wish, to follow up with you. They are kept privately by POV and not used for anything else. To see or delete your information, email <a href="mailto:may@pointofview-pov.com">may@pointofview-pov.com</a>.</p>
+      <p class="privacy-note">🔒 Your name, email and answers go to May Sanguanchati at Point of View™ to prepare your report and, if you wish, to follow up with you. They are kept privately by POV and not used for anything else. Any notes and action plan you write stay with you unless you press "Share with May". To see or delete your information, email <a href="mailto:may@pointofview-pov.com">may@pointofview-pov.com</a>.</p>
       <div class="divider"></div>
       <div class="categories-preview">
         <div class="cat-pill cog"><span class="dot"></span>Cognitive</div>
@@ -340,11 +361,12 @@ details.r-card[open] summary{margin-bottom:1rem}
       <div class="journey" id="journey"></div>
       <div class="scale-legend">
         <span class="sl-title">Scale:</span>
-        <span class="sl-item"><span class="sdot sdot-1"></span>1 — Not yet / Rarely</span>
+        <span class="sl-item"><span class="sdot sdot-1"></span>1 — Rarely</span>
         <span class="sl-item"><span class="sdot sdot-2"></span>2 — Sometimes</span>
         <span class="sl-item"><span class="sdot sdot-3"></span>3 — Often</span>
-        <span class="sl-item"><span class="sdot sdot-4"></span>4 — Consistently / Strongly</span>
+        <span class="sl-item"><span class="sdot sdot-4"></span>4 — Consistently</span>
       </div>
+      <p class="step-note">Think about the past three months. Examples can come from work, study, volunteering or everyday life. If you haven't had the chance to do something, choose "Haven't had the opportunity".</p>
       <div id="questionsContainer"></div>
     </div>
   </div>
@@ -520,7 +542,8 @@ const TRY = {
   da3:"I'll choose one repetitive task and try one digital way to make it faster or easier."
 };
 const JOURNEY = {cognitive:"How you think",interpersonal:"How you connect",selfleadership:"How you lead yourself",digital:"How you use technology"};
-const SCALE_WORDS = ["Not yet","Sometimes","Often","Consistently"];
+const SCALE_WORDS = ["Rarely","Sometimes","Often","Consistently"];
+const NA_TEXT = "Haven't had the opportunity";
 const STEPS = CATEGORIES.flatMap(cat=>cat.skillGroups.map(sg=>({cat,sg})));
 
 const TOTAL_Qs = CATEGORIES.reduce((s,c)=>s+c.skillGroups.reduce((ss,sg)=>ss+sg.questions.length,0),0);
@@ -529,6 +552,9 @@ let candidate = {name:"",email:""};
 let stepIndex = 0;
 let allStatements = [];
 let plan = {label:""};
+let reflections = {};
+let latestScores = null;
+let shareState = "idle";
 
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
@@ -554,6 +580,7 @@ function startAssessment(){
   candidate.name=document.getElementById("candName").value.trim();
   candidate.email=document.getElementById("candEmail").value.trim();
   answers={};
+  reflections={};
   stepIndex=0;
   buildStep();
   showScreen("assessScreen");
@@ -569,11 +596,20 @@ function buildStep(){
       <div class="q-desc">${q.desc}</div>
       <div class="rating-btns">
         ${[1,2,3,4].map(r=>`<button class="rbtn${answers[q.id]===r?` sel-${r}`:""}" id="rb-${q.id}-${r}" onclick="rate('${q.id}',${r})">${r} — ${SCALE_WORDS[r-1]}</button>`).join("")}
+        <button class="rbtn rbtn-na${answers[q.id]==="na"?" sel-na":""}" id="rb-${q.id}-na" onclick="rate('${q.id}','na')">${NA_TEXT}</button>
       </div></div>`).join("");
+  const lastInCat=cat.skillGroups[cat.skillGroups.length-1]===sg;
+  const reflect=lastInCat?`<div class="reflect-box">
+      <label for="reflection">Pause for a moment (optional)</label>
+      <p>What recent example comes to mind? What did you do, and what happened? These notes stay with you unless you choose to share them.</p>
+      <textarea class="plan-text" id="reflection" maxlength="2000" placeholder="A few notes for yourself"></textarea>
+    </div>`:"";
   document.getElementById("questionsContainer").innerHTML=`<div class="cat-block">
     <div class="cat-header ${cat.cls}"><h3>${JOURNEY[cat.id]}</h3><p>${cat.name}: ${cat.desc}</p></div>
-    <div class="cat-body"><div class="sg-block"><div class="sg-label">${sg.name}</div>${qs}</div></div>
+    <div class="cat-body"><div class="sg-block"><div class="sg-label">${sg.name}</div>${qs}</div>${reflect}</div>
   </div>`;
+  const box=document.getElementById("reflection");
+  if(box){box.value=reflections[cat.id]||"";box.oninput=()=>{reflections[cat.id]=box.value;};}
   updateProgress();
   window.scrollTo({top:0,behavior:"auto"});
 }
@@ -588,9 +624,9 @@ function prevStep(){
 
 function rate(qid,val){
   answers[qid]=val;
-  [1,2,3,4].forEach(r=>{
+  [1,2,3,4,"na"].forEach(r=>{
     const b=document.getElementById(`rb-${qid}-${r}`);
-    b.className="rbtn"+(r===val?` sel-${r}`:"");
+    b.className="rbtn"+(r==="na"?" rbtn-na":"")+(r===val?` sel-${r}`:"");
   });
   updateProgress();
 }
@@ -612,6 +648,8 @@ function updateProgress(){
 function submitAssessment(){
   const scores=computeScores();
   const flags=computeFlags(scores);
+  latestScores=scores;
+  shareState="idle";
   const ts=new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"});
   showScreen("resultsScreen");
   document.getElementById("resultsTitle").textContent="Your DELTA Report";
@@ -626,18 +664,19 @@ function saveToSheet(scores,flags,ts){
   if(!SHEET_URL)return;
   try{
     const cats=Object.values(scores);
+    const ratedCats=cats.filter(c=>c.avg!==null);
     const row={
       "Submitted":ts,
       "Name":candidate.name,
       "Email":candidate.email,
-      "Overall":Number((cats.reduce((s,c)=>s+c.avg,0)/cats.length).toFixed(1))
+      "Overall":ratedCats.length?Number((ratedCats.reduce((s,c)=>s+c.avg,0)/ratedCats.length).toFixed(1)):"Not rated"
     };
     cats.forEach(cat=>{
-      row[cat.name]=cat.avg;
+      row[cat.name]=cat.avg===null?"Not rated":cat.avg;
       row[cat.name+" level"]=sLabel(cat.avg);
     });
     cats.forEach(cat=>{
-      Object.values(cat.skillGroups).forEach(sg=>{row[cat.name+" · "+sg.name]=sg.avg;});
+      Object.values(cat.skillGroups).forEach(sg=>{row[cat.name+" · "+sg.name]=sg.avg===null?"Not rated":sg.avg;});
     });
     row["Flag count"]=flags.length;
     row["Flagged areas"]=flags.length?flags.map(f=>f.label+" ("+f.cat+")").join("; "):"None";
@@ -651,12 +690,13 @@ function computeScores(){
     const catScore={name:cat.name,color:cat.color,cls:cat.cls,skillGroups:{}};
     let catVals=[];
     cat.skillGroups.forEach(sg=>{
-      const vals=sg.questions.map(q=>answers[q.id]||0);
-      const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
-      catScore.skillGroups[sg.id]={name:sg.name,avg:Math.round(avg*10)/10,vals,questions:sg.questions};
-      catVals=catVals.concat(vals);
+      const vals=sg.questions.map(q=>answers[q.id]);
+      const rated=vals.filter(v=>typeof v==="number");
+      const avg=rated.length?rated.reduce((a,b)=>a+b,0)/rated.length:null;
+      catScore.skillGroups[sg.id]={name:sg.name,avg:avg===null?null:Math.round(avg*10)/10,vals,questions:sg.questions};
+      catVals=catVals.concat(rated);
     });
-    catScore.avg=Math.round((catVals.reduce((a,b)=>a+b,0)/catVals.length)*10)/10;
+    catScore.avg=catVals.length?Math.round((catVals.reduce((a,b)=>a+b,0)/catVals.length)*10)/10:null;
     scores[cat.id]=catScore;
   });
   return scores;
@@ -669,15 +709,17 @@ function computeFlags(scores){
       sg.questions.forEach((q,i)=>{
         if(sg.vals[i]===1) flags.push({label:q.label,group:sg.name,cat:cat.name,val:1});
       });
-      if(sg.avg<2) flags.push({label:`Low overall: ${sg.name}`,group:sg.name,cat:cat.name,val:sg.avg});
+      if(sg.avg!==null&&sg.avg<2) flags.push({label:`Low overall: ${sg.name}`,group:sg.name,cat:cat.name,val:sg.avg});
     });
   });
   return flags;
 }
 
-function sLabel(v){if(v>=3.5)return"Strong";if(v>=2.5)return"Developing";if(v>=1.5)return"Emerging";return"Focus area";}
+function sLabel(v){if(v===null)return"Not rated";if(v>=3.5)return"Strong";if(v>=2.5)return"Developing";if(v>=1.5)return"Emerging";return"Focus area";}
 // What participants see: the words from their own rating scale, not a judgement.
-function scaleWord(v){if(v>=3.5)return"Consistently";if(v>=2.5)return"Often";if(v>=1.5)return"Sometimes";return"Not yet";}
+function scaleWord(v){if(v===null)return"Not rated";if(v>=3.5)return"Consistently";if(v>=2.5)return"Often";if(v>=1.5)return"Sometimes";return"Rarely";}
+function ratingWord(v){return v===null?"No opportunity yet":SCALE_WORDS[v-1];}
+function fmtScore(v){return v===null?"Not rated":v+"/4";}
 
 function nameList(names){return names.length<2?names[0]:names.slice(0,-1).join(", ")+" and "+names[names.length-1];}
 
@@ -685,7 +727,7 @@ function flattenStatements(scores){
   const list=[];
   Object.values(scores).forEach(cat=>{
     Object.values(cat.skillGroups).forEach(sg=>{
-      sg.questions.forEach((q,i)=>list.push({id:q.id,label:q.label,val:sg.vals[i],catName:cat.name,catId:cat.name,group:sg.name}));
+      sg.questions.forEach((q,i)=>list.push({id:q.id,label:q.label,val:typeof sg.vals[i]==="number"?sg.vals[i]:null,catName:cat.name,catId:cat.name,group:sg.name}));
     });
   });
   return list;
@@ -702,54 +744,62 @@ function spread(pool,key,n){
 function renderResults(scores,flags){
   const container=document.getElementById("resultsContainer");
   const cats=Object.values(scores);
+  const ratedCats=cats.filter(c=>c.avg!==null);
   allStatements=flattenStatements(scores);
+  const rated=allStatements.filter(s=>s.val!==null);
+  const naCount=allStatements.length-rated.length;
   plan={label:""};
   const first=esc(candidate.name.split(/\s+/)[0]);
-  const max=Math.max(...cats.map(c=>c.avg));
-  const min=Math.min(...cats.map(c=>c.avg));
-  const tops=cats.filter(c=>c.avg===max).map(c=>c.name);
-  const lows=cats.filter(c=>c.avg===min).map(c=>c.name);
+  const max=ratedCats.length?Math.max(...ratedCats.map(c=>c.avg)):null;
+  const min=ratedCats.length?Math.min(...ratedCats.map(c=>c.avg)):null;
+  const tops=ratedCats.filter(c=>c.avg===max).map(c=>c.name);
+  const lows=ratedCats.filter(c=>c.avg===min).map(c=>c.name);
   const even=max===min;
 
   // Personal snapshot
-  const snapLine=even
-    ?`You rated all four areas at about the same level today (${max}/4).`
+  const snapLine=!ratedCats.length
+    ?`You marked every statement as something you haven't had the opportunity to do yet, so there are no scores to compare.`
+    :ratedCats.length===1
+    ?`The only area you rated was <strong>${tops[0]}</strong> (${max}/4).`
+    :even
+    ?`You rated ${ratedCats.length===4?"all four areas":"these areas"} at about the same level today (${max}/4).`
     :`Your highest self-rated ${tops.length>1?"areas are":"area is"} <strong>${nameList(tops)}</strong> (${max}/4), and the one you rated lowest ${lows.length>1?"were":"was"} <strong>${nameList(lows)}</strong> (${min}/4).`;
+  const naLine=naCount&&rated.length?` You marked ${naCount} statement${naCount===1?"":"s"} as "Haven't had the opportunity", and ${naCount===1?"it is":"they are"} left out of your scores.`:"";
   let html=`<div class="r-card"><h3>Your snapshot</h3>
-    <p class="snap-text">${first}, this is a picture of how you see yourself today, not a measure of your ability. ${snapLine}</p>`;
+    <p class="snap-text">${first}, this is a picture of how you see yourself over the past three months, not a measure of your ability. ${snapLine}${naLine}</p>`;
   cats.forEach(cat=>{
     html+=`<div class="cat-score-row">
       <div class="cat-score-label" style="color:${cat.color};font-weight:600">${cat.name}</div>
-      <div class="cat-score-bar-bg"><div class="cat-score-bar" style="width:${(cat.avg/4)*100}%;background:${cat.color}"></div></div>
-      <div class="cat-score-val">${cat.avg}/4 <span style="font-size:10px;display:block">${scaleWord(cat.avg)}</span></div>
+      <div class="cat-score-bar-bg"><div class="cat-score-bar" style="width:${((cat.avg||0)/4)*100}%;background:${cat.color}"></div></div>
+      <div class="cat-score-val">${fmtScore(cat.avg)} <span style="font-size:10px;display:block">${cat.avg===null?"":scaleWord(cat.avg)}</span></div>
     </div>`;
   });
   html+=`</div>`;
 
   // What you see yourself doing regularly
-  const bestVal=Math.max(...allStatements.map(s=>s.val));
-  const regular=allStatements.filter(s=>s.val>=3).sort((a,b)=>b.val-a.val);
-  const shown=regular.length?spread(regular,"catId",3):bestVal===2?spread(allStatements.filter(s=>s.val===2),"catId",3):[];
+  const bestVal=rated.length?Math.max(...rated.map(s=>s.val)):null;
+  const regular=rated.filter(s=>s.val>=3).sort((a,b)=>b.val-a.val);
+  const shown=regular.length?spread(regular,"catId",3):bestVal===2?spread(rated.filter(s=>s.val===2),"catId",3):[];
   html+=`<div class="r-card"><h3>${regular.length?"What you see yourself doing regularly":bestVal===2?"What you see yourself doing some of the time":"Where you are starting from"}</h3>`;
   if(shown.length){
-    html+=`<ul class="see-list">${shown.map(s=>`<li>${s.label}<span>${SCALE_WORDS[s.val-1]} · ${s.group}</span></li>`).join("")}</ul>
+    html+=`<ul class="see-list">${shown.map(s=>`<li>${s.label}<span>${ratingWord(s.val)} · ${s.group}</span></li>`).join("")}</ul>
       <p class="card-note">Choose one and think of a real moment. When did you last do this, and what happened because of it?</p>`;
   }else{
-    html+=`<p class="card-note">You chose "Not yet" for every statement. That often reflects how few chances you have had so far, not what you are capable of. Think of one time you helped someone or solved something, however small. What did you do?</p>`;
+    html+=`<p class="card-note">Nothing here came out as a regular habit yet. That often reflects how few chances you have had so far, not what you are capable of. Think of one time you helped someone or solved something, however small. What did you do?</p>`;
   }
   html+=`</div>`;
 
   // What you want to explore
-  const lowPool=allStatements.filter(s=>s.val<=2).sort((a,b)=>a.val-b.val);
-  const lowest=Math.min(...allStatements.map(s=>s.val));
-  const suggestions=spread(lowPool.length?lowPool:allStatements.filter(s=>s.val===lowest),"group",4);
-  const groupsHtml=Object.values(scores).map(cat=>`<optgroup label="${cat.name}">${
+  const lowPool=rated.filter(s=>s.val<=2).sort((a,b)=>a.val-b.val);
+  const lowest=rated.length?Math.min(...rated.map(s=>s.val)):null;
+  const suggestions=spread(lowPool.length?lowPool:rated.length?rated.filter(s=>s.val===lowest):allStatements,"group",4);
+  const groupsHtml=cats.map(cat=>`<optgroup label="${cat.name}">${
     Object.values(cat.skillGroups).flatMap(sg=>sg.questions.map(q=>`<option value="${q.id}">${q.label}</option>`)).join("")
   }</optgroup>`).join("");
   html+=`<div class="r-card"><h3>What you want to explore</h3>
-    <p class="card-note">${lowPool.length?"These are statements you rated lower.":"You rated every statement Often or above, so these are simply the ones you rated lowest."} As you read them, ask: is this something I want to develop, or something I've had less opportunity to practise? Choose the one that matters most to you right now.</p>
-    <div class="pick-list">${suggestions.map(s=>`<button class="pick-btn" id="pick-${s.id}" onclick="choosePractice('${s.id}')">${s.label}<span>${SCALE_WORDS[s.val-1]} · ${s.group}</span></button>`).join("")}</div>
-    <select class="pick-other" id="pickOther" aria-label="Or choose any other statement" onchange="if(this.value)choosePractice(this.value)"><option value="">Or choose any other statement</option>${groupsHtml}</select>
+    <p class="card-note">${!rated.length?"Here are some places you could start.":lowPool.length?"These are statements you rated lower.":"You rated every statement Often or above, so these are simply the ones you rated lowest."} Your lowest rating doesn't have to be your priority. Ask yourself: is this something I want to develop, or something I've had less opportunity to practise? Choose the one that matters most to you right now.</p>
+    <div class="pick-list">${suggestions.map(s=>`<button class="pick-btn" id="pick-${s.id}" onclick="choosePractice('${s.id}')">${s.label}<span>${ratingWord(s.val)} · ${s.group}</span></button>`).join("")}</div>
+    <select class="pick-other no-print" id="pickOther" aria-label="Or choose any other statement" onchange="if(this.value)choosePractice(this.value)"><option value="">Or choose any other statement</option>${groupsHtml}</select>
   </div>`;
 
   // One thing to try this week
@@ -758,24 +808,34 @@ function renderResults(scores,flags){
     <div id="planForm" style="display:none">
       <span class="plan-label">What I want to practise</span>
       <div class="plan-chosen" id="planChosen"></div>
-      <label class="plan-label" for="planText">What I'll try (change this so it fits your week)</label>
-      <textarea class="plan-text" id="planText"></textarea>
-      <div class="plan-actions">
+      <label class="plan-label" for="planTextBox">What I'll try (change this so it fits your week)</label>
+      <textarea class="plan-text" id="planTextBox" oninput="resetShare()"></textarea>
+      <label class="plan-label" for="planWhen">When or where I'll try it</label>
+      <input class="plan-input" id="planWhen" maxlength="300" placeholder="For example: in Thursday's team meeting" oninput="resetShare()">
+      <label class="plan-label" for="planNotice">What I'll look for afterwards</label>
+      <textarea class="plan-text plan-small" id="planNotice" maxlength="1000" placeholder="What happened? What will I adjust?" oninput="resetShare()"></textarea>
+      <div class="plan-actions no-print">
         <button class="copy-btn" onclick="copyPlan(this)">Copy my plan</button>
         <button class="btn-ghost" onclick="emailPlan()">Email it to myself</button>
       </div>
-      <p class="plan-private">Your plan stays with you. It is not sent to May unless you choose to share it.</p>
+      <p class="plan-private no-print">Your plan stays with you unless you press "Share with May" below.</p>
     </div>
   </div>`;
 
   // Reflection questions
   html+=`<div class="r-card"><h3>Questions to sit with</h3>
-    ${even
-      ?`<div class="prompt-item">You rated all four areas about the same. Which one do you most want people to notice in you, and what would they see you doing?</div>`
+    ${ratedCats.length<2?"":even
+      ?`<div class="prompt-item">You rated these areas about the same. Which one do you most want people to notice in you, and what would they see you doing?</div>`
       :`<div class="prompt-item">${nameList(lows)} came out lowest today. Is this something you want to develop, or something you've had less opportunity to practise?</div>
     <div class="prompt-item">${nameList(tops)} came out highest. What recent example backs this up, and how could you use it in the area you want to explore?</div>`}
     <div class="prompt-item">If someone who works closely with you rated these same areas for you, where do you think their view would differ most from yours, and why?</div>
   </div>`;
+
+  // Their own notes
+  const noted=CATEGORIES.filter(c=>(reflections[c.id]||"").trim());
+  if(noted.length){
+    html+=`<details class="r-card"><summary>Your notes</summary>${noted.map(c=>`<div class="note-block"><h4>${JOURNEY[c.id]}</h4><p>${esc(reflections[c.id].trim())}</p></div>`).join("")}</details>`;
+  }
 
   // Detailed scores, closed by default
   html+=`<details class="r-card"><summary>See all your ratings</summary>`;
@@ -783,21 +843,30 @@ function renderResults(scores,flags){
     html+=`<div class="detail-cat" style="color:${cat.color}">${cat.name}</div>`;
     Object.values(cat.skillGroups).forEach(sg=>{
       html+=`<div class="sg-score-section">
-        <div class="sg-score-title">${sg.name} · ${sg.avg}/4</div>`;
+        <div class="sg-score-title">${sg.name} · ${fmtScore(sg.avg)}</div>`;
       sg.questions.forEach((q,i)=>{
-        const v=sg.vals[i];
+        const v=typeof sg.vals[i]==="number"?sg.vals[i]:null;
         html+=`<div class="sg-score-row">
           <div class="sg-score-label">${q.label}</div>
-          <div class="sg-score-bar-bg"><div class="sg-score-bar" style="width:${(v/4)*100}%;background:${cat.color}"></div></div>
-          <div class="sg-score-val">${v}/4</div>
+          <div class="sg-score-bar-bg"><div class="sg-score-bar" style="width:${((v||0)/4)*100}%;background:${cat.color}"></div></div>
+          <div class="sg-score-val">${v===null?"N/A":v+"/4"}</div>
         </div>`;
       });
       html+=`</div>`;
     });
   });
-  html+=`<div class="summary-box" style="margin-top:1rem"><pre id="summaryText">${esc(buildSummary(scores,[]))}</pre></div>
-    <button class="copy-btn" onclick="copySummary(this)">Copy my scores</button>
-  </details>`;
+  html+=`</details>`;
+
+  // Keep and share
+  html+=`<div class="r-card no-print"><h3>Keep your results</h3>
+    <p class="keep-note">Save a copy for yourself. Your ratings have gone to May. Your notes and action plan stay with you unless you press "Share with May".</p>
+    <div class="plan-actions">
+      <button class="btn-ghost" onclick="downloadResults()">Download my results</button>
+      <button class="btn-ghost" onclick="printResults()">Print or save as PDF</button>
+      <button class="copy-btn" id="shareBtn" onclick="shareWithMay()">Share with May</button>
+    </div>
+    <p class="plan-private" id="shareStatus" role="status"></p>
+  </div>`;
 
   html+=`<div class="r-card" style="background:var(--gold-light);border:1px solid rgba(240,180,41,0.4);text-align:center;padding:2rem">
     <div style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:17px;color:var(--near-black);line-height:1.65;margin-bottom:0.75rem">"Not sure what to make of your results? That is completely normal. Sometimes a score raises more questions than answers, and that is exactly where a conversation with May begins."</div>
@@ -819,12 +888,18 @@ function choosePractice(id){
   document.getElementById("planEmpty").style.display="none";
   document.getElementById("planForm").style.display="block";
   document.getElementById("planChosen").textContent=s.label;
-  document.getElementById("planText").value=TRY[id];
+  document.getElementById("planTextBox").value=TRY[id];
+  resetShare();
   document.getElementById("planCard").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
 function planText(){
-  return `My one thing to try this week\n\nWhat I want to practise: ${plan.label}\n\nWhat I'll try: ${document.getElementById("planText").value.trim()}\n\nFrom my DELTA reflection with Point of View™`;
+  const when=document.getElementById("planWhen").value.trim();
+  const notice=document.getElementById("planNotice").value.trim();
+  let t=`My one thing to try this week\n\nWhat I want to practise: ${plan.label}\n\nWhat I'll try: ${document.getElementById("planTextBox").value.trim()}`;
+  if(when)t+=`\n\nWhen or where: ${when}`;
+  if(notice)t+=`\n\nWhat I'll look for afterwards: ${notice}`;
+  return t+`\n\nFrom my DELTA reflection with Point of View™`;
 }
 function copyPlan(b){
   navigator.clipboard.writeText(planText()).then(()=>{
@@ -836,30 +911,83 @@ function emailPlan(){
   location.href=`mailto:${encodeURIComponent(candidate.email)}?subject=${encodeURIComponent("My one thing to try this week")}&body=${encodeURIComponent(planText())}`;
 }
 
+function notesText(){
+  return CATEGORIES.filter(c=>(reflections[c.id]||"").trim()).map(c=>`${JOURNEY[c.id]}: ${reflections[c.id].trim()}`).join("\n\n");
+}
+function fullText(){
+  const notes=notesText();
+  let t=buildSummary(latestScores,[]);
+  if(notes)t+=`\n\nMY NOTES\n${notes}`;
+  if(plan.label)t+=`\n\n${planText()}`;
+  return t;
+}
+function downloadResults(){
+  const url=URL.createObjectURL(new Blob([fullText()],{type:"text/plain;charset=utf-8"}));
+  const a=document.createElement("a");
+  a.href=url;a.download="My-DELTA-Results.txt";a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function printResults(){
+  document.querySelectorAll("#resultsContainer details").forEach(d=>{d.open=true;});
+  window.print();
+}
+function resetShare(){
+  if(shareState!=="sent")return;
+  shareState="idle";
+  const b=document.getElementById("shareBtn");
+  b.disabled=false;b.textContent="Share my latest with May";
+  document.getElementById("shareStatus").textContent="";
+}
+// Sends notes and plan by email only. The Google Sheet row was already saved on submit.
+function shareWithMay(){
+  if(shareState==="sending"||shareState==="sent")return;
+  const b=document.getElementById("shareBtn"),m=document.getElementById("shareStatus");
+  if(!plan.label&&!notesText()){
+    m.textContent="There is nothing new to share yet. Choose an action above or add a note first.";
+    return;
+  }
+  const fail=()=>{
+    shareState="idle";b.disabled=false;
+    m.textContent="We couldn't send this. Please try again, or download your results and email them to may@pointofview-pov.com.";
+  };
+  if(typeof emailjs==="undefined"){fail();return;}
+  shareState="sending";b.disabled=true;m.textContent="Sending to May...";
+  emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+  emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+    to_email:YOUR_EMAIL,candidate_name:candidate.name,
+    candidate_email:candidate.email,
+    submitted_at:new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"}),
+    flags:"Shared by the participant: notes and action plan",
+    summary:fullText()
+  }).then(()=>{
+    shareState="sent";b.textContent="✓ Shared with May";
+    m.textContent="Your notes and plan were sent to May.";
+  }).catch(fail);
+}
+
 function buildSummary(scores,flags){
-  const overall=(Object.values(scores).reduce((s,c)=>s+c.avg,0)/4).toFixed(1);
+  const ratedCats=Object.values(scores).filter(c=>c.avg!==null);
+  const overall=ratedCats.length?(ratedCats.reduce((s,c)=>s+c.avg,0)/ratedCats.length).toFixed(1):null;
   let t=`POV DELTA ASSESSMENT SUMMARY\n`;
   t+=`Participant: ${candidate.name}\nEmail: ${candidate.email}\nDate: ${new Date().toLocaleDateString("en-GB")}\n`;
-  t+=`Overall Average: ${overall}/4\n\nCATEGORY SCORES\n${"─".repeat(50)}\n`;
+  t+=`Overall Average: ${overall===null?"Not rated":overall+"/4"}\n\nCATEGORY SCORES\n${"─".repeat(50)}\n`;
   Object.values(scores).forEach(cat=>{
-    t+=`${cat.name.padEnd(20)} ${cat.avg}/4  [${sLabel(cat.avg)}]\n`;
+    t+=`${cat.name.padEnd(20)} ${fmtScore(cat.avg)}  [${sLabel(cat.avg)}]\n`;
     Object.values(cat.skillGroups).forEach(sg=>{
-      t+=`  · ${sg.name.padEnd(38)} ${sg.avg}/4\n`;
+      t+=`  · ${sg.name.padEnd(38)} ${fmtScore(sg.avg)}\n`;
     });
   });
+  const naItems=CATEGORIES.flatMap(c=>c.skillGroups.flatMap(g=>g.questions)).filter(q=>answers[q.id]==="na");
+  if(naItems.length>0){
+    t+=`\nHAVEN'T HAD THE OPPORTUNITY (${naItems.length}, left out of scores)\n${"─".repeat(50)}\n`;
+    naItems.forEach(q=>{t+=`· ${q.label}\n`;});
+  }
   if(flags.length>0){
     t+=`\nFLAGGED AREAS\n${"─".repeat(50)}\n`;
     flags.forEach(f=>{t+=`· ${f.label} (${f.cat})\n`;});
   }
   t+=`\nGenerated by POV™ Assessment · may@pointofview-pov.com`;
   return t;
-}
-
-function copySummary(b){
-  navigator.clipboard.writeText(document.getElementById("summaryText").textContent).then(()=>{
-    b.textContent="✓ Copied!";
-    setTimeout(()=>{b.textContent="Copy my scores";},2000);
-  });
 }
 
 function sendEmail(scores,flags,ts){
@@ -876,7 +1004,7 @@ function sendEmail(scores,flags,ts){
     flags:flagText,summary
   }).then(()=>{
     const m=document.getElementById("sendingMsg");
-    if(m)m.innerHTML="✅ Results sent to May.";
+    if(m)m.innerHTML="✅ Your ratings were sent to May.";
   }).catch(()=>{
     const m=document.getElementById("sendingMsg");
     if(m)m.innerHTML="⚠ We couldn't send your results to May. Please email may@pointofview-pov.com.";
